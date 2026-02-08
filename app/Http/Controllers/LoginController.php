@@ -67,7 +67,7 @@ class LoginController extends Controller
         ]);
 
         // Jika login dari halaman admin atau role admin, set session admin juga
-        $allowedRoles = ['admin', 'superadmin', 'adminsistem', 'opdusun', 'opdesa', 'timverif', 'penyusunrkp', 'bpd', 'bendahara'];
+        $allowedRoles = ['admin', 'opdusun', 'opdesa', 'timverif', 'penyusunrkp', 'bpd', 'bendahara'];
         
         if (in_array(strtolower($user->role), $allowedRoles)) { 
             session()->put('admin_authenticated', true);

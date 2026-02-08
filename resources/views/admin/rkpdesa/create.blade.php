@@ -146,7 +146,7 @@
                                 </div>
                             </div>
 
-                             <div class="row">
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Pola Pelaksanaan <span class="text-danger">*</span></label>
                                     <select class="form-select" name="pola_pelaksanaan" required>
@@ -156,13 +156,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Status <span class="text-danger">*</span></label>
                                     <select class="form-select" name="status" required>
-                                        <option value="draft">Draft</option>
-                                        <option value="diajukan">Diajukan</option>
-                                        <option value="disetujui">Disetujui</option>
+                                        <option value="Proses">Proses</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Terverifikasi">Terverifikasi</option>
                                     </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Prioritas (1-5)</label>
+                                    <input type="number" class="form-control" name="prioritas" min="1" max="5" placeholder="1-5">
                                 </div>
                             </div>
 

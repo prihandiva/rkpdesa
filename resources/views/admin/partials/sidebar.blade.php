@@ -23,8 +23,8 @@
                 <!--! [End] Menu Caption !-->
 
                 <!--! [Start] Dashboard Menu !-->
-                <li class="nxl-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('admin.dashboard') }}" class="nxl-link">
+                <li class="nxl-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-airplay"></i></span>
                         <span class="nxl-mtext">Dashboard</span>
                     </a>
@@ -32,59 +32,42 @@
                 <!--! [End] Dashboard Menu !-->
 
                 <!--! [Start] Usulan Menu !-->
-                <li class="nxl-item {{ request()->routeIs('usulan.*') ? 'active nxl-hasmenu' : 'nxl-hasmenu' }}">
-                    <a href="javascript:void(0);" class="nxl-link">
+                <li class="nxl-item {{ request()->routeIs('usulan.*') ? 'active' : '' }}">
+                    <a href="{{ route('usulan.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-edit-2"></i></span>
                         <span class="nxl-mtext">Usulan</span>
-                        <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
                     </a>
-                    <ul class="nxl-submenu">
-                        <li class="nxl-item {{ request()->routeIs('usulan.index') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('usulan.index') }}">Daftar Usulan</a>
-                        </li>
-                        <li class="nxl-item {{ request()->routeIs('usulan.create') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('usulan.create') }}">Tambah Usulan</a>
-                        </li>
-                    </ul>
                 </li>
                 <!--! [End] Usulan Menu !-->
 
                 <!--! [Start] RPJM Desa Menu !-->
-                <li class="nxl-item {{ request()->routeIs('rpjm.*') ? 'active nxl-hasmenu' : 'nxl-hasmenu' }}">
-                    <a href="javascript:void(0);" class="nxl-link">
+                <li class="nxl-item {{ request()->routeIs('rpjm.*') ? 'active' : '' }}">
+                    <a href="{{ route('rpjm.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-file-text"></i></span>
                         <span class="nxl-mtext">RPJM Desa</span>
-                        <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
                     </a>
-                    <ul class="nxl-submenu">
-                        <li class="nxl-item {{ request()->routeIs('rpjm.index') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('rpjm.index') }}">Daftar RPJM</a>
-                        </li>
-                        <li class="nxl-item {{ request()->routeIs('rpjm.create') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('rpjm.create') }}">Tambah RPJM</a>
-                        </li>
-                    </ul>
                 </li>
                 <!--! [End] RPJM Desa Menu !-->
 
                 <!--! [Start] RKP Desa Menu !-->
-                <li class="nxl-item {{ request()->routeIs('rkpdesa.*') ? 'active nxl-hasmenu' : 'nxl-hasmenu' }}">
-                    <a href="javascript:void(0);" class="nxl-link">
+                <li class="nxl-item {{ request()->routeIs('rkpdesa.*') ? 'active' : '' }}">
+                    <a href="{{ route('rkpdesa.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-send"></i></span>
                         <span class="nxl-mtext">RKP Desa</span>
-                        <span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
                     </a>
-                    <ul class="nxl-submenu">
-                        <li class="nxl-item {{ request()->routeIs('rkpdesa.index') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('rkpdesa.index') }}">Daftar RKP</a>
-                        </li>
-                        <li class="nxl-item {{ request()->routeIs('rkpdesa.create') ? 'active' : '' }}">
-                            <a class="nxl-link" href="{{ route('rkpdesa.create') }}">Tambah RKP</a>
-                        </li>
-                    </ul>
                 </li>
                 <!--! [End] RKP Desa Menu !-->
 
+                <!--! [Start] Berita Acara Menu !-->
+                <li class="nxl-item {{ request()->routeIs('berita-acara.*') ? 'active' : '' }}">
+                    <a href="{{ route('berita-acara.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-book-open"></i></span>
+                        <span class="nxl-mtext">Berita Acara</span>
+                    </a>
+                </li>
+                <!--! [End] Berita Acara Menu !-->
+
+                @if(strtolower(session('user_role')) === 'admin')
                 <!--! [Start] Menu Caption !-->
                 <li class="nxl-item nxl-caption">
                     <label>Manajemen Data</label>
@@ -166,6 +149,7 @@
                     </a>
                 </li>
                 <!--! [End] Additional Data Management Menus !-->
+                @endif
 
                 <!--! [Start] Menu Caption !-->
                 <li class="nxl-item nxl-caption">
@@ -184,14 +168,14 @@
             </ul>
 
             <!--! [Start] Download Card !-->
-            <div class="card text-center">
+            <!-- <div class="card text-center">
                 <div class="card-body">
                     <i class="feather-sunrise fs-4 text-dark"></i>
                     <h6 class="mt-4 text-dark fw-bolder">RKP Desa System</h6>
                     <p class="fs-11 my-3 text-dark">Sistem manajemen RKP Desa terpadu dengan template Duralux.</p>
                     <a href="#" class="btn btn-primary text-white w-100">Bantuan</a>
                 </div>
-            </div>
+            </div> -->
             <!--! [End] Download Card !-->
         </div>
         <!--! [End] Navbar Content !-->
@@ -200,3 +184,4 @@
 <!--! ================================================================ !-->
 <!--! [End] Navigation Menu !-->
 <!--! ================================================================ !-->
+<!-- DEBUG: Role in session is '{{ session('user_role') }}' -->

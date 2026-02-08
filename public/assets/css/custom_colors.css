@@ -1,0 +1,12 @@
+/* Custom colors requested */
+.bg-purple {
+    background-color: #6f42c1 !important; /* Bootstrap purple */
+    color: white;
+}
+.text-purple {
+    color: #6f42c1 !important;
+}
+.bg-soft-purple {
+    background-color: rgba(111, 66, 193, 0.1) !important;
+    color: #6f42c1 !important;
+}

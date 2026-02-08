@@ -7,14 +7,22 @@ use Illuminate\Http\Request;
 
 class RKPController extends Controller
 {
+    protected $statusService;
+
+    public function __construct(\App\Services\StatusService $statusService)
+    {
+        $this->statusService = $statusService;
+    }
+
     /**
      * Display a listing of the resource (Index)
      * Menampilkan daftar semua RKP Desa
      */
     public function index()
     {
-        $rkpDesaSs = RKPDesa::paginate(10);
-        return view('admin.rkpdesa.index', compact('rkpDesaSs'));
+        // $rkp_desa = RKPDesa::all();
+        $rkp_desa = RKPDesa::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.rkpdesa.index', compact('rkp_desa'));
     }
 
     /**
@@ -24,8 +32,10 @@ class RKPController extends Controller
     public function create()
     {
         $tahuns = \App\Models\Tahun::where('status', 'aktif')->get();
-        $rpjms = \App\Models\RPJM::all(); // Assuming RPJM model exists
-        $usulans = \App\Models\Usulan::where('status', 'Setuju')->get(); // Only approved usulans
+        $rpjms = \App\Models\RPJM::all(); 
+        $usulans = \App\Models\Usulan::where('status', 'Disetujui')->orWhere('status', 'Pending')->get(); // Show approved usulans to be picked? Or pending? Usually Approved Usulan -> RKP. But user mentioned "Proses" -> "Pending". Let's show all relevant.
+        // Reverting to user requirement: Pending (kuning) -> masuk ke rkpdesa.
+        // So maybe show 'Pending' usulans here.
         $bidangs = \App\Models\Bidang::all();
         $sumber_biayas = \App\Models\SumberBiaya::all();
         $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
@@ -41,7 +51,6 @@ class RKPController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
-            // 'id_kegiatan' => 'required|unique:rkpdesa', // Auto increment ID, not needed validation usually
             'nama' => 'required|string|max:255',
             'bidang' => 'required|exists:bidang,id_bidang',
             'jenis_kegiatan' => 'required|string',
@@ -54,11 +63,14 @@ class RKPController extends Controller
             'jumlah' => 'nullable|numeric',
             'sumber_biaya' => 'required|exists:sumber_biaya,id_sumber_biaya',
             'pola_pelaksanaan' => 'required|exists:pola_pelaksanaan,id_pola',
-            'status' => 'required|in:draft,diajukan,disetujui,ditolak',
+            'status' => 'required|string', // Validation for new status strings
             'tahun' => 'required|exists:tahun,id_tahun',
             'id_rpjm' => 'nullable|exists:rpjm,id_rpjm',
             'id_usulan' => 'nullable|exists:usulan,id_usulan',
             'file_berita_acara_musrenbang' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
+            'file_berita_acara_musrenbang' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
+            'catatan_verifikasi' => 'nullable|string',
+            'prioritas' => 'nullable|integer|between:1,5',
         ]);
 
         // Handle File Upload
@@ -70,7 +82,10 @@ class RKPController extends Controller
         }
 
         // Simpan RKP Desa baru
-        RKPDesa::create($validated);
+        $rkpDesa = RKPDesa::create($validated);
+        
+        // Sync Status using Service
+        $this->statusService->updateStatus($rkpDesa, $validated['status']);
 
         return redirect()->route('rkpdesa.index')
             ->with('success', 'RKP Desa berhasil ditambahkan');
@@ -83,7 +98,16 @@ class RKPController extends Controller
     public function show($id)
     {
         $rkpDesa = RKPDesa::findOrFail($id);
-        return view('admin.rkpdesa.show', compact('rkpDesa'));
+        $logs = \App\Models\Notifikasi::where('id_kegiatan', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        
+        // Fetch reference data for the edit form in show page
+        $bidangs = \App\Models\Bidang::all();
+        $sumber_biayas = \App\Models\SumberBiaya::all();
+        $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
+
+        return view('admin.rkpdesa.show', compact('rkpDesa', 'logs', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans'));
     }
 
     /**
@@ -95,7 +119,7 @@ class RKPController extends Controller
         $rkpDesa = RKPDesa::findOrFail($id);
         $tahuns = \App\Models\Tahun::where('status', 'aktif')->get();
         $rpjms = \App\Models\RPJM::all();
-        $usulans = \App\Models\Usulan::where('status', 'Setuju')->get();
+        $usulans = \App\Models\Usulan::all();
         $bidangs = \App\Models\Bidang::all();
         $sumber_biayas = \App\Models\SumberBiaya::all();
         $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
@@ -113,9 +137,9 @@ class RKPController extends Controller
 
         // Validasi input
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'bidang' => 'required|exists:bidang,id_bidang',
-            'jenis_kegiatan' => 'required|string',
+            'nama' => 'sometimes|required|string|max:255',
+            'bidang' => 'nullable|exists:bidang,id_bidang',
+            'jenis_kegiatan' => 'sometimes|required|string',
             'data_existing' => 'nullable|string',
             'target_capaian' => 'nullable|string',
             'lokasi' => 'nullable|string',
@@ -123,16 +147,16 @@ class RKPController extends Controller
             'penerima' => 'nullable|string',
             'waktu' => 'nullable|string',
             'jumlah' => 'nullable|numeric',
-            'sumber_biaya' => 'required|exists:sumber_biaya,id_sumber_biaya',
-            'pola_pelaksanaan' => 'required|exists:pola_pelaksanaan,id_pola',
-            'status' => 'required|in:draft,diajukan,disetujui,ditolak',
-            'tahun' => 'required|exists:tahun,id_tahun',
+            'sumber_biaya' => 'nullable|exists:sumber_biaya,id_sumber_biaya',
+            'pola_pelaksanaan' => 'nullable|exists:pola_pelaksanaan,id_pola',
+            'status' => 'required|string',
+            'tahun' => 'sometimes|required|exists:tahun,id_tahun',
             'id_rpjm' => 'nullable|exists:rpjm,id_rpjm',
             'id_usulan' => 'nullable|exists:usulan,id_usulan',
             'file_berita_acara_musrenbang' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
-            'status_verifikasi' => 'nullable|in:Menunggu,Diterima,Ditolak,Revisi',
+            'file_berita_acara_musrenbang' => 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:5120',
             'catatan_verifikasi' => 'nullable|string',
-            'status_approval' => 'nullable|string', // Menunggu, Disetujui BPD, Disetujui Kepala Desa
+            'prioritas' => 'nullable|integer|between:1,5',
         ]);
 
         // Handle File Upload
@@ -143,8 +167,18 @@ class RKPController extends Controller
             $validated['file_berita_acara_musrenbang'] = 'uploads/rkp/' . $filename;
         }
 
-        // Update RKP Desa
+        // Check if status changed
+        $oldStatus = $rkpDesa->status;
+        $newStatus = $validated['status'];
+
+        // Update RKP Desa (excluding status first if we want service to handle it, but service updates it too. Safe to just update all)
         $rkpDesa->update($validated);
+
+        // Trigger Service if status changed (or even if same to ensure sync?)
+        // Better to always sync if update is called
+        if ($oldStatus !== $newStatus) {
+            $this->statusService->updateStatus($rkpDesa, $newStatus);
+        }
 
         return redirect()->route('rkpdesa.index')
             ->with('success', 'RKP Desa berhasil diperbarui');
@@ -167,43 +201,24 @@ class RKPController extends Controller
         foreach ($ids as $id) {
             $usulan = \App\Models\Usulan::find($id);
             if ($usulan) {
-                // Cek apakah sudah ada di RKP (optional check to prevent duplicates if needed, but prompt didn't specify strict check, just logic)
-                // Disini kita asumsi bisa masuk berkali-kali atau cek flag status 'Pending' di Usulan
                 
-                if ($usulan->status != 'Pending' && $usulan->status != 'Proses') {
-                    // Skip if already processed or invalid status? User said "Proses" -> "Pending"
-                    // But let's allow "Proses" to be moved.
-                }
-
                 // Create RKP Desa
-                // "jenis kegiatan -> masuk ke kolom nama dan jenis kegiatan"
-                RKPDesa::create([
+                $rkp = RKPDesa::create([
                     'nama' => $usulan->jenis_kegiatan,
                     'jenis_kegiatan' => $usulan->jenis_kegiatan,
-                    'bidang' => '1', // Default or need mapping? Prompt didn't specify, use default valid ID
+                    'bidang' => null, 
                     'id_usulan' => $usulan->id_usulan,
-                    'id_rpjm' => null, // Not from RPJM
+                    'id_rpjm' => null, 
                     'tahun' => $usulan->tahun,
-                    'status' => 'draft', // Default RKP status
-                    'sumber_biaya' => '1', // Default
-                    'pola_pelaksanaan' => '1', // Default
-                    'status_verifikasi' => 'pending',
-                    'status_approval' => 'pending',
+                    'status' => "Pending", // Default 
+                    'sumber_biaya' => null, 
+                    'pola_pelaksanaan' => null,
+                    'catatan_verifikasi' => null,
                 ]);
 
-                // Update Status Usulan
-                $usulan->update(['status' => 'Pending']);
-
-                // Create Notification for Operator Dusun
-                \App\Models\Notifikasi::create([
-                    'judul' => 'Usulan Masuk RKP',
-                    'deskripsi' => 'Usulan "' . substr($usulan->jenis_kegiatan, 0, 30) . '..." telah masuk ke draft RKP Desa.',
-                    'id_kegiatan' => $usulan->id_usulan,
-                    'judul_kegiatan' => $usulan->jenis_kegiatan,
-                    'status' => 'success',
-                    'id_penerima' => null, // Logic to target specific user if needed
-                    'dibaca' => 0
-                ]);
+                // Update Status Usulan & Sync via Service
+                // If we set RKP to Pending, we should sync Usulan to Pending too.
+                $this->statusService->updateStatus($rkp, 'Pending');
 
                 $count++;
             }

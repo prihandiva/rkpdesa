@@ -29,22 +29,84 @@
         <!--! [Start] Header Right !-->
         <div class="header-right ms-auto d-flex align-items-center gap-3">
             <!--! [Start] Header Search !-->
-            <div class="nxl-h-item d-none d-md-flex">
+            <!-- <div class="nxl-h-item d-none d-md-flex">
                 <div class="input-group search-form">
                     <span class="input-group-text">
                         <i class="feather-search"></i>
                     </span>
                     <input type="text" class="form-control" placeholder="Search here...">
                 </div>
-            </div>
+            </div> -->
             <!--! [End] Header Search !-->
             <!--! [Start] Header Notifications !-->
+            <!--! [Start] Header Notifications !-->
             <div class="nxl-h-item">
-                <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#nxl-offcanvas-element">
-                    <div class="avatar-text avatar-md bg-light-primary text-primary rounded-pill">
-                        <i class="feather-bell"></i>
+                <div class="dropdown">
+                    <a href="javascript:void(0);" class="nxl-head-link" data-bs-toggle="dropdown" role="button" aria-expanded="false">
+                        <div class="avatar-text avatar-md bg-light-primary text-primary rounded-pill">
+                            <i class="feather-bell"></i>
+                            @auth
+                                @if(auth()->user()->unreadNotifications->count() > 0)
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+                                        {{ auth()->user()->unreadNotifications->count() }}
+                                        <span class="visually-hidden">unread messages</span>
+                                    </span>
+                                @endif
+                            @endauth
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown text-center border-0 p-0" style="width: 350px; left: auto; right: 0;">
+                        <div class="dropdown-header d-flex align-items-center justify-content-between p-3 border-bottom">
+                            <h6 class="m-0">Notifications</h6>
+                            <a href="javascript:void(0);" class="text-muted text-decoration-none f-12">Mark all as read</a>
+                        </div>
+                        <div class="dropdown-body nxl-h-dropdown-scroll" style="max-height: 400px; overflow-y: auto;">
+                            @auth
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                                    <a href="{{ $notification->data['url'] ?? '#' }}" class="dropdown-item d-flex align-items-center gap-3 p-3 border-bottom text-start">
+                                        <div class="avatar-text avatar-md bg-soft-primary text-primary rounded">
+                                            {{-- Map Color based on data or fallback --}}
+                                            @php
+                                                $colorClass = 'text-primary bg-light-primary';
+                                                if(isset($notification->data['color'])) {
+                                                    switch($notification->data['color']) {
+                                                        case 'primary': $colorClass = 'text-primary bg-light-primary'; break;
+                                                        case 'warning': $colorClass = 'text-warning bg-light-warning'; break;
+                                                        case 'purple': $colorClass = 'text-white bg-purple'; break;
+                                                        case 'danger': $colorClass = 'text-danger bg-light-danger'; break; // or text-white bg-danger
+                                                        case 'success': $colorClass = 'text-success bg-light-success'; break;
+                                                        case 'light': $colorClass = 'text-dark bg-light'; break;
+                                                        case 'dark': $colorClass = 'text-white bg-dark'; break;
+                                                        default: $colorClass = 'text-primary bg-light-primary';
+                                                    }
+                                                }
+                                            @endphp
+                                            <div class="avatar-text avatar-sm {{ $colorClass }} rounded">
+                                                <i class="feather-{{ $notification->data['icon'] ?? 'activity' }}"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 text-wrap text-break lh-base f-14">{{ $notification->data['message'] ?? 'No Message' }}</h6>
+                                            <span class="f-12 text-muted">{{ $notification->created_at->diffForHumans() }}</span>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <div class="p-4 text-center">
+                                        <i class="feather-bell-off fs-1 text-muted mb-2"></i>
+                                        <p class="text-muted mb-0">Tidak ada notifikasi baru</p>
+                                    </div>
+                                @endforelse
+                            @else
+                                <div class="p-4 text-center">
+                                    <p class="text-muted mb-0">Silahkan login untuk melihat notifikasi.</p>
+                                </div>
+                            @endauth
+                        </div>
+                        <div class="dropdown-footer p-3 border-top">
+                            <a href="javascript:void(0);" class="btn btn-primary w-100">Lihat Semua Notifikasi</a>
+                        </div>
                     </div>
-                </a>
+                </div>
             </div>
             <!--! [End] Header Notifications !-->
             <!--! [Start] Header Profile !-->

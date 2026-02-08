@@ -59,10 +59,12 @@
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
+                                    <tr>
                                         <th style="width: 50px;">No</th>
-                                        <th>Tahun</th>
-                                        <th>Judul RKP</th>
-                                        <th>Berita Acara</th>
+                                        <th>Deskripsi</th>
+                                        <th class="text-center">Prioritas</th>
+                                        <th>Sumber</th>
+                                        <th>Dusun</th>
                                         <th>Status</th>
                                         <th style="width: 100px;">Aksi</th>
                                     </tr>
@@ -71,37 +73,63 @@
                                     @forelse($rkp_desa as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->tahun ?? '-' }}</td>
-                                            <td>{{ $item->nama ?? '-' }}</td>
                                             <td>
-                                                @if($item->file_berita_acara_musrenbang)
-                                                    <a href="{{ asset($item->file_berita_acara_musrenbang) }}" target="_blank" class="btn btn-xs btn-outline-primary">
-                                                        <i class="feather-file-text me-1"></i>Lihat
-                                                    </a>
+                                                <div class="fw-bold">{{ $item->nama }}</div>
+                                            </td>
+                                            <td class="text-center">
+                                                @if($item->prioritas)
+                                                    <span class="badge rounded-pill bg-{{ $item->prioritas >= 4 ? 'danger' : ($item->prioritas >= 3 ? 'warning text-dark' : 'success') }} fs-6">
+                                                        {{ $item->prioritas }}
+                                                    </span>
                                                 @else
                                                     <span class="text-muted">-</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <span class="badge {{ $item->status == 'Selesai' ? 'bg-success' : ($item->status == 'Berjalan' ? 'bg-primary' : 'bg-warning') }}">
-                                                    {{ $item->status ?? 'Menunggu' }}
-                                                </span>
+                                                @if($item->id_usulan)
+                                                    <span class="badge bg-info text-dark">Usulan Masyarakat</span>
+                                                @elseif($item->id_rpjm)
+                                                    <span class="badge bg-primary">RPJM Desa</span>
+                                                @else
+                                                    <span class="badge bg-secondary">Lainnya</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $item->usulan?->dusun?->nama ?? '-' }}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $status = $item->status;
+                                                    $badgeClass = 'bg-secondary text-white';
+                                                    
+                                                    switch($status) {
+                                                        case 'Proses': $badgeClass = 'bg-primary'; break;
+                                                        case 'Pending': $badgeClass = 'bg-warning text-dark'; break;
+                                                        case 'Terverifikasi': $badgeClass = 'bg-purple text-white'; break;
+                                                        case 'Gagal Terverifikasi': $badgeClass = 'bg-danger'; break;
+                                                        case 'Disetujui': $badgeClass = 'bg-success'; break;
+                                                        case 'Menunggu persetujuan BPD': $badgeClass = 'bg-light text-dark border'; break;
+                                                        case 'Ditolak BPD': $badgeClass = 'bg-dark text-white'; break;
+                                                        default: $badgeClass = 'bg-secondary';
+                                                    }
+                                                @endphp
+                                                <span class="badge {{ $badgeClass }}">{{ $status }}</span>
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('rkpdesa.show', $item->id_kegiatan) }}"
-                                                        class="btn btn-sm btn-outline-info">
+                                                        class="btn btn-sm btn-outline-info" title="Lihat">
                                                         <i class="feather-eye"></i>
                                                     </a>
                                                     <a href="{{ route('rkpdesa.edit', $item->id_kegiatan) }}"
-                                                        class="btn btn-sm btn-outline-warning">
+                                                        class="btn btn-sm btn-outline-warning" title="Edit">
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('rkpdesa.destroy', $item->id_kegiatan) }}" method="POST"
                                                         class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus">
                                                             <i class="feather-trash-2"></i>
                                                         </button>
                                                     </form>
@@ -150,6 +178,10 @@
     <style>
         .table-hover tbody tr:hover {
             background-color: rgba(0, 0, 0, 0.02);
+        }
+        .bg-purple {
+            background-color: #6f42c1 !important;
+            color: #fff !important;
         }
     </style>
 @endsection

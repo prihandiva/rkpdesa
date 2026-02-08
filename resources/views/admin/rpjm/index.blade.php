@@ -61,31 +61,41 @@
                                     <tr>
                                         <th style="width: 50px;">No</th>
                                         <th>Tahun</th>
-                                        <th>Judul RPJM</th>
+                                        <th>Visi</th>
                                         <th>Status</th>
                                         <th style="width: 100px;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($rpjm as $item)
+                                    @forelse($rpjms as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->tahun_awal }} - {{ $item->tahun_akhir }}</td>
-                                            <td>{{ $item->judul ?? '-' }}</td>
+                                            <td>{{ $item->tahun_mulai }} - {{ $item->tahun_selesai }}</td>
+                                            <td>{{ Str::limit($item->visi, 50) }}</td>
                                             <td>
-                                                <span class="badge bg-primary">Aktif</span>
+                                                @php
+                                                    $statusClass = match($item->status) {
+                                                        'Proses' => 'bg-primary',
+                                                        'Pending' => 'bg-warning text-dark',
+                                                        'Terverifikasi' => 'bg-info',
+                                                        'Disetujui' => 'bg-success',
+                                                        'Ditolak' => 'bg-danger',
+                                                        default => 'bg-secondary'
+                                                    };
+                                                @endphp
+                                                <span class="badge {{ $statusClass }}">{{ $item->status ?? 'Draft' }}</span>
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a href="{{ route('rpjm.show', $item->id) }}"
+                                                    <a href="{{ route('rpjm.show', $item->id_rpjm) }}"
                                                         class="btn btn-sm btn-outline-info">
                                                         <i class="feather-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('rpjm.edit', $item->id) }}"
+                                                    <a href="{{ route('rpjm.edit', $item->id_rpjm) }}"
                                                         class="btn btn-sm btn-outline-warning">
                                                         <i class="feather-edit"></i>
                                                     </a>
-                                                    <form action="{{ route('rpjm.destroy', $item->id) }}" method="POST"
+                                                    <form action="{{ route('rpjm.destroy', $item->id_rpjm) }}" method="POST"
                                                         class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
                                                         @csrf
                                                         @method('DELETE')

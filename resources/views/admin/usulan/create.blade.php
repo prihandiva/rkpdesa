@@ -86,7 +86,12 @@
                             
                             <div class="mb-3">
                                 <label class="form-label">Jenis Kegiatan / Nama Usulan <span class="text-danger">*</span></label>
-                                <textarea class="form-control" name="jenis_kegiatan" required placeholder="Jelaskan usulan kegiatan..." rows="2">{{ old('jenis_kegiatan') }}</textarea>
+                                <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Contoh: Pembangunan Jalan Paving..." value="{{ old('jenis_kegiatan') }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Deskripsi Lengkap</label>
+                                <textarea class="form-control" name="deskripsi" placeholder="Jelaskan detail usulan..." rows="3">{{ old('deskripsi') }}</textarea>
                             </div>
 
                             <div class="mb-3">

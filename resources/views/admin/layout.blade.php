@@ -135,12 +135,88 @@
         
         /* Fix for last row being cut off in tables */
         .table-responsive {
-            padding-bottom: 0.5rem;
+            margin-bottom: 0;
+            padding-bottom: 20px !important;
+            overflow-x: auto;
         }
         
-        /* Force margin at the bottom of the table to prevent clipping of shadows/borders */
+        /* Force margin at the bottom of the table to prevent clipping of shadows/borders and push footer down */
         .table-responsive > .table.mb-0 {
-            margin-bottom: 5px !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Allow overflow on desktop to prevent clipping of dropdowns/shadows */
+        @media (min-width: 992px) {
+            .table-responsive {
+                overflow: visible !important;
+            }
+        }
+
+        /* Smaller Pagination */
+        .page-link {
+            font-size: 11px !important;
+            padding: 0.4rem 0.6rem !important;
+        }
+
+        .page-item .page-link {
+            display: flex;
+            align-items: center;
+            height: 30px;
+        }
+    
+        /* Sidebar Mini (Collapsed) - Added for responsiveness */
+        @media (min-width: 992px) {
+            body.sidebar-mini .nxl-navigation {
+                width: 80px;
+                z-index: 1000;
+            }
+
+            body.sidebar-mini .nxl-container {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+            }
+            
+            body.sidebar-mini .nxl-mtext {
+                display: none;
+            }
+            
+            body.sidebar-mini .nxl-caption label {
+                display: none;
+            }
+
+            body.sidebar-mini .nxl-micon {
+                margin-right: 0;
+                justify-content: center;
+            }
+            
+            body.sidebar-mini .nxl-item .nxl-link {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            
+            body.sidebar-mini .m-header .logo-lg {
+                display: none;
+            }
+            
+            body.sidebar-mini .m-header .logo-sm {
+                display: block !important;
+                margin: 0 auto;
+            }
+
+            /* Hide the download card in mini mode */
+            body.sidebar-mini .nxl-navigation .card {
+                display: none;
+            }
+            
+            /* Toggle Buttons Visibility */
+            body.sidebar-mini #menu-mini-button {
+                display: none !important;
+            }
+            
+            body.sidebar-mini #menu-expend-button {
+                display: flex !important;
+            }
         }
     </style>
 
@@ -153,7 +229,7 @@
     <!--! ================================================================ !-->
     @include('admin.partials.sidebar')
     <!--! [End] Sidebar !-->
-@include('admin.partials.header')
+    @include('admin.partials.header')
     <!--! ================================================================ !-->
     <!--! [Start] Main App Wrapper !-->
     <!--! ================================================================ !-->
@@ -210,6 +286,7 @@
     <script src="{{ asset('admin-template/assets/vendors/js/vendors.min.js') }}"></script>
     <script src="{{ asset('admin-template/assets/vendors/js/daterangepicker.min.js') }}"></script>
     <script src="{{ asset('admin-template/assets/vendors/js/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('admin-template/assets/vendors/js/circle-progress.min.js') }}"></script>
     <!--! [End] Script: Vendors !-->
 
     <!--! ================================================================ !-->
@@ -236,13 +313,20 @@
 
             // Desktop mini menu toggle
             var miniToggle = document.getElementById('menu-mini-button');
+            var expendToggle = document.getElementById('menu-expend-button');
             var body = document.body;
 
+            function toggleSidebar(e) {
+                e.preventDefault();
+                body.classList.toggle('sidebar-mini');
+            }
+
             if (miniToggle) {
-                miniToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    body.classList.toggle('sidebar-mini');
-                });
+                miniToggle.addEventListener('click', toggleSidebar);
+            }
+            
+            if (expendToggle) {
+                expendToggle.addEventListener('click', toggleSidebar);
             }
         })();
     </script>

@@ -19,6 +19,7 @@ class Usulan extends Model
      */
     protected $fillable = [
         'jenis_kegiatan',
+        'deskripsi',
         'id_dusun',
         'id_rw',
         'id_rt',

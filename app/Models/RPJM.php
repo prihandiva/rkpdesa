@@ -18,6 +18,8 @@ class RPJM extends Model
         'tahun_mulai',
         'tahun_selesai',
         'file_dokumen',
+        'status',
+        'prioritas',
     ];
 
     /**

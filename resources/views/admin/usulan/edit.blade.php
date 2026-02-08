@@ -60,45 +60,40 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="id_dusun" class="form-label">Dusun</label>
-                                <select class="form-select @error('id_dusun') is-invalid @enderror" id="id_dusun" name="id_dusun" required>
-                                    <option value="">Pilih Dusun</option>
-                                    @foreach(\App\Models\Dusun::all() as $dusun)
-                                        <option value="{{ $dusun->id_dusun }}" {{ old('id_dusun', $usulan->id_dusun) == $dusun->id_dusun ? 'selected' : '' }}>
-                                            {{ $dusun->nama }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('id_dusun')
+                                <label for="deskripsi" class="form-label">Deskripsi Lengkap</label>
+                                <textarea class="form-control @error('deskripsi') is-invalid @enderror"
+                                    id="deskripsi" name="deskripsi" rows="3">{{ old('deskripsi', $usulan->deskripsi) }}</textarea>
+                                @error('deskripsi')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="mb-3">
-                                <label for="prioritas" class="form-label">Prioritas (1-5)</label>
-                                <select class="form-select @error('prioritas') is-invalid @enderror" id="prioritas" name="prioritas" required>
-                                    <option value="1" {{ old('prioritas', $usulan->prioritas) == 1 ? 'selected' : '' }}>1 (Sangat Rendah)</option>
-                                    <option value="2" {{ old('prioritas', $usulan->prioritas) == 2 ? 'selected' : '' }}>2 (Rendah)</option>
-                                    <option value="3" {{ old('prioritas', $usulan->prioritas) == 3 ? 'selected' : '' }}>3 (Sedang)</option>
-                                    <option value="4" {{ old('prioritas', $usulan->prioritas) == 4 ? 'selected' : '' }}>4 (Tinggi)</option>
-                                    <option value="5" {{ old('prioritas', $usulan->prioritas) == 5 ? 'selected' : '' }}>5 (Sangat Tinggi)</option>
+                                <label class="form-label">Dusun</label>
+                                <!-- Display disabled select/input for visual -->
+                                <select class="form-select bg-light" disabled>
+                                    @foreach(\App\Models\Dusun::all() as $dusun)
+                                        <option value="{{ $dusun->id_dusun }}" {{ $usulan->id_dusun == $dusun->id_dusun ? 'selected' : '' }}>
+                                            {{ $dusun->nama }}
+                                        </option>
+                                    @endforeach
                                 </select>
+                                <!-- Send actual value via hidden input -->
+                                <input type="hidden" name="id_dusun" value="{{ $usulan->id_dusun }}">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="prioritas" class="form-label">Prioritas</label>
+                                <input type="number" class="form-control @error('prioritas') is-invalid @enderror" 
+                                    id="prioritas" name="prioritas" value="{{ old('prioritas', $usulan->prioritas) }}" required min="1">
+                                <div class="form-text text-muted">Angka prioritas harus unik dalam satu dusun.</div>
                                 @error('prioritas')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                             <div class="mb-3">
-                                <label for="status" class="form-label">Status</label>
-                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
-                                    <option value="Menunggu" {{ old('status', $usulan->status) == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
-                                    <option value="Setuju" {{ old('status', $usulan->status) == 'Setuju' ? 'selected' : '' }}>Setuju</option>
-                                    <option value="Tolak" {{ old('status', $usulan->status) == 'Tolak' ? 'selected' : '' }}>Tolak</option>
-                                </select>
-                                @error('status')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            {{-- Status field removed as per request (Cannot change status in edit) --}}
+                            {{-- <input type="hidden" name="status" value="{{ $usulan->status }}"> --}}
 
                             <div class="mb-3">
                                 <label for="tahun" class="form-label">Tahun</label>

@@ -34,8 +34,18 @@ class RPJMController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
-            // Sesuaikan dengan fillable model RPJM
+            'tahun_mulai' => 'required|integer|digits:4',
+            'tahun_selesai' => 'required|integer|digits:4|gte:tahun_mulai',
+            'visi' => 'required|string',
+            'misi' => 'required|string',
+            'status' => 'nullable|string', // Default Proses if null
+            'prioritas' => 'nullable|integer|between:1,5',
+            'file_dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
+
+        if (empty($validated['status'])) {
+            $validated['status'] = 'Proses';
+        }
 
         // Simpan RPJM baru
         RPJM::create($validated);
@@ -74,7 +84,13 @@ class RPJMController extends Controller
 
         // Validasi input
         $validated = $request->validate([
-            // Sesuaikan dengan fillable model RPJM
+            'tahun_mulai' => 'required|integer|digits:4',
+            'tahun_selesai' => 'required|integer|digits:4|gte:tahun_mulai',
+            'visi' => 'required|string',
+            'misi' => 'required|string',
+            'status' => 'nullable|string',
+            'prioritas' => 'nullable|integer|between:1,5',
+            'file_dokumen' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         // Update RPJM

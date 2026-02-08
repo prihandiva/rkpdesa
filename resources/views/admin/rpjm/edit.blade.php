@@ -47,54 +47,54 @@
                         <h6 class="mb-0">Form Edit RPJM Desa</h6>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('rpjm.update', $rpjm->id) }}" method="POST">
+                        <form action="{{ route('rpjm.update', $rpjm->id_rpjm) }}" method="POST">
                             @csrf
                             @method('PUT')
-                            <!-- Assumed fields based on create, adjusted if needed. RPJM model fillable was empty but traditionally these fields are here -->
-                             <div class="mb-3">
-                                <label for="judul" class="form-label">Judul RPJM</label>
-                                <input type="text" class="form-control @error('judul') is-invalid @enderror"
-                                    id="judul" name="judul" value="{{ old('judul', $rpjm->judul ?? '') }}" required>
-                                @error('judul')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
 
-                             <div class="mb-3">
-                                <label for="tahun_id" class="form-label">Tahun</label>
-                                <select class="form-select @error('tahun_id') is-invalid @enderror" name="tahun_id" required>
-                                    <option value="">-- Pilih Tahun --</option>
-                                    @foreach(\App\Models\Tahun::all() as $t)
-                                        <option value="{{ $t->id_tahun }}" {{ old('tahun_id', $rpjm->tahun_id ?? '') == $t->id_tahun ? 'selected' : '' }}>{{ $t->tahun }}</option>
-                                    @endforeach
-                                </select>
-                                @error('tahun_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                             <div class="mb-3">
-                                <label class="form-label">Periode Tahun <span class="text-danger">*</span></label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="number" class="form-control" placeholder="Tahun Awal"
-                                            name="tahun_awal" value="{{ old('tahun_awal', $rpjm->tahun_awal ?? '') }}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="number" class="form-control" placeholder="Tahun Akhir"
-                                            name="tahun_akhir" value="{{ old('tahun_akhir', $rpjm->tahun_akhir ?? '') }}" required>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tahun Mulai <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="tahun_mulai" value="{{ old('tahun_mulai', $rpjm->tahun_mulai) }}" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tahun Selesai <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" name="tahun_selesai" value="{{ old('tahun_selesai', $rpjm->tahun_selesai) }}" required>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea class="form-control" rows="4" placeholder="Masukkan deskripsi RPJM" name="deskripsi">{{ old('deskripsi', $rpjm->deskripsi ?? '') }}</textarea>
+                                <label class="form-label">Visi <span class="text-danger">*</span></label>
+                                <textarea class="form-control" rows="3" name="visi" required>{{ old('visi', $rpjm->visi) }}</textarea>
                             </div>
 
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                                <a href="{{ route('rpjm.index') }}" class="btn btn-secondary">Batal</a>
+                            <div class="mb-3">
+                                <label class="form-label">Misi <span class="text-danger">*</span></label>
+                                <textarea class="form-control" rows="5" name="misi" required>{{ old('misi', $rpjm->misi) }}</textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select" name="status">
+                                        <option value="Proses" {{ $rpjm->status == 'Proses' ? 'selected' : '' }}>Proses</option>
+                                        <option value="Pending" {{ $rpjm->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="Terverifikasi" {{ $rpjm->status == 'Terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
+                                        <option value="Disetujui" {{ $rpjm->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Prioritas (1-5)</label>
+                                    <input type="number" class="form-control" name="prioritas" value="{{ old('prioritas', $rpjm->prioritas) }}" min="1" max="5" placeholder="1-5">
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2 justify-content-between">
+                                <a href="{{ route('rpjm.index') }}" class="btn btn-secondary">
+                                    <i class="feather-x me-1"></i>Batal
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="feather-save me-1"></i>Simpan Perubahan
+                                </button>
                             </div>
                         </form>
                     </div>

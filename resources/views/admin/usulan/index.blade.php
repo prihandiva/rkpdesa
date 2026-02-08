@@ -130,13 +130,34 @@
                                                                     <td>{{ $usulan->prioritas }}</td>
                                                                     <td>
                                                                         @php
-                                                                            $badgeClass = 'bg-secondary';
-                                                                            if($usulan->status == 'Proses') $badgeClass = 'bg-primary'; // Biru
-                                                                            elseif($usulan->status == 'Pending') $badgeClass = 'bg-warning'; // Kuning (Masuk RKP)
-                                                                            elseif($usulan->status == 'Terverifikasi') $badgeClass = 'bg-purple'; // Ungu (Custom CSS needed or allow purple)
-                                                                            elseif($usulan->status == 'Gagal Terverifikasi') $badgeClass = 'bg-danger'; // Merah
-                                                                            elseif($usulan->status == 'Disetujui') $badgeClass = 'bg-success'; // Hijau
-                                                                            elseif($usulan->status == 'Menunggu persetujuan BPD') $badgeClass = 'bg-light text-dark border'; // Putih
+                                                                            $status = $usulan->status;
+                                                                            $badgeClass = 'bg-secondary text-white';
+                                                                            
+                                                                            switch($status) {
+                                                                                case 'Proses': 
+                                                                                    $badgeClass = 'bg-primary'; // Biru
+                                                                                    break;
+                                                                                case 'Pending': 
+                                                                                    $badgeClass = 'bg-warning text-dark'; // Kuning
+                                                                                    break;
+                                                                                case 'Terverifikasi': 
+                                                                                    $badgeClass = 'bg-purple text-white'; // Ungu
+                                                                                    break;
+                                                                                case 'Gagal Terverifikasi': 
+                                                                                    $badgeClass = 'bg-danger'; // Merah
+                                                                                    break;
+                                                                                case 'Disetujui': 
+                                                                                    $badgeClass = 'bg-success'; // Hijau
+                                                                                    break;
+                                                                                case 'Menunggu persetujuan BPD': 
+                                                                                    $badgeClass = 'bg-light text-dark border'; // Putih
+                                                                                    break;
+                                                                                case 'Ditolak BPD': 
+                                                                                    $badgeClass = 'bg-dark text-white'; // Hitam
+                                                                                    break;
+                                                                                default:
+                                                                                    $badgeClass = 'bg-secondary';
+                                                                            }
                                                                         @endphp
                                                                         <span class="badge {{ $badgeClass }}">
                                                                             {{ $usulan->status }}
@@ -154,7 +175,7 @@
                                                                     <td>
                                                                         <div class="d-flex gap-2">
                                                                             <a href="{{ route('usulan.show', $usulan->id_usulan) }}" class="btn btn-sm btn-outline-info" title="Detail">
-                                                                                <i class="feather-eye"></i> Show
+                                                                                <i class="feather-eye"></i>
                                                                             </a>
                                                                              @if(isset($currentUser) && ($currentUser->role == 'operator_dusun' || $currentUser->role == 'admin'))
                                                                                 <a href="{{ route('usulan.edit', $usulan->id_usulan) }}"

@@ -65,32 +65,39 @@ Route::get('/admin/dashboard', function () {
 // DEVELOPMENT MODE: Bypass authentication
 // Route::middleware(['auth.admin'])->prefix('admin')->group(function () {
 Route::prefix('admin')->group(function () {
-    Route::resource('user', UserController::class);
-    
-    // Role Management Routes via UserController
-    Route::post('user/role', [UserController::class, 'storeRole'])->name('user.role.store');
-    Route::put('user/role/{id}', [UserController::class, 'updateRole'])->name('user.role.update');
-    Route::delete('user/role/{id}', [UserController::class, 'destroyRole'])->name('user.role.destroy');
-
     Route::resource('berita-acara', BeritaAcaraController::class);
+    Route::get('berita-acara/{id}/print', [BeritaAcaraController::class, 'print'])->name('berita-acara.print');
     Route::post('rkpdesa/store-from-usulan', [RKPController::class, 'storeFromUsulan'])->name('rkp.store_from_usulan');
     Route::post('usulan/upload-berita-acara', [UsulanController::class, 'uploadBeritaAcara'])->name('usulan.upload_ba');
     Route::resource('usulan', UsulanController::class);
     Route::resource('rkpdesa', RKPController::class);
     Route::resource('rpjm', RPJMController::class);
-    Route::resource('rpjm', RPJMController::class);
-    Route::post('tahun/{id}/status', [TahunController::class, 'updateStatus'])->name('tahun.status.update');
-    Route::resource('tahun', TahunController::class);
-    Route::resource('usulan', UsulanController::class);
-    Route::resource('dusun', DusunController::class);
     Route::resource('notifikasi', NotifikasiController::class);
-    Route::resource('pegawai', PegawaiController::class);
-    Route::resource('pola-pelaksanaan', PolaPelaksanaanController::class);
-    Route::resource('role', RoleController::class);
-    Route::resource('rt', RTController::class);
-    Route::resource('rw', RWController::class);
-    Route::resource('sumber-biaya', SumberBiayaController::class);
-    Route::resource('bidang', BidangController::class);
-    // Monitoring
-    Route::get('monitoring', [\App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring.index');
+    
+    // Restricted Routes for "Admin Sistem" only
+    Route::group(['middleware' => function ($request, $next) {
+        if (strtolower(session('user_role')) !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+        return $next($request);
+    }], function () {
+        Route::resource('user', UserController::class);
+        // Role Management Routes via UserController
+        Route::post('user/role', [UserController::class, 'storeRole'])->name('user.role.store');
+        Route::put('user/role/{id}', [UserController::class, 'updateRole'])->name('user.role.update');
+        Route::delete('user/role/{id}', [UserController::class, 'destroyRole'])->name('user.role.destroy');
+
+        Route::post('tahun/{id}/status', [TahunController::class, 'updateStatus'])->name('tahun.status.update');
+        Route::resource('tahun', TahunController::class);
+        Route::resource('dusun', DusunController::class);
+        Route::resource('pegawai', PegawaiController::class);
+        Route::resource('pola-pelaksanaan', PolaPelaksanaanController::class);
+        Route::resource('role', RoleController::class);
+        Route::resource('rt', RTController::class);
+        Route::resource('rw', RWController::class);
+        Route::resource('sumber-biaya', SumberBiayaController::class);
+        Route::resource('bidang', BidangController::class);
+        // Monitoring
+        Route::get('monitoring', [\App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring.index');
+    });
 });

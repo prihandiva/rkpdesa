@@ -34,10 +34,9 @@ class RKPDesa extends Model
         'tahun',
         'id_rpjm',
         'id_usulan',
-        'status_verifikasi',
         'catatan_verifikasi',
-        'status_approval',
         'file_berita_acara_musrenbang',
+        'prioritas',
     ];
 
     public function rpjm()

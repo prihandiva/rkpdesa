@@ -89,6 +89,7 @@ class UsulanController extends Controller
         // Validasi input
         $validated = $request->validate([
             'jenis_kegiatan' => 'required|string',
+            'deskripsi' => 'nullable|string',
             'id_dusun' => 'required|exists:dusun,id_dusun',
             'id_rw' => 'required|exists:rw,id_rw',
             'id_rt' => 'required|exists:rt,id_rt',
@@ -162,7 +163,25 @@ class UsulanController extends Controller
     public function show($id)
     {
         $usulan = Usulan::findOrFail($id);
-        return view('admin.usulan.show', compact('usulan'));
+        
+        // Fetch logs from Notifikasi where id_kegiatan matches usulan ID 
+        // Note: Notifikasi 'id_kegiatan' is being overloaded for Usulan IDs too as per StatusService update.
+        // We might want to filter by 'judul' or add a 'type' column later, but for now assuming disjoint IDs or just showing mixed if collision (rare if big int).
+        // Actually, cleaner way is: Usulan logs might be distinguished by 'judul' containing "Usulan".
+        // Or better, just show logs where id_kegiatan matches.
+        $logs = Notifikasi::where('id_kegiatan', $id)
+                    ->Where('judul', 'like', '%Usulan%') // Filter to be safe? Or just all.
+                    ->orWhere(function($query) use ($id){
+                         $query->where('id_kegiatan', $id)
+                               ->where('judul_kegiatan', '!=', null); // Just simple fetch
+                    })
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        // Simplified: Just get by ID for now.
+        $logs = Notifikasi::where('id_kegiatan', $id)->orderBy('created_at', 'desc')->get();
+
+        return view('admin.usulan.show', compact('usulan', 'logs'));
     }
 
     /**
@@ -190,6 +209,7 @@ class UsulanController extends Controller
         // Validasi input
         $validated = $request->validate([
             'jenis_kegiatan' => 'required|string',
+            'deskripsi' => 'nullable|string',
             'id_dusun' => 'required|exists:dusun,id_dusun',
             'id_rw' => 'nullable|exists:rw,id_rw',
             'id_rt' => 'nullable|exists:rt,id_rt',
@@ -225,6 +245,17 @@ class UsulanController extends Controller
         // Update usulan
         $usulan->update($validated);
 
+        // Log Update Activity
+        Notifikasi::create([
+            'judul' => 'Usulan Diedit',
+            'deskripsi' => 'Data usulan ' . substr($usulan->jenis_kegiatan, 0, 30) . ' telah diperbarui.',
+            'id_kegiatan' => $usulan->id_usulan,
+            'judul_kegiatan' => $usulan->jenis_kegiatan,
+            'status' => 'info',
+            'id_penerima' => null,
+            'dibaca' => 0
+        ]);
+
         return redirect()->route('usulan.index')
             ->with('success', 'Usulan berhasil diperbarui');
     }
@@ -236,6 +267,18 @@ class UsulanController extends Controller
     public function destroy($id)
     {
         $usulan = Usulan::findOrFail($id);
+        
+        // Log Delete Activity
+        Notifikasi::create([
+            'judul' => 'Usulan Dihapus',
+            'deskripsi' => 'Usulan ' . substr($usulan->jenis_kegiatan, 0, 30) . ' telah dihapus.',
+            'id_kegiatan' => $usulan->id_usulan,
+            'judul_kegiatan' => $usulan->jenis_kegiatan,
+            'status' => 'danger',
+            'id_penerima' => null,
+            'dibaca' => 0
+        ]);
+
         $usulan->delete();
 
         return redirect()->route('usulan.index')

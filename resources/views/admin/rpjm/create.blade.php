@@ -56,44 +56,47 @@
                             @csrf
 
                             <!--! [Start] Form Group 1 !-->
-                            <div class="mb-3">
-                                <label class="form-label">Tahun <span class="text-danger">*</span></label>
-                                <select class="form-select" name="tahun_id" required>
-                                    <option value="">-- Pilih Tahun --</option>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tahun Mulai <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" placeholder="Contoh: 2025" name="tahun_mulai" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tahun Selesai <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" placeholder="Contoh: 2030" name="tahun_selesai" required>
+                                </div>
                             </div>
                             <!--! [End] Form Group 1 !-->
 
                             <!--! [Start] Form Group 2 !-->
                             <div class="mb-3">
-                                <label class="form-label">Judul RPJM <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" placeholder="Masukkan judul RPJM" name="judul"
-                                    required>
+                                <label class="form-label">Visi <span class="text-danger">*</span></label>
+                                <textarea class="form-control" rows="3" placeholder="Masukkan Visi" name="visi" required></textarea>
                             </div>
                             <!--! [End] Form Group 2 !-->
 
-                            <!--! [Start] Form Group 3 !-->
+                             <!--! [Start] Form Group 3 !-->
                             <div class="mb-3">
-                                <label class="form-label">Periode Tahun <span class="text-danger">*</span></label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="number" class="form-control" placeholder="Tahun Awal"
-                                            name="tahun_awal" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="number" class="form-control" placeholder="Tahun Akhir"
-                                            name="tahun_akhir" required>
-                                    </div>
-                                </div>
+                                <label class="form-label">Misi <span class="text-danger">*</span></label>
+                                <textarea class="form-control" rows="5" placeholder="Masukkan Misi" name="misi" required></textarea>
                             </div>
                             <!--! [End] Form Group 3 !-->
 
-                            <!--! [Start] Form Group 4 !-->
-                            <div class="mb-3">
-                                <label class="form-label">Deskripsi</label>
-                                <textarea class="form-control" rows="4" placeholder="Masukkan deskripsi RPJM" name="deskripsi"></textarea>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select class="form-select" name="status">
+                                        <option value="Proses">Proses</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Terverifikasi">Terverifikasi</option>
+                                        <option value="Disetujui">Disetujui</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Prioritas (1-5)</label>
+                                    <input type="number" class="form-control" name="prioritas" min="1" max="5" placeholder="1-5">
+                                </div>
                             </div>
-                            <!--! [End] Form Group 4 !-->
 
                             <!--! [Start] Form Actions !-->
                             <div class="d-flex gap-2 justify-content-between">
