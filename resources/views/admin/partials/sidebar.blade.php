@@ -7,8 +7,8 @@
         <div class="m-header">
             <a href="{{ route('admin.dashboard') }}" class="b-brand">
                 <!-- Change your logo here -->
-                <img src="{{ asset('admin-template/assets/images/siperdes.png') }}" alt="Logo" class="logo logo-lg" />
-                <img src="{{ asset('admin-template/assets/images/logo_siperdes.png') }}" alt="Logo"
+                <img src="{{ asset('admin-template/assets/images/Logo Sipdes 3.png') }}" alt="Logo" class="logo logo-lg" />
+                <img src="{{ asset('admin-template/assets/images/Logo Sipdes 2.png') }}" alt="Logo"
                     class="logo logo-sm" />
             </a>
         </div>

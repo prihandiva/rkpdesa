@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Daftar RPJM Desa')
+@section('title', 'Daftar RPJM')
 
 @section('content')
     <div class="container-fluid">
@@ -12,133 +12,159 @@
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item">RPJM Desa</li>
+                        <li class="breadcrumb-item">Daftar RPJM</li>
                     </ul>
+                    @if(isset($currentUser))
+                        <div class="mt-2">
+                            <span class="badge bg-info text-white">Role: {{ $currentUser->role }}</span>
+                        </div>
+                    @endif
                 </div>
                 <div class="page-header-right ms-auto">
                     <div class="page-header-right-items">
-                        <div class="d-flex d-md-none">
-                            <a href="javascript:void(0)" class="page-header-right-close-toggle">
-                                <i class="feather-arrow-left me-2"></i>
-                                <span>Back</span>
-                            </a>
+                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                            @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary">
+                                    <i class="feather-plus me-2"></i>
+                                    <span>Tambah RPJM</span>
+                                </a>
+                            @endif
                         </div>
-                        <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
-                            <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary">
-                                <i class="feather-plus me-2"></i>
-                                <span>Tambah RPJM</span>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="d-md-none d-flex align-items-center">
-                        <a href="javascript:void(0)" class="page-header-right-open-toggle">
-                            <i class="feather-align-right fs-20"></i>
-                        </a>
                     </div>
                 </div>
             </div>
             <!-- [ page-header ] end -->
 
+        <!--! [Start] Main Content Card !-->
         <div class="row">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
+                    <!--! [Start] Card Header !-->
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Rencana Pembangunan Jangka Menengah Desa</h6>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                <i class="feather-filter me-1"></i>Filter
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                <i class="feather-download me-1"></i>Export
-                            </button>
-                        </div>
+                        <h6 class="mb-0">Data RPJM Desa Grouped by Bidang</h6>
                     </div>
+                    <!--! [End] Card Header !-->
+
+                    <!--! [Start] Card Body !-->
                     <div class="card-body p-0">
-                        <!--! [Start] Table Responsive !-->
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th style="width: 50px;">No</th>
-                                        <th>Tahun</th>
-                                        <th>Visi</th>
-                                        <th>Status</th>
-                                        <th style="width: 100px;">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($rpjms as $item)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->tahun_mulai }} - {{ $item->tahun_selesai }}</td>
-                                            <td>{{ Str::limit($item->visi, 50) }}</td>
-                                            <td>
-                                                @php
-                                                    $statusClass = match($item->status) {
-                                                        'Proses' => 'bg-primary',
-                                                        'Pending' => 'bg-warning text-dark',
-                                                        'Terverifikasi' => 'bg-info',
-                                                        'Disetujui' => 'bg-success',
-                                                        'Ditolak' => 'bg-danger',
-                                                        default => 'bg-secondary'
-                                                    };
-                                                @endphp
-                                                <span class="badge {{ $statusClass }}">{{ $item->status ?? 'Draft' }}</span>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex gap-2">
-                                                    <a href="{{ route('rpjm.show', $item->id_rpjm) }}"
-                                                        class="btn btn-sm btn-outline-info">
-                                                        <i class="feather-eye"></i>
-                                                    </a>
-                                                    <a href="{{ route('rpjm.edit', $item->id_rpjm) }}"
-                                                        class="btn btn-sm btn-outline-warning">
-                                                        <i class="feather-edit"></i>
-                                                    </a>
-                                                    <form action="{{ route('rpjm.destroy', $item->id_rpjm) }}" method="POST"
-                                                        class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                            <i class="feather-trash-2"></i>
-                                                        </button>
-                                                    </form>
+                        {{-- Form pembungkus untuk 'Masuk ke RKP Desa' --}}
+                        <form action="{{ route('rkp.store_from_rpjm') }}" method="POST" id="form-rkp">
+                            @csrf
+                            
+                            {{-- Button Masuk RKP hanya untuk Operator Desa / Admin --}}
+                            @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                            <div class="p-3 bg-light border-bottom d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary" id="btn-masuk-rkp" disabled onclick="return confirm('Pindahkan item terpilih ke RKP Desa?')">
+                                    <i class="feather-check-square me-1"></i> Masuk ke RKP Desa
+                                </button>
+                            </div>
+                            @endif
+
+                            <div class="accordion" id="accordionBidang">
+                                @forelse($bidangs as $bidang)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading{{ $bidang->id_bidang }}">
+                                            <div class="d-flex align-items-center justify-content-between w-100 p-3">
+                                                <button class="accordion-button collapsed flex-grow-1 me-3" type="button" 
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse{{ $bidang->id_bidang }}" 
+                                                    aria-expanded="false" aria-controls="collapse{{ $bidang->id_bidang }}">
+                                                    {{ $bidang->nama }} <span class="badge bg-secondary ms-2">{{ $bidang->rpjm->count() }} Kegiatan</span>
+                                                </button>
+                                            </div>
+                                        </h2>
+                                        <div id="collapse{{ $bidang->id_bidang }}" class="accordion-collapse collapse" 
+                                            aria-labelledby="heading{{ $bidang->id_bidang }}" data-bs-parent="#accordionBidang">
+                                            <div class="accordion-body p-0">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                {{-- Checkbox Column only for Operator Desa --}}
+                                                                @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                                                    <th width="50" class="text-center">#</th>
+                                                                @endif
+                                                                <th>Jenis Kegiatan</th>
+                                                                <th>Lokasi</th>
+                                                                <th>Volume</th>
+                                                                <th>Waktu</th>
+                                                                <th>Biaya</th>
+                                                                <th>Status</th>
+                                                                <th>Aksi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse($bidang->rpjm as $rpjm)
+                                                                <tr>
+                                                                    {{-- Checkbox Input --}}
+                                                                    @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                                                        <td class="text-center">
+                                                                            {{-- Checkbox enabled regardless of status? Or check specific status? --}}
+                                                                            {{-- Usulan checked for 'Proses'. RPJM items are usually 'Draft' or just existing items ready to be picked. --}}
+                                                                            <input type="checkbox" name="id_rpjm[]" value="{{ $rpjm->id_rpjm }}" class="form-check-input rpjm-checkbox">
+                                                                        </td>
+                                                                    @endif
+                                                                    
+                                                                    <td>{{ $rpjm->jenis_kegiatan }}</td>
+                                                                    <td>{{ $rpjm->lokasi }}</td>
+                                                                    <td>{{ $rpjm->volume }}</td>
+                                                                    <td>{{ $rpjm->waktu }}</td>
+                                                                    <td>Rp {{ number_format($rpjm->jumlah, 0, ',', '.') }}</td>
+                                                                     <td>
+                                                                        @php
+                                                                            $statusColor = 'secondary';
+                                                                            switch($rpjm->status) {
+                                                                                case 'Proses': $statusColor = 'primary'; break; // Biru
+                                                                                case 'Pending': $statusColor = 'warning'; break; // Kuning
+                                                                                case 'Terverifikasi': $statusColor = 'purple'; break; // Ungu
+                                                                                case 'Gagal Terverifikasi': $statusColor = 'danger'; break; // Merah
+                                                                                case 'Disetujui': $statusColor = 'success'; break; // Hijau
+                                                                                case 'Menunggu persetujuan BPD': $statusColor = 'light text-dark border'; break; // Putih
+                                                                                case 'Ditolak BPD': $statusColor = 'dark'; break; // Hitam
+                                                                                default: $statusColor = 'secondary';
+                                                                            }
+                                                                        @endphp
+                                                                        <span class="badge bg-{{ $statusColor }}">{{ $rpjm->status ?? 'Proses' }}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="d-flex gap-2">
+                                                                            <a href="{{ route('rpjm.show', $rpjm->id_rpjm) }}" class="btn btn-sm btn-outline-info" title="Detail">
+                                                                                <i class="feather-eye"></i>
+                                                                            </a>
+                                                                             @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                                                                <a href="{{ route('rpjm.edit', $rpjm->id_rpjm) }}"
+                                                                                    class="btn btn-sm btn-outline-warning">
+                                                                                    <i class="feather-edit"></i>
+                                                                                </a>
+                                                                                <form action="{{ route('rpjm.destroy', $rpjm->id_rpjm) }}" method="POST"
+                                                                                    class="d-inline" onsubmit="return confirm('Yakin hapus RPJM ini?')">
+                                                                                    @csrf
+                                                                                    @method('DELETE')
+                                                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                                        <i class="feather-trash-2"></i>
+                                                                                    </button>
+                                                                                </form>
+                                                                            @endif
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="8" class="text-center py-3">Tidak ada kegiatan untuk bidang ini.</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center py-5">
-                                                <div class="alert alert-light mb-0" role="alert">
-                                                    <i class="feather-inbox me-2"></i>Belum ada data RPJM
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--! [End] Table Responsive !-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="p-3 text-center">Belum ada data bidang.</div>
+                                @endforelse
+                            </div>
+                        </form>
                     </div>
                     <!--! [End] Card Body !-->
-
-                    <!--! [Start] Card Footer - Pagination !-->
-                    <div class="card-footer bg-light border-top">
-                        <nav aria-label="Page navigation" class="mb-0">
-                            <ul class="pagination justify-content-center mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="javascript:void(0);">Previous</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="javascript:void(0);">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0);">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                    <!--! [End] Card Footer - Pagination !-->
                 </div>
             </div>
         </div>
@@ -151,3 +177,31 @@
         }
     </style>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.rpjm-checkbox');
+        const btnMasukRKP = document.getElementById('btn-masuk-rkp');
+
+        if(btnMasukRKP) {
+            function updateButtonState() {
+                let anyChecked = false;
+                checkboxes.forEach(chk => {
+                    if(chk.checked) anyChecked = true;
+                });
+                
+                if(anyChecked) {
+                    btnMasukRKP.removeAttribute('disabled');
+                } else {
+                    btnMasukRKP.setAttribute('disabled', 'disabled');
+                }
+            }
+
+            checkboxes.forEach(chk => {
+                chk.addEventListener('change', updateButtonState);
+            });
+        }
+    });
+</script>
+@endpush

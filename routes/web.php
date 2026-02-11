@@ -68,6 +68,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('berita-acara', BeritaAcaraController::class);
     Route::get('berita-acara/{id}/print', [BeritaAcaraController::class, 'print'])->name('berita-acara.print');
     Route::post('rkpdesa/store-from-usulan', [RKPController::class, 'storeFromUsulan'])->name('rkp.store_from_usulan');
+    Route::post('rkpdesa/store-from-rpjm', [RKPController::class, 'storeFromRpjm'])->name('rkp.store_from_rpjm');
     Route::post('usulan/upload-berita-acara', [UsulanController::class, 'uploadBeritaAcara'])->name('usulan.upload_ba');
     Route::resource('usulan', UsulanController::class);
     Route::resource('rkpdesa', RKPController::class);

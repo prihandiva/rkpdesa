@@ -1,5 +1,58 @@
 @extends('admin.layout')
 
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const existingPriorities = @json($existingPriorities);
+            const currentBidang = "{{ $rkpDesa->bidang }}";
+            const currentPriority = {{ $rkpDesa->prioritas ?? 'null' }};
+            
+            const bidangSelect = document.querySelector('select[name="bidang"]');
+            const prioritasInput = document.querySelector('input[name="prioritas"]');
+
+            function checkPriority() {
+                const selectedBidang = bidangSelect.value;
+                const enteredPriority = parseInt(prioritasInput.value);
+
+                const errorDiv = document.getElementById('prioritas-error');
+
+                // Reset state first
+                prioritasInput.classList.remove('is-invalid');
+                if(errorDiv) errorDiv.style.display = 'none';
+
+                if (selectedBidang && enteredPriority) {
+                    // Check if user is keeping the original combination
+                    if (selectedBidang == currentBidang && enteredPriority == currentPriority) {
+                        return; // Valid (no change or same value)
+                    }
+
+                    const prioritiesInBidang = existingPriorities[selectedBidang] || [];
+                    
+                    if (prioritiesInBidang.includes(enteredPriority)) {
+                        prioritasInput.classList.add('is-invalid');
+                        if(errorDiv) {
+                            errorDiv.textContent = 'Prioritas ' + enteredPriority + ' sudah digunakan pada bidang ini.';
+                            errorDiv.style.display = 'block';
+                        }
+                        prioritasInput.value = '';
+                        // prioritasInput.focus();
+                    }
+                }
+            }
+
+            if (bidangSelect && prioritasInput) {
+                prioritasInput.addEventListener('change', checkPriority);
+                prioritasInput.addEventListener('blur', checkPriority);
+                prioritasInput.addEventListener('input', function() {
+                    prioritasInput.classList.remove('is-invalid');
+                    const errorDiv = document.getElementById('prioritas-error');
+                    if(errorDiv) errorDiv.style.display = 'none';
+                });
+            }
+        });
+    </script>
+@endpush
+
 @section('title', 'Edit RKP Desa')
 
 @section('content')
@@ -90,7 +143,7 @@
                                     <select name="sumber_biaya" class="form-select @error('sumber_biaya') is-invalid @enderror" required>
                                         <option value="">-- Pilih Sumber Biaya --</option>
                                         @foreach($sumber_biayas as $sb)
-                                            <option value="{{ $sb->id_sumber_biaya }}" {{ old('sumber_biaya', $rkpDesa->sumber_biaya) == $sb->id_sumber_biaya ? 'selected' : '' }}>
+                                            <option value="{{ $sb->id_biaya }}" {{ old('sumber_biaya', $rkpDesa->sumber_biaya) == $sb->id_biaya ? 'selected' : '' }}>
                                                 {{ $sb->nama }}
                                             </option>
                                         @endforeach
@@ -104,7 +157,7 @@
                                     <select name="pola_pelaksanaan" class="form-select @error('pola_pelaksanaan') is-invalid @enderror" required>
                                         <option value="">-- Pilih Pola --</option>
                                         @foreach($pola_pelaksanaans as $pp)
-                                            <option value="{{ $pp->id_pola }}" {{ old('pola_pelaksanaan', $rkpDesa->pola_pelaksanaan) == $pp->id_pola ? 'selected' : '' }}>
+                                            <option value="{{ $pp->id_pelaksanaan }}" {{ old('pola_pelaksanaan', $rkpDesa->pola_pelaksanaan) == $pp->id_pelaksanaan ? 'selected' : '' }}>
                                                 {{ $pp->nama }}
                                             </option>
                                         @endforeach
@@ -148,6 +201,8 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Prioritas (1-5)</label>
                                     <input type="number" name="prioritas" class="form-control" value="{{ old('prioritas', $rkpDesa->prioritas) }}" min="1" max="5" placeholder="1-5">
+                                    <div class="form-text text-muted">Angka prioritas harus unik dalam satu bidang.</div>
+                                    <small class="text-danger" id="prioritas-error" style="display:none;"></small>
                                 </div>
 
                                 <div class="col-md-12 mb-3">

@@ -95,7 +95,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                {{ $item->usulan?->dusun?->nama ?? '-' }}
+                                                {{ $item->usulan?->dusun?->nama ?? ($item->lokasi ?? '-') }}
                                             </td>
                                             <td>
                                                 @php
@@ -121,10 +121,11 @@
                                                         class="btn btn-sm btn-outline-info" title="Lihat">
                                                         <i class="feather-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('rkpdesa.edit', $item->id_kegiatan) }}"
+                                                    <!-- <a href="{{ route('rkpdesa.edit', $item->id_kegiatan) }}"
                                                         class="btn btn-sm btn-outline-warning" title="Edit">
                                                         <i class="feather-edit"></i>
-                                                    </a>
+                                                    </a> -->
+                                                    @if(auth()->check() && (auth()->user()->role == 'admin' || auth()->user()->role == 'operator_desa'))
                                                     <form action="{{ route('rkpdesa.destroy', $item->id_kegiatan) }}" method="POST"
                                                         class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
                                                         @csrf
@@ -133,6 +134,7 @@
                                                             <i class="feather-trash-2"></i>
                                                         </button>
                                                     </form>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>

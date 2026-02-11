@@ -12,6 +12,11 @@ class Bidang extends Model
     protected $table = 'bidang';
     protected $primaryKey = 'id_bidang';
 
+    public function rpjm()
+    {
+        return $this->hasMany(RPJM::class, 'bidang', 'id_bidang');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

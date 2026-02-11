@@ -40,7 +40,13 @@ class RKPController extends Controller
         $sumber_biayas = \App\Models\SumberBiaya::all();
         $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
 
-        return view('admin.rkpdesa.create', compact('tahuns', 'rpjms', 'usulans', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans'));
+        // Existing Priorities for Frontend Validation (RKP needs strict priority per Bidang too?)
+        // Assuming per Bidang as per user request context.
+        $existingPriorities = RKPDesa::select('bidang', 'prioritas')->whereNotNull('prioritas')->get()->groupBy('bidang')->map(function ($items) {
+            return $items->pluck('prioritas')->toArray();
+        });
+
+        return view('admin.rkpdesa.create', compact('tahuns', 'rpjms', 'usulans', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans', 'existingPriorities'));
     }
 
     /**
@@ -61,8 +67,8 @@ class RKPController extends Controller
             'penerima' => 'nullable|string',
             'waktu' => 'nullable|string',
             'jumlah' => 'nullable|numeric',
-            'sumber_biaya' => 'required|exists:sumber_biaya,id_sumber_biaya',
-            'pola_pelaksanaan' => 'required|exists:pola_pelaksanaan,id_pola',
+            'sumber_biaya' => 'required|exists:sumber_biaya,id_biaya',
+            'pola_pelaksanaan' => 'required|exists:pola_pelaksanaan,id_pelaksanaan',
             'status' => 'required|string', // Validation for new status strings
             'tahun' => 'required|exists:tahun,id_tahun',
             'id_rpjm' => 'nullable|exists:rpjm,id_rpjm',
@@ -124,7 +130,11 @@ class RKPController extends Controller
         $sumber_biayas = \App\Models\SumberBiaya::all();
         $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
 
-        return view('admin.rkpdesa.edit', compact('rkpDesa', 'tahuns', 'rpjms', 'usulans', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans'));
+        $existingPriorities = RKPDesa::select('bidang', 'prioritas')->whereNotNull('prioritas')->get()->groupBy('bidang')->map(function ($items) {
+            return $items->pluck('prioritas')->toArray();
+        });
+
+        return view('admin.rkpdesa.edit', compact('rkpDesa', 'tahuns', 'rpjms', 'usulans', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans', 'existingPriorities'));
     }
 
     /**
@@ -147,8 +157,8 @@ class RKPController extends Controller
             'penerima' => 'nullable|string',
             'waktu' => 'nullable|string',
             'jumlah' => 'nullable|numeric',
-            'sumber_biaya' => 'nullable|exists:sumber_biaya,id_sumber_biaya',
-            'pola_pelaksanaan' => 'nullable|exists:pola_pelaksanaan,id_pola',
+            'sumber_biaya' => 'nullable|exists:sumber_biaya,id_biaya',
+            'pola_pelaksanaan' => 'nullable|exists:pola_pelaksanaan,id_pelaksanaan',
             'status' => 'required|string',
             'tahun' => 'sometimes|required|exists:tahun,id_tahun',
             'id_rpjm' => 'nullable|exists:rpjm,id_rpjm',
@@ -226,6 +236,64 @@ class RKPController extends Controller
 
         return redirect()->route('usulan.index')
             ->with('success', $count . ' Usulan berhasil dimasukkan ke RKP Desa (Status: Pending)');
+    }
+
+    /**
+     * Store RKP Desa from RPJM (Bulk Action)
+     * Memindahkan data RPJM terpilih ke tabel RKP Desa
+     */
+    public function storeFromRpjm(Request $request)
+    {
+        $request->validate([
+            'id_rpjm' => 'required|array',
+            'id_rpjm.*' => 'exists:rpjm,id_rpjm',
+        ]);
+
+        $ids = $request->id_rpjm;
+        $count = 0;
+        
+        // Get Active Tahun
+        $tahunAktif = \App\Models\Tahun::where('status', 'Aktif')->value('tahun') ?? date('Y');
+
+        foreach ($ids as $id) {
+            $rpjm = \App\Models\RPJM::find($id);
+            if ($rpjm) {
+                
+                // Check if already in RKP?
+                // Probably not strictly required, but usually we don't want duplicates for same year.
+                // But RKP table doesn't enforce unique constraints strongly yet.
+                
+                $rkp = RKPDesa::create([
+                    'nama' => $rpjm->jenis_kegiatan,
+                    'jenis_kegiatan' => $rpjm->jenis_kegiatan,
+                    'bidang' => $rpjm->bidang,
+                    'id_usulan' => null,
+                    'id_rpjm' => $rpjm->id_rpjm, 
+                    'tahun' => $tahunAktif,
+                    'status' => "Pending",
+                    'sumber_biaya' => $rpjm->sumber_biaya, 
+                    'pola_pelaksanaan' => $rpjm->pola_pelaksanaan,
+                    'lokasi' => $rpjm->lokasi,
+                    'volume' => $rpjm->volume,
+                    'penerima' => $rpjm->sasaran,
+                    'waktu' => $rpjm->waktu,
+                    'jumlah' => $rpjm->jumlah,
+                    'catatan_verifikasi' => $rpjm->catatan_verifikasi,
+                    'prioritas' => $rpjm->prioritas,
+                ]);
+
+                // Update Status RPJM to Pending (kuning) as it's now in RKP
+                $rpjm->update(['status' => 'Pending']);
+
+                // Status Service update for RKP if needed
+                $this->statusService->updateStatus($rkp, 'Pending');
+
+                $count++;
+            }
+        }
+
+        return redirect()->route('rpjm.index')
+            ->with('success', $count . ' Item RPJM berhasil dimasukkan ke RKP Desa (Status: Pending)');
     }
 
     /**

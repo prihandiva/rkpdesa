@@ -13,7 +13,7 @@
     <title>@yield('title', 'Dashboard') - RKP Desa</title>
 
     <!--! Favicon !-->
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-template/assets/images/logo_siperdes.png') }}" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-template/assets/images/Logo Sipdes 2 Persegi.png') }}" />
 
     <!--! Bootstrap CSS !-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-template/assets/css/bootstrap.min.css') }}" />
@@ -165,10 +165,20 @@
         }
     
         /* Sidebar Mini (Collapsed) - Added for responsiveness */
+
+        /* Sidebar Mini (Collapsed) - Added for responsiveness */
         @media (min-width: 992px) {
             body.sidebar-mini .nxl-navigation {
                 width: 80px;
                 z-index: 1000;
+                transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                overflow-x: hidden; /* Prevent horizontal scroll or messy overflow during transition */
+            }
+
+            /* Expand on Hover */
+            body.sidebar-mini .nxl-navigation:hover {
+                width: 280px;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1);
             }
 
             body.sidebar-mini .nxl-container {
@@ -176,40 +186,118 @@
                 width: calc(100% - 80px);
             }
             
+            /* Text Handling */
             body.sidebar-mini .nxl-mtext {
                 display: none;
-            }
-            
-            body.sidebar-mini .nxl-caption label {
-                display: none;
+                opacity: 0;
+                white-space: nowrap;
+                transition: opacity 0.2s ease;
             }
 
+            /* Show text only after a slight delay to allow width expansion */
+            body.sidebar-mini .nxl-navigation:hover .nxl-mtext {
+                display: inline-block;
+                opacity: 1;
+                transition-delay: 0.15s; 
+            }
+            
+            /* Caption Handling */
+            body.sidebar-mini .nxl-caption label {
+                display: none;
+                opacity: 0;
+                white-space: nowrap;
+                transition: opacity 0.2s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-caption label {
+                display: block;
+                opacity: 1;
+                transition-delay: 0.15s;
+            }
+
+            /* Icon Alignment */
             body.sidebar-mini .nxl-micon {
                 margin-right: 0;
                 justify-content: center;
+                min-width: 20px; /* Ensure icon doesn't shrink */
+                transition: all 0.3s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-micon {
+                margin-right: 10px;
+                justify-content: center; /* Keep icon centered in its space, or align if needed */
             }
             
+            /* Link Justification & Padding */
             body.sidebar-mini .nxl-item .nxl-link {
                 justify-content: center;
                 padding-left: 0;
                 padding-right: 0;
+                transition: all 0.3s ease;
             }
             
+            body.sidebar-mini .nxl-navigation:hover .nxl-item .nxl-link {
+                justify-content: flex-start;
+                padding-left: 25px; /* Add padding to align items nicely */
+                padding-right: 20px;
+            }
+            
+            /* Logo Handling - Crucial for fixing jump/cut-off */
+            body.sidebar-mini .m-header {
+                display: flex;
+                align-items: center;
+                justify-content: center; /* Center logo by default in mini */
+                padding: 0;
+                overflow: hidden; /* Clip overflowing content during transition */
+                transition: all 0.3s ease;
+            }
+
             body.sidebar-mini .m-header .logo-lg {
                 display: none;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            
+            /* Show large logo on hover with delay */
+            body.sidebar-mini .nxl-navigation:hover .m-header .logo-lg {
+                display: inline-block;
+                opacity: 1;
+                transition-delay: 0.1s; 
             }
             
             body.sidebar-mini .m-header .logo-sm {
                 display: block !important;
                 margin: 0 auto;
+                opacity: 1;
+                transition: opacity 0.1s ease;
             }
 
-            /* Hide the download card in mini mode */
-            body.sidebar-mini .nxl-navigation .card {
-                display: none;
+            /* Hide small logo on hover */
+            body.sidebar-mini .nxl-navigation:hover .m-header .logo-sm {
+                display: none !important;
+                opacity: 0;
             }
             
-            /* Toggle Buttons Visibility */
+            /* Align header content to left on hover */
+            body.sidebar-mini .nxl-navigation:hover .m-header {
+                justify-content: flex-start;
+                padding-left: 25px; /* Match link padding */
+            }
+
+            /* Hide downloads card */
+            body.sidebar-mini .nxl-navigation .card {
+                display: none;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+            }
+            
+            body.sidebar-mini .nxl-navigation:hover .card {
+                display: block;
+                opacity: 1;
+                transition-delay: 0.2s;
+            }
+            
+            /* Toggle Buttons */
             body.sidebar-mini #menu-mini-button {
                 display: none !important;
             }

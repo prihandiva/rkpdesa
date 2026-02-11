@@ -21,6 +21,7 @@ class SumberBiaya extends Seeder
             ['kode' => 'DDS', 'nama' => 'Dana Desa (DDS/DD)', 'created_at' => $now, 'updated_at' => $now],
             ['kode' => 'PBH', 'nama' => 'Pendapatan Bagi Hasil (PBH)', 'created_at' => $now, 'updated_at' => $now],
             ['kode' => 'PAD', 'nama' => 'Pendapatan Asli Daerah (PAD)', 'created_at' => $now, 'updated_at' => $now],
+            ['kode' => 'DLL', 'nama' => 'Dana Tunai (DLL)', 'created_at' => $now, 'updated_at' => $now],
         ];
 
         foreach ($items as $it) {

@@ -13,14 +13,36 @@ class RPJM extends Model
     protected $primaryKey = 'id_rpjm';
     
     protected $fillable = [
-        'visi',
-        'misi',
-        'tahun_mulai',
-        'tahun_selesai',
-        'file_dokumen',
         'status',
         'prioritas',
+        'bidang',
+        'subbidang',
+        'jenis_kegiatan',
+        'lokasi',
+        'volume',
+        'sasaran',
+        'waktu',
+        'jumlah',
+        'jumlah',
+        'sumber_biaya',
+        'pola_pelaksanaan',
+        'catatan_verifikasi',
     ];
+
+    public function masterBidang()
+    {
+        return $this->belongsTo(Bidang::class, 'bidang', 'id_bidang');
+    }
+
+    public function masterSumberBiaya()
+    {
+        return $this->belongsTo(SumberBiaya::class, 'sumber_biaya', 'id_biaya'); 
+    }
+
+    public function masterPola()
+    {
+        return $this->belongsTo(PolaPelaksanaan::class, 'pola_pelaksanaan', 'id_pelaksanaan');
+    }
 
     /**
      * The attributes that should be cast.

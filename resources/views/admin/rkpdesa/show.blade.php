@@ -39,10 +39,7 @@
                             </tr>
                             <tr>
                                 <th>Bidang</th>
-                                <!-- Assuming id or name is stored. If ID, might need relationship access but controller passed model. -->
-                                <!-- Model has 'bidang' field. If it's ID, we should ideally show name. -->
-                                <!-- Assuming simple string or ID for now as per previous views I saw. -->
-                                <td>{{ $rkpDesa->bidang }}</td> 
+                                <td>{{ $rkpDesa->masterBidang->nama ?? $rkpDesa->bidang }}</td> 
                             </tr>
                             <tr>
                                 <th>Tahun</th>
@@ -62,11 +59,11 @@
                             </tr>
                             <tr>
                                 <th>Sumber Biaya</th>
-                                <td>{{ $rkpDesa->sumber_biaya }}</td>
+                                <td>{{ $rkpDesa->masterSumberBiaya->nama ?? $rkpDesa->sumber_biaya }}</td>
                             </tr>
                             <tr>
                                 <th>Pola Pelaksanaan</th>
-                                <td>{{ $rkpDesa->pola_pelaksanaan }}</td>
+                                <td>{{ $rkpDesa->masterPola->nama ?? $rkpDesa->pola_pelaksanaan }}</td>
                             </tr>
                             <tr>
                                 <th>File Berita Acara</th>

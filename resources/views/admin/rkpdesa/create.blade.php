@@ -140,23 +140,23 @@
                                     <select class="form-select" name="sumber_biaya" required>
                                         <option value="">-- Pilih Sumber Biaya --</option>
                                         @foreach($sumber_biayas as $sb)
-                                            <option value="{{ $sb->id_sumber_biaya }}">{{ $sb->nama_sumber_biaya }}</option>
+                                            <option value="{{ $sb->id_biaya }}">{{ $sb->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Pola Pelaksanaan <span class="text-danger">*</span></label>
                                     <select class="form-select" name="pola_pelaksanaan" required>
                                         <option value="">-- Pilih Pola --</option>
                                         @foreach($pola_pelaksanaans as $pp)
-                                            <option value="{{ $pp->id_pola }}">{{ $pp->nama_pola }}</option>
+                                            <option value="{{ $pp->id_pelaksanaan }}">{{ $pp->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Status <span class="text-danger">*</span></label>
                                     <select class="form-select" name="status" required>
                                         <option value="Proses">Proses</option>
@@ -164,9 +164,11 @@
                                         <option value="Terverifikasi">Terverifikasi</option>
                                     </select>
                                 </div>
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Prioritas (1-5)</label>
                                     <input type="number" class="form-control" name="prioritas" min="1" max="5" placeholder="1-5">
+                                    <div class="form-text text-muted">Angka prioritas harus unik dalam satu bidang.</div>
+                                    <small class="text-danger" id="prioritas-error" style="display:none;"></small>
                                 </div>
                             </div>
 
@@ -217,4 +219,51 @@
         </div>
         <!--! [End] Main Form Card !-->
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const existingPriorities = @json($existingPriorities);
+            const bidangSelect = document.querySelector('select[name="bidang"]');
+            const prioritasInput = document.querySelector('input[name="prioritas"]');
+
+            function checkPriority() {
+                const selectedBidang = bidangSelect.value;
+                const enteredPriority = parseInt(prioritasInput.value);
+                const errorDiv = document.getElementById('prioritas-error');
+
+                // Reset state first
+                prioritasInput.classList.remove('is-invalid');
+                if(errorDiv) errorDiv.style.display = 'none';
+
+                if (selectedBidang && enteredPriority) {
+                    const prioritiesInBidang = existingPriorities[selectedBidang] || [];
+                    
+                    if (prioritiesInBidang.includes(enteredPriority)) {
+                        prioritasInput.classList.add('is-invalid');
+                        if(errorDiv) {
+                            errorDiv.textContent = 'Prioritas ' + enteredPriority + ' sudah digunakan pada bidang ini.';
+                            errorDiv.style.display = 'block';
+                        }
+                        prioritasInput.value = '';
+                        // prioritasInput.focus();
+                    }
+                }
+            }
+
+            if (bidangSelect && prioritasInput) {
+                prioritasInput.addEventListener('change', checkPriority);
+                prioritasInput.addEventListener('blur', checkPriority); // check on leaving field
+                prioritasInput.addEventListener('input', function() {
+                    prioritasInput.classList.remove('is-invalid');
+                    const errorDiv = document.getElementById('prioritas-error');
+                    if(errorDiv) errorDiv.style.display = 'none';
+                });
+                bidangSelect.addEventListener('change', function() {
+                    prioritasInput.value = ''; // Reset priority when bidang changes
+                    prioritasInput.classList.remove('is-invalid');
+                    const errorDiv = document.getElementById('prioritas-error');
+                    if(errorDiv) errorDiv.style.display = 'none';
+                });
+            }
+        });
+    </script>
 @endsection
