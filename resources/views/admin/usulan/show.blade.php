@@ -105,7 +105,7 @@
                             <div class="d-flex justify-content-center align-items-center">
                                 <h1 class="display-3 fw-bold text-{{ $prioColor }} mb-0">{{ $prioVal }}</h1>
                             </div>
-                            <span class="badge bg-light text-muted border mt-2">Skala 1 - 5</span>
+                            <span class="badge bg-light text-muted border mt-2">{{ $usulan->jenis }}</span>
                         </div>
 
                             <!-- Vertical Timeline (Stepper) -->

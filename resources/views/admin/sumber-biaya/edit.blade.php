@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Edit Sumber Biaya')
+@section('title', 'Edit Sumber Dana')
 
 @section('content')
     <div class="container-fluid">
@@ -8,11 +8,11 @@
         <div class="page-header">
             <div class="page-header-left d-flex align-items-center">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">Edit Sumber Biaya</h5>
+                    <h5 class="m-b-10">Edit Sumber Dana</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('sumber-biaya.index') }}">Sumber Biaya</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('sumber-biaya.index') }}">Sumber Dana</a></li>
                     <li class="breadcrumb-item">Edit</li>
                 </ul>
             </div>
@@ -44,7 +44,7 @@
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white">
-                        <h6 class="mb-0">Form Edit Sumber Biaya</h6>
+                        <h6 class="mb-0">Form Edit Sumber Dana</h6>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('sumber-biaya.update', $sumberBiaya->id_biaya) }}" method="POST">
@@ -60,7 +60,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="nama" class="form-label">Nama Sumber Biaya</label>
+                                <label for="nama" class="form-label">Nama Sumber Dana</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                     id="nama" name="nama" value="{{ old('nama', $sumberBiaya->nama) }}" required>
                                 @error('nama')

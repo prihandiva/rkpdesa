@@ -112,13 +112,38 @@
             <!--! [Start] Header Profile !-->
             <div class="nxl-h-item nxl-profile-menu">
                 <div class="dropdown">
-                    <a href="javascript:void(0);"
-                        class="avatar-text avatar-md bg-primary text-white rounded-pill d-flex align-items-center justify-content-center"
-                        data-bs-toggle="dropdown">
-                        <span>{{ auth()->user()->name ?? 'User' }}</span>
+                    <a href="javascript:void(0);" data-bs-toggle="dropdown" role="button" data-bs-auto-close="outside">
+                        @php
+                            $currentUser = auth()->user();
+                            if (!$currentUser && session('user_id')) {
+                                $currentUser = \App\Models\User::find(session('user_id'));
+                            }
+                            $userName = $currentUser ? $currentUser->nama : 'User';
+                            $userImage = $currentUser ? $currentUser->profile_image : null;
+                        @endphp
+                        
+                        @if($userImage)
+                            <img src="{{ asset('storage/' . $userImage) }}" alt="user-image" class="avatar-md rounded-circle border" style="object-fit: cover;">
+                        @else
+                            <div class="avatar-text avatar-md bg-primary text-white rounded-pill d-flex align-items-center justify-content-center">
+                                <span>{{ substr($userName, 0, 1) }}</span>
+                            </div>
+                        @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown">
-                        <a href="javascript:void(0);" class="dropdown-item">
+                        <div class="dropdown-header d-flex flex-column align-items-center p-3">
+                            @if($userImage)
+                                <img src="{{ asset('storage/' . $userImage) }}" alt="user-image" class="avatar-lg rounded-circle mb-2 border" style="object-fit: cover; width: 60px; height: 60px;">
+                            @else
+                                <div class="avatar-text avatar-lg bg-primary text-white rounded-circle mb-2 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 24px;">
+                                    <span>{{ substr($userName, 0, 1) }}</span>
+                                </div>
+                            @endif
+                            <h6 class="m-0">{{ $userName }}</h6>
+                            <span class="text-muted f-12">{{ $currentUser ? $currentUser->email : '' }}</span>
+                        </div>
+                        <div class="dropdown-divider mt-0"></div>
+                        <a href="{{ route('profile.index') }}" class="dropdown-item">
                             <i class="feather-user me-2"></i>
                             <span>Profile</span>
                         </a>

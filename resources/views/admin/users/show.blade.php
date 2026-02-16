@@ -32,6 +32,10 @@
                                     <td>{{ $user->nama }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Username</th>
+                                    <td>{{ $user->username ?? '-' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Email</th>
                                     <td>{{ $user->email }}</td>
                                 </tr>

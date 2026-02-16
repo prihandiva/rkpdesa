@@ -62,22 +62,10 @@ class StatusService
             }
         } elseif ($sourceModel instanceof RPJM) {
              $rpjmId = $sourceModel->id_rpjm;
-             // Update all RKPDesa linked to this RPJM? 
-             // CAUTION: RPJM is a master plan. Changing RPJM status might not want to change ALL RKPDesa status.
-             // But user said: "seluruh tabel dengan id_kegiatan/id_usulan/id_rpjm yang terkait(sama) juga harus berubah"
-             // This implies if I update one item, the related items update.
-             // If I update RPJM status, it SHOULD update links? 
-             // Actually, usually status flows from Usulan -> RKP -> Implementation.
-             // If I update an RPJM item's status, it might mean that specific RPJM item context.
-             // But if specific RKPDesa changes, RPJM itself shouldn't necessarily change status (as it contains many RKPDesa).
-             // HOWEVER, strictly following user instruction: "where status changed on one table, then ALL tables ... associated ... must also change".
-             // I will implement downward sync from RPJM -> RKPDesa -> Usulan just in case, but usually it's upward or sideways.
-             // Safest for "linked items":
-             // If RKPDesa changes -> Update Usulan. (One to One/Many relation).
-             
-             // Let's focus on the RKPDesa (Center) <-> Usulan link which is 1-to-1 or 1-to-Many? 
-             // RkpDesa belongsTo Usulan. So 1 RKPDesa has 1 Usulan.
-             // Update Usulan.
+             // Update linked RKPDesa
+             // Note: Updating RPJM usually doesn't cascade down to RKPDesa unless specific action, 
+             // but per user request "seluruh tabel... juga harus berubah", we enable it.
+             RkpDesa::where('id_rpjm', $rpjmId)->update(['status' => $status]);
         }
 
         // Execute Updates
@@ -86,42 +74,20 @@ class StatusService
         }
         
         if ($rpjmId) {
-            // Only update the specific RPJM record? IDK if RPJM is "one item" or "the document".
-            // Looking at RPJM model fields: `visi`, `misi`. It looks like the *Document*.
-            // It might be dangerous to change the status of the WHOLE RPJM document based on one activity.
-            // User said: "tables with id_kegiatan/id_usulan/id_rpjm that are RELATED(SAME)".
-            // This might mean if there is a specific entry in RPJM that corresponds to the activity.
-            // But RPJM table seems to be the Header? 
-            // Let's re-read User request: "seluruh tabel dengan id_kegiatan/id_usulan/id_rpjm yang terkait(sama) juga harus berubah"
-            // If the user means if I change status of RKPDesa ID 5, it changes Usulan ID 5 (if IDs match, or foreign key).
-            // It says "related (same)".
-            // I will implement: RKPDesa <-> Usulan sync.
-            // I will SKIP RPJM sync for now if it looks like a Header table, to avoid wiping the Master Plan status.
-            // Wait, looking at RPJM model: `visi`, `misi`, `tahun_mulai`. It IS a header.
-            // Accessing RPJM ID and changing its status because ONE sub-activity changed is WRONG logic usually.
-            // BUT, if the user insists "id_rpjm yang terkait", maybe they have a breakdown table?
-            // No, `rkpdesa` has `id_rpjm`.
-            // I will add the logic but maybe comment it out or add a check?
-            // "Pending" -> "Terverifikasi" for RKPDesa shouldn't make the whole 6-year RPJM "Terverifikasi".
-            // I'll stick to RkpDesa <-> Usulan for safety, and maybe update RPJM status ONLY if the source was RPJM.
-            
-            // Correction: The user might have meant: "If I approve an Usulan, the RKPDesa entry created from it should be Approved."
-            // And vice versa.
-            // I will do RkpDesa <-> Usulan. 
-            // I will also update RPJM ONLY IF it makes sense? No, I'll restrict to Usulan <-> RkpDesa for now to avoid breaking the app.
-            
-            // Re-evaluating: "seluruh tabel dengan id_kegiatan/id_usulan/id_rpjm"
-            // Maybe they mean if there's a table `verifikasi_usulan` with `id_usulan`, update that too.
-            // I'll search for any table having these columns later.
-            // For now, syncing Usulan is the most critical.
-             if ($rpjmId) {
-                 RPJM::where('id_rpjm', $rpjmId)->update(['status' => $status]);
-             }
+             RPJM::where('id_rpjm', $rpjmId)->update(['status' => $status]);
         }
         
         // Also update RkpDesa if source was something else (like Usulan)
         if ($sourceModel instanceof Usulan) {
-            RkpDesa::where('id_usulan', $sourceModel->id_usulan)->update(['status' => $status]);
+            $rkp = RkpDesa::where('id_usulan', $sourceModel->id_usulan)->first();
+            if ($rkp) {
+                $rkp->status = $status;
+                $rkp->saveQuietly();
+                // Also need to get RPJM if Usulan only had RKP linked to it
+                if ($rkp->id_rpjm && !$rpjmId) {
+                    RPJM::where('id_rpjm', $rkp->id_rpjm)->update(['status' => $status]);
+                }
+            }
         }
     }
 

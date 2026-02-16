@@ -31,25 +31,29 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        // Determine input name (login or email)
+        $inputName = $request->has('login') ? 'login' : 'email';
+
         // Validasi input
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6',
+        $request->validate([
+            $inputName => 'required|string',
+            'password' => 'required|string',
         ], [
-            'email.required' => 'Email harus diisi',
-            'email.email' => 'Format email tidak valid',
+            "$inputName.required" => 'Email atau Username harus diisi',
             'password.required' => 'Password harus diisi',
-            'password.min' => 'Password minimal 6 karakter',
         ]);
 
-        // Cari user berdasarkan email
-        $user = User::where('email', $validated['email'])->first();
+        $inputValue = $request->input($inputName);
+        $loginType = filter_var($inputValue, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // Cari user berdasarkan email atau username
+        $user = User::where($loginType, $inputValue)->first();
 
         // Validasi user dan password
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return redirect()->back()
-                ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Email atau password salah']);
+                ->withInput($request->only($inputName))
+                ->withErrors([$inputName => 'Email/Username atau password salah']);
         }
 
         // Simpan ke session

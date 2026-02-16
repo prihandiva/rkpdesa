@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Sumber Biaya')
+@section('title', 'Sumber Dana')
 
 @section('content')
     <div class="container-fluid">
@@ -8,11 +8,11 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">Sumber Biaya</h5>
+                        <h5 class="m-b-10">Sumber Dana</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                        <li class="breadcrumb-item">Sumber Biaya</li>
+                        <li class="breadcrumb-item">Sumber Dana</li>
                     </ul>
                 </div>
                 <div class="page-header-right ms-auto">
@@ -26,7 +26,7 @@
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             <a href="{{ route('sumber-biaya.create') }}" class="btn btn-md btn-primary">
                                 <i class="feather-plus me-2"></i>
-                                <span>Tambah Sumber Biaya</span>
+                                <span>Tambah Sumber Dana</span>
                             </a>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Data Sumber Biaya</h6>
+                        <h6 class="mb-0">Data Sumber Dana</h6>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-sm btn-outline-secondary">
                                 <i class="feather-filter me-1"></i>Filter
@@ -60,7 +60,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Kode</th>
-                                        <th>Nama Sumber Biaya</th>
+                                        <th>Nama Sumber Dana</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

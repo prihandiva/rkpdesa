@@ -18,6 +18,7 @@ class RPJM extends Model
         'bidang',
         'subbidang',
         'jenis_kegiatan',
+        'jenis',
         'lokasi',
         'volume',
         'sasaran',

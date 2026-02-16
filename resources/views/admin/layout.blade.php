@@ -8,6 +8,7 @@
     <meta name="description" content="RKP Desa Management System - Powered by Duralux" />
     <meta name="keyword" content="rkp, desa, management" />
     <meta name="author" content="RKP Desa Team" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!--! Title !-->
     <title>@yield('title', 'Dashboard') - RKP Desa</title>

@@ -79,6 +79,7 @@ class RPJMController extends Controller
             'bidang' => 'required|exists:bidang,id_bidang',
             'subbidang' => 'nullable|string',
             'jenis_kegiatan' => 'required|string',
+            'jenis' => 'nullable|string',
             'lokasi' => 'nullable|string',
             'volume' => 'nullable|string',
             'sasaran' => 'nullable|string',
@@ -207,5 +208,28 @@ class RPJMController extends Controller
         $rpjm->delete();
 
         return redirect()->route('rpjm.index')->with('success', 'RPJM berhasil dihapus');
+    }
+
+    /**
+     * Update Prioritas Only
+     */
+    public function updatePrioritas(Request $request, $id)
+    {
+        $rpjm = RPJM::findOrFail($id);
+
+        $validated = $request->validate([
+            'prioritas' => [
+                'nullable',
+                'integer',
+                // Unique priority per bidang check
+                Rule::unique('rpjm')->ignore($rpjm->id_rpjm, 'id_rpjm')->where(function ($query) use ($rpjm) {
+                    return $query->where('bidang', $rpjm->bidang);
+                }),
+            ],
+        ]);
+
+        $rpjm->update(['prioritas' => $validated['prioritas']]);
+
+        return redirect()->back()->with('success', 'Prioritas berhasil diperbarui');
     }
 }

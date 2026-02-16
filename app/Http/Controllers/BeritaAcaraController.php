@@ -94,12 +94,18 @@ class BeritaAcaraController extends Controller
             'jenis' => 'required|in:Musdus,Musrenbang,BPD',
             'hari' => 'required|string',
             'tanggal' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'tempat' => 'required|string',
             'materi' => 'required|string', 
             'putusan' => 'nullable|string', 
             'pemimpin' => 'required|string',
+            'asal_pemimpin' => 'required|string',
+            'nama_bpd' => 'nullable|string',
             'notulis1' => 'nullable|string',
+            'asal_notulis1' => 'nullable|string',
             'notulis2' => 'nullable|string',
+            'asal_notulis2' => 'nullable|string',
             'peserta_nama.*' => 'required|string',
             'peserta_alamat.*' => 'nullable|string',
             'peserta_jabatan.*' => 'nullable|string',
@@ -113,13 +119,20 @@ class BeritaAcaraController extends Controller
                 'id_dusun' => $validated['id_dusun'],
                 'jenis' => $validated['jenis'],
                 'hari' => $validated['hari'],
+                'hari' => $validated['hari'],
                 'tanggal' => $validated['tanggal'],
+                'jam_mulai' => $validated['jam_mulai'],
+                'jam_selesai' => $validated['jam_selesai'],
                 'tempat' => $validated['tempat'],
                 'materi' => $validated['materi'],
                 'putusan' => $validated['putusan'] ?? null,
                 'pemimpin' => $validated['pemimpin'],
+                'asal_pemimpin' => $validated['asal_pemimpin'] ?? null, // Storing asal_pemimpin
+                'nama_bpd' => $validated['jenis'] == 'BPD' ? $validated['nama_bpd'] : null,
                 'notulis1' => $validated['notulis1'],
+                'asal_notulis1' => $validated['asal_notulis1'] ?? null, // Storing asal_notulis1
                 'notulis2' => $validated['notulis2'],
+                'asal_notulis2' => $validated['asal_notulis2'] ?? null, // Storing asal_notulis2
             ]);
 
             // Save Participants
@@ -182,12 +195,18 @@ class BeritaAcaraController extends Controller
             'jenis' => 'required|in:Musdus,Musrenbang,BPD',
             'hari' => 'required|string',
             'tanggal' => 'required|date',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'tempat' => 'required|string',
             'materi' => 'required|string',
             'putusan' => 'nullable|string',
             'pemimpin' => 'required|string',
+            'asal_pemimpin' => 'required|string',
+            'nama_bpd' => 'nullable|string',
             'notulis1' => 'nullable|string',
+            'asal_notulis1' => 'nullable|string',
             'notulis2' => 'nullable|string',
+            'asal_notulis2' => 'nullable|string',
             'peserta_nama' => 'required|array|min:1',
             'peserta_nama.*' => 'required|string',
         ]);
@@ -200,6 +219,12 @@ class BeritaAcaraController extends Controller
                  abort(403, 'Anda tidak memiliki hak akses untuk mengubah ke jenis berita acara ini.');
              }
         }
+
+        if ($validated['jenis'] !== 'BPD') {
+            $validated['nama_bpd'] = null;
+        }
+
+
 
         // Update berita acara
         $beritaAcara->update($validated);

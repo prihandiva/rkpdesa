@@ -61,25 +61,23 @@
                                     <select class="form-select" name="tahun" required>
                                         <option value="">-- Pilih Tahun --</option>
                                         @foreach($tahuns as $t)
-                                            <option value="{{ $t->id_tahun }}">{{ $t->tahun }}</option>
+                                            <option value="{{ $t->tahun }}">{{ $t->tahun }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Nama Kegiatan / Judul RKP <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="nama" required placeholder="Contoh: Pembangunan Posyandu">
+                                    <label class="form-label">Nama Kegiatan / Jenis Kegiatan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Contoh: Pembangunan Posyandu" value="{{ old('jenis_kegiatan') }}">
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Jenis Kegiatan <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="jenis_kegiatan" required>
-                                        <option value="Pembangunan">Pembangunan</option>
-                                        <option value="Pemberdayaan">Pemberdayaan</option>
-                                        <option value="Pembinaan">Pembinaan</option>
-                                        <option value="Penyelenggaraan">Penyelenggaraan</option>
-                                        <option value="Penanggulangan">Penanggulangan</option>
+                                    <label class="form-label">Jenis <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Fisik" {{ old('jenis') == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                        <option value="Non Fisik" {{ old('jenis') == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
@@ -136,9 +134,9 @@
                                     <input type="number" class="form-control" name="jumlah">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Sumber Biaya <span class="text-danger">*</span></label>
+                                    <label class="form-label">Sumber Dana <span class="text-danger">*</span></label>
                                     <select class="form-select" name="sumber_biaya" required>
-                                        <option value="">-- Pilih Sumber Biaya --</option>
+                                        <option value="">-- Pilih Sumber Dana --</option>
                                         @foreach($sumber_biayas as $sb)
                                             <option value="{{ $sb->id_biaya }}">{{ $sb->nama }}</option>
                                         @endforeach
@@ -165,8 +163,8 @@
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Prioritas (1-5)</label>
-                                    <input type="number" class="form-control" name="prioritas" min="1" max="5" placeholder="1-5">
+                                    <label class="form-label">Prioritas</label>
+                                    <input type="number" class="form-control" name="prioritas" min="1" placeholder="Masukkan Prioritas">
                                     <div class="form-text text-muted">Angka prioritas harus unik dalam satu bidang.</div>
                                     <small class="text-danger" id="prioritas-error" style="display:none;"></small>
                                 </div>

@@ -111,9 +111,19 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Jenis Kegiatan / Nama Kegiatan <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Nama kegiatan..." value="{{ old('jenis_kegiatan') ?? $rpjm->jenis_kegiatan }}">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Jenis <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Fisik" {{ (old('jenis') ?? $rpjm->jenis) == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                        <option value="Non Fisik" {{ (old('jenis') ?? $rpjm->jenis) == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label">Jenis Kegiatan / Nama Kegiatan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Nama kegiatan..." value="{{ old('jenis_kegiatan') ?? $rpjm->jenis_kegiatan }}">
+                                </div>
                             </div>
 
                             <div class="row">
@@ -141,7 +151,7 @@
                                     <input type="number" class="form-control" name="jumlah" value="{{ old('jumlah') ?? $rpjm->jumlah }}" placeholder="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Sumber Biaya</label>
+                                    <label class="form-label">Sumber Dana</label>
                                     <select class="form-select" name="sumber_biaya">
                                         <option value="">-- Pilih Sumber --</option>
                                         @foreach($sumber_biayas as $sb)

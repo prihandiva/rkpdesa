@@ -84,9 +84,19 @@
                                 </div>
                             </div>
                             
-                            <div class="mb-3">
-                                <label class="form-label">Jenis Kegiatan / Nama Usulan <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Contoh: Pembangunan Jalan Paving..." value="{{ old('jenis_kegiatan') }}">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Jenis <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Fisik" {{ old('jenis') == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                        <option value="Non Fisik" {{ old('jenis') == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Jenis Kegiatan / Nama Usulan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Contoh: Pembangunan Jalan Paving..." value="{{ old('jenis_kegiatan') }}">
+                                </div>
                             </div>
 
                             <div class="mb-3">

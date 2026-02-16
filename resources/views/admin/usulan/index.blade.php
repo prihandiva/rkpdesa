@@ -105,7 +105,7 @@
                                                                 <th>Tahun</th>
                                                                 <th>Prioritas</th>
                                                                 <th>Status</th>
-                                                                <th>Berita Acara</th>
+                                                                <!-- <th>Berita Acara</th> -->
                                                                 <th>Aksi</th>
                                                             </tr>
                                                         </thead>
@@ -163,7 +163,7 @@
                                                                             {{ $usulan->status }}
                                                                         </span>
                                                                     </td>
-                                                                    <td>
+                                                                    <!-- <td>
                                                                         @if($usulan->file_berita_acara)
                                                                             <a href="{{ asset($usulan->file_berita_acara) }}" target="_blank" class="btn btn-xs btn-outline-primary" title="Download Berita Acara">
                                                                                 <i class="feather-download"></i>
@@ -171,7 +171,7 @@
                                                                         @else
                                                                             <span class="text-muted">-</span>
                                                                         @endif
-                                                                    </td>
+                                                                    </td> -->
                                                                     <td>
                                                                         <div class="d-flex gap-2">
                                                                             <a href="{{ route('usulan.show', $usulan->id_usulan) }}" class="btn btn-sm btn-outline-info" title="Detail">

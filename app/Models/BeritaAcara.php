@@ -23,12 +23,18 @@ class BeritaAcara extends Model
         'jenis',
         'hari',
         'tanggal',
+        'jam_mulai',
+        'jam_selesai',
         'tempat',
         'materi',
         'putusan',
         'pemimpin',
+        'asal_pemimpin',
+        'nama_bpd',
         'notulis1',
+        'asal_notulis1',
         'notulis2',
+        'asal_notulis2',
     ];
 
     /**

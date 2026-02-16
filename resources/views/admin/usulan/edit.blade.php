@@ -51,6 +51,18 @@
                             @csrf
                             @method('PUT')
                             <div class="mb-3">
+                                <label for="jenis" class="form-label">Jenis</label>
+                                <select class="form-select @error('jenis') is-invalid @enderror" id="jenis" name="jenis" required>
+                                    <option value="">-- Pilih Jenis --</option>
+                                    <option value="Fisik" {{ old('jenis', $usulan->jenis) == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                    <option value="Non Fisik" {{ old('jenis', $usulan->jenis) == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
+                                </select>
+                                @error('jenis')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="jenis_kegiatan" class="form-label">Jenis Kegiatan (Nama Usulan)</label>
                                 <input type="text" class="form-control @error('jenis_kegiatan') is-invalid @enderror"
                                     id="jenis_kegiatan" name="jenis_kegiatan" value="{{ old('jenis_kegiatan', $usulan->jenis_kegiatan) }}" required>

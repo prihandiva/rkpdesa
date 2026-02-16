@@ -106,8 +106,6 @@
 
                             <!-- Hidden Fields for Fixed/Existing Data -->
                             <input type="hidden" name="status" value="{{ $rkpDesa->status }}">
-                            <input type="hidden" name="nama" value="{{ $rkpDesa->nama }}">
-                            <input type="hidden" name="jenis_kegiatan" value="{{ $rkpDesa->jenis_kegiatan }}">
 
                             <div class="row">
                                 <!-- Dusun (Readonly) -->
@@ -121,6 +119,23 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Tahun</label>
                                     <input type="text" name="tahun" class="form-control bg-light" value="{{ $rkpDesa->tahun }}" readonly>
+                                </div>
+
+                                <!-- Jenis Kegiatan / Nama (Editable) -->
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Nama Kegiatan / Jenis Kegiatan <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('jenis_kegiatan') is-invalid @enderror" name="jenis_kegiatan" required value="{{ old('jenis_kegiatan', $rkpDesa->jenis_kegiatan) }}">
+                                    @error('jenis_kegiatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                                </div>
+
+                                <!-- Jenis (Dropdown) -->
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Jenis <span class="text-danger">*</span></label>
+                                    <select class="form-select" name="jenis" required>
+                                        <option value="">-- Pilih Jenis --</option>
+                                        <option value="Fisik" {{ (old('jenis') ?? $rkpDesa->jenis) == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                        <option value="Non Fisik" {{ (old('jenis') ?? $rkpDesa->jenis) == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
+                                    </select>
                                 </div>
 
                                 <!-- Bidang (Dropdown) -->
@@ -137,11 +152,11 @@
                                     @error('bidang') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
 
-                                <!-- Sumber Biaya (Dropdown) -->
+                                <!--Sumber Dana (Dropdown) -->
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Sumber Biaya <span class="text-danger">*</span></label>
+                                    <label class="form-label">Sumber Dana <span class="text-danger">*</span></label>
                                     <select name="sumber_biaya" class="form-select @error('sumber_biaya') is-invalid @enderror" required>
-                                        <option value="">-- Pilih Sumber Biaya --</option>
+                                        <option value="">-- Pilih Sumber Dana --</option>
                                         @foreach($sumber_biayas as $sb)
                                             <option value="{{ $sb->id_biaya }}" {{ old('sumber_biaya', $rkpDesa->sumber_biaya) == $sb->id_biaya ? 'selected' : '' }}>
                                                 {{ $sb->nama }}
@@ -199,8 +214,8 @@
                                 </div>
                                 
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Prioritas (1-5)</label>
-                                    <input type="number" name="prioritas" class="form-control" value="{{ old('prioritas', $rkpDesa->prioritas) }}" min="1" max="5" placeholder="1-5">
+                                    <label class="form-label">Prioritas</label>
+                                    <input type="number" name="prioritas" class="form-control" value="{{ old('prioritas', $rkpDesa->prioritas) }}" min="1" placeholder="Masukkan Prioritas">
                                     <div class="form-text text-muted">Angka prioritas harus unik dalam satu bidang.</div>
                                     <small class="text-danger" id="prioritas-error" style="display:none;"></small>
                                 </div>

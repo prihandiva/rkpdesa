@@ -24,6 +24,17 @@
                             </a>
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                            @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']))
+                                <button type="button" class="btn btn-md btn-warning text-dark" onclick="submitToBPD()">
+                                    <i class="feather-send me-2"></i>
+                                    <span>Ajukan Persetujuan BPD</span>
+                                </button>
+                                <form id="bulkSubmitForm" action="{{ route('rkpdesa.submit_bpd') }}" method="POST" style="display: none;">
+                                    @csrf
+                                    <!-- Inputs will be appended here via JS -->
+                                </form>
+                            @endif
+
                             <a href="{{ route('rkpdesa.create') }}" class="btn btn-md btn-primary">
                                 <i class="feather-plus me-2"></i>
                                 <span>Tambah RKP</span>
@@ -46,23 +57,71 @@
                         <h6 class="mb-0">Rencana Kerja Pembangunan Desa</h6>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-sm btn-outline-secondary">
-                                <i class="feather-filter me-1"></i>Filter
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
                                 <i class="feather-download me-1"></i>Export
                             </button>
                         </div>
                     </div>
                     <div class="card-body p-0">
+                        <!-- Filter Section -->
+                        <div class="p-3 border-bottom bg-light">
+                            <form action="{{ route('rkpdesa.index') }}" method="GET">
+                                <div class="d-flex flex-wrap align-items-center gap-2">
+                                    <div style="min-width: 200px;">
+                                        <select name="status" class="form-select form-select-sm">
+                                            <option value="">Semua Status</option>
+                                            <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
+                                            <option value="Proses" {{ request('status') == 'Proses' ? 'selected' : '' }}>Proses</option>
+                                            <option value="Terverifikasi" {{ request('status') == 'Terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
+                                            <option value="Gagal Terverifikasi" {{ request('status') == 'Gagal Terverifikasi' ? 'selected' : '' }}>Gagal Terverifikasi</option>
+                                            <option value="Menunggu persetujuan BPD" {{ request('status') == 'Menunggu persetujuan BPD' ? 'selected' : '' }}>Menunggu persetujuan BPD</option>
+                                            <option value="Disetujui" {{ request('status') == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
+                                            <option value="Ditolak BPD" {{ request('status') == 'Ditolak BPD' ? 'selected' : '' }}>Ditolak BPD</option>
+                                            
+                                        </select>
+                                    </div>
+                                    <div style="min-width: 150px;">
+                                        <select name="jenis" class="form-select form-select-sm">
+                                            <option value="">Semua Jenis</option>
+                                            <option value="Fisik" {{ request('jenis') == 'Fisik' ? 'selected' : '' }}>Fisik</option>
+                                            <option value="Non Fisik" {{ request('jenis') == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex gap-1">
+                                        <button type="submit" class="btn btn-sm btn-primary">
+                                            <i class="feather-filter me-1"></i>Terapkan
+                                        </button>
+                                        <a href="{{ route('rkpdesa.index') }}" class="btn btn-sm btn-light border">
+                                            <i class="feather-refresh-cw me-1"></i>Reset
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
                         <!--! [Start] Table Responsive !-->
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                    <tr>
+                                        <!-- Checkbox Column -->
+                                        @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']))
+                                        <th style="width: 40px; text-align: center;">
+                                            <div class="form-check d-flex justify-content-center">
+                                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                            </div>
+                                        </th>
+                                        @endif
                                         <th style="width: 50px;">No</th>
                                         <th>Deskripsi</th>
-                                        <th class="text-center">Prioritas</th>
+                                        <th class="text-center">
+                                            <a href="{{ route('rkpdesa.index', array_merge(request()->except('sort'), ['sort' => request('sort') == 'prioritas_desc' ? 'prioritas_asc' : 'prioritas_desc'])) }}" class="text-dark text-decoration-none">
+                                                Prioritas
+                                                <span class="d-inline-flex flex-column align-items-center ms-1" style="vertical-align: middle; line-height: 1; height: 14px; justify-content: center;">
+                                                    <i class="feather-chevron-up {{ request('sort') == 'prioritas_asc' ? 'text-dark fw-bold' : 'text-muted' }}" style="font-size: 9px;"></i>
+                                                    <i class="feather-chevron-down {{ request('sort') == 'prioritas_desc' ? 'text-dark fw-bold' : 'text-muted' }}" style="font-size: 9px; margin-top: -2px;"></i>
+                                                </span>
+                                            </a>
+                                        </th>
                                         <th>Sumber</th>
                                         <th>Dusun</th>
                                         <th>Status</th>
@@ -72,13 +131,25 @@
                                 <tbody>
                                     @forelse($rkp_desa as $item)
                                         <tr>
+                                            <!-- Checkbox Check -->
+                                            @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']))
+                                            <td class="text-center">
+                                                @if($item->status == 'Terverifikasi')
+                                                    <div class="form-check d-flex justify-content-center">
+                                                        <input class="form-check-input row-checkbox" type="checkbox" value="{{ $item->id_kegiatan }}">
+                                                    </div>
+                                                @else
+                                                    <span class="text-muted" style="font-size: 0.8em;">-</span>
+                                                @endif
+                                            </td>
+                                            @endif
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <div class="fw-bold">{{ $item->nama }}</div>
+                                                <div class="fw-bold">{{ $item->jenis_kegiatan }}</div>
                                             </td>
                                             <td class="text-center">
                                                 @if($item->prioritas)
-                                                    <span class="badge rounded-pill bg-{{ $item->prioritas >= 4 ? 'danger' : ($item->prioritas >= 3 ? 'warning text-dark' : 'success') }} fs-6">
+                                                    <span class="fs-6 fw-bold text-dark">
                                                         {{ $item->prioritas }}
                                                     </span>
                                                 @else
@@ -140,7 +211,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center py-5">
+                                            <td colspan="{{ in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']) ? 7 : 6 }}" class="text-center py-5">
                                                 <div class="alert alert-light mb-0" role="alert">
                                                     <i class="feather-inbox me-2"></i>Belum ada data RKP
                                                 </div>
@@ -176,6 +247,57 @@
         </div>
         <!--! [End] Main Content Card !-->
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectAll = document.getElementById('selectAll');
+            if(selectAll) {
+                selectAll.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.row-checkbox');
+                    checkboxes.forEach(cb => cb.checked = this.checked);
+                });
+            }
+        });
+
+        function submitToBPD() {
+            const selected = [];
+            document.querySelectorAll('.row-checkbox:checked').forEach(cb => {
+                selected.push(cb.value);
+            });
+
+            if (selected.length === 0) {
+                alert('Pilih setidaknya satu item yang statusnya Terverifikasi.');
+                return;
+            }
+
+            if (!confirm('Apakah Anda yakin ingin mengajukan data yang dipilih (' + selected.length + ' item) untuk persetujuan BPD?')) {
+                return;
+            }
+
+            const form = document.getElementById('bulkSubmitForm');
+            // Remove previous inputs if any (clean state)
+            form.innerHTML = '';
+            
+            // Add CSRF
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+
+            // Add selected IDs
+            selected.forEach(id => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = id;
+                form.appendChild(input);
+            });
+
+            form.submit();
+        }
+    </script>
 
     <style>
         .table-hover tbody tr:hover {

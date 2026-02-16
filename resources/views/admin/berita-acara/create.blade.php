@@ -57,16 +57,28 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="hari">Hari</label>
                                 <input type="text" name="hari" id="hari" class="form-control" placeholder="Contoh: Senin" value="{{ old('hari') }}" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="tanggal">Tanggal</label>
                                 <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ old('tanggal') }}" required>
+                            </div>
+                        </div>
+                         <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="jam_mulai">Jam Mulai</label>
+                                <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" value="{{ old('jam_mulai') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="jam_selesai">Jam Selesai</label>
+                                <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" value="{{ old('jam_selesai') }}" required>
                             </div>
                         </div>
                     </div>
@@ -81,36 +93,79 @@
 
                     <div class="form-group">
                         <label for="materi">Materi / Topik Pembahasan</label>
-                        <textarea name="materi" id="materi" class="form-control tinymce-editor">{{ old('materi') }}</textarea>
+                        <small class="text-danger d-block mb-1">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
+                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim...">{{ old('materi') }}</textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="putusan">Putusan / Kesepakatan</label>
-                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor">{{ old('putusan') }}</textarea>
+                        <small class="text-danger d-block mb-1">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
+                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan...">{{ old('putusan') }}</textarea>
                     </div>
 
                     <hr>
                     <h5>Pimpinan & Notulis</h5>
+                    <hr>
+                    <h5>Pimpinan & Notulis</h5>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="pemimpin">Pimpinan Rapat</label>
                                 <input type="text" list="pegawai_list" name="pemimpin" id="pemimpin" class="form-control" 
-                                    placeholder="Ketikan atau pilih..." value="{{ old('pemimpin') }}" autocomplete="off" required>
+                                    placeholder="Nama Pimpinan" value="{{ old('pemimpin') }}" autocomplete="off" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="asal_pemimpin">Asal Pimpinan (Jabatan/Instansi)</label>
+                                <input type="text" name="asal_pemimpin" id="asal_pemimpin" class="form-control" 
+                                    placeholder="Contoh: Ketua BPD" value="{{ old('asal_pemimpin') }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if(($jenis ?? '') == 'BPD')
+                    <div class="row">
+                         <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="nama_bpd">Ketua BPD</label>
+                                <input type="text" name="nama_bpd" id="nama_bpd" class="form-control" 
+                                    placeholder="Nama Ketua BPD" value="{{ old('nama_bpd') }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="notulis1">Notulis 1</label>
                                 <input type="text" list="pegawai_list" name="notulis1" id="notulis1" class="form-control" 
-                                    placeholder="Ketikan atau pilih..." value="{{ old('notulis1') }}" autocomplete="off">
+                                    placeholder="Nama Notulis 1" value="{{ old('notulis1') }}" autocomplete="off">
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="asal_notulis1">Asal Notulis 1</label>
+                                <input type="text" name="asal_notulis1" id="asal_notulis1" class="form-control" 
+                                    placeholder="Contoh: Sekretaris Desa" value="{{ old('asal_notulis1') }}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="notulis2">Notulis 2 (Opsional)</label>
                                 <input type="text" list="pegawai_list" name="notulis2" id="notulis2" class="form-control" 
-                                    placeholder="Ketikan atau pilih..." value="{{ old('notulis2') }}" autocomplete="off">
+                                    placeholder="Nama Notulis 2" value="{{ old('notulis2') }}" autocomplete="off">
+                            </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="asal_notulis2">Asal Notulis 2</label>
+                                <input type="text" name="asal_notulis2" id="asal_notulis2" class="form-control" 
+                                    placeholder="Contoh: Kaur Perencanaan" value="{{ old('asal_notulis2') }}">
                             </div>
                         </div>
                     </div>

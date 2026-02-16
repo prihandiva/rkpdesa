@@ -31,7 +31,7 @@
                         <tbody>
                             <tr>
                                 <th style="width: 30%;">Nama Kegiatan</th>
-                                <td>{{ $rkpDesa->nama }}</td>
+                                <td>{{ $rkpDesa->jenis_kegiatan }}</td>
                             </tr>
                             <tr>
                                 <th>Jenis Kegiatan</th>
@@ -58,7 +58,7 @@
                                 <td>Rp {{ number_format($rkpDesa->jumlah, 0, ',', '.') }}</td>
                             </tr>
                             <tr>
-                                <th>Sumber Biaya</th>
+                                <th>Sumber Dana</th>
                                 <td>{{ $rkpDesa->masterSumberBiaya->nama ?? $rkpDesa->sumber_biaya }}</td>
                             </tr>
                             <tr>
@@ -87,7 +87,7 @@
                     <div class="card bg-light border mb-3">
                         <div class="card-body">
                             <h6 class="card-title text-info"><i class="feather-check-circle me-2"></i>Verifikasi Usulan</h6>
-                            <form action="{{ route('rkpdesa.update', $rkpDesa->id_kegiatan) }}" method="POST">
+                            <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <!-- Removed hidden fields to prevent validation errors with empty values -->
@@ -115,11 +115,11 @@
 
                     <!-- ROLE: BPD -->
                     @if(session('user_role') == 'bpd')
-                        @if($rkpDesa->status == 'Terverifikasi' || $rkpDesa->status == 'Disetujui' || $rkpDesa->status == 'Ditolak BPD')
+                        @if(in_array($rkpDesa->status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD']))
                         <div class="card bg-light border mb-3">
                             <div class="card-body">
                                 <h6 class="card-title text-warning"><i class="feather-shield me-2"></i>Persetujuan BPD</h6>
-                                <form action="{{ route('rkpdesa.update', $rkpDesa->id_kegiatan) }}" method="POST">
+                                <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
@@ -139,8 +139,8 @@
                         @else
                         <div class="alert alert-warning">
                             <i class="feather-clock me-2"></i>
-                            <strong>Menunggu Verifikasi</strong>
-                            <p class="mb-0 small">Anda dapat memberikan persetujuan setelah kegiatan ini berstatus <strong>Terverifikasi</strong>. Status saat ini: <strong>{{ $rkpDesa->status }}</strong></p>
+                            <strong>Menunggu Pengajuan</strong>
+                            <p class="mb-0 small">Anda dapat memberikan persetujuan setelah kegiatan ini diajukan oleh Tim Penyusun (Status: Menunggu persetujuan BPD). Status saat ini: <strong>{{ $rkpDesa->status }}</strong></p>
                         </div>
                         @endif
                     @endif
@@ -191,11 +191,20 @@
                             };
                             if($prioVal == 0) $prioColor = 'secondary';
                         @endphp
-                        <div class="d-flex justify-content-center align-items-center">
+                        <div class="d-flex justify-content-center align-items-center position-relative">
                             <h1 class="display-3 fw-bold text-{{ $prioColor }} mb-0">{{ $prioVal > 0 ? $prioVal : '-' }}</h1>
+
+                            @if(session('user_role') == 'operator_desa' || session('user_role') == 'admin')
+                                <button type="button" class="btn btn-sm btn-light border position-absolute top-0 end-0" 
+                                    data-bs-toggle="modal" data-bs-target="#editPrioritasModal" title="Edit Prioritas">
+                                    <i class="feather-edit-2"></i>
+                                </button>
+                            @endif
                         </div>
-                        <span class="badge bg-light text-muted border mt-2">Skala 1 - 5</span>
+                        <span class="badge bg-light text-muted border mt-2">{{ $rkpDesa->jenis }}</span>
                     </div>
+
+
 
                     <!-- Vertical Timeline (Stepper) -->
                     <div class="position-relative ps-3 mt-4">
@@ -346,3 +355,31 @@
     }
 </style>
 @endsection
+
+<!-- Modal Edit Prioritas (Moved outside to fix z-index) -->
+@if(session('user_role') == 'operator_desa' || session('user_role') == 'admin')
+<div class="modal fade" id="editPrioritasModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Prioritas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('rkpdesa.update_prioritas', $rkpDesa->id_kegiatan) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Prioritas</label>
+                        <input type="number" name="prioritas" class="form-control" min="1" value="{{ $rkpDesa->prioritas }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endif

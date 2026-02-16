@@ -103,7 +103,7 @@
                 <li class="nxl-item {{ request()->routeIs('sumber-biaya.*') ? 'active' : '' }}">
                     <a href="{{ route('sumber-biaya.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-credit-card"></i></span>
-                        <span class="nxl-mtext">Sumber Biaya</span>
+                        <span class="nxl-mtext">Sumber Dana</span>
                     </a>
                 </li>
 
@@ -120,18 +120,16 @@
                         <span class="nxl-mtext">Dusun</span>
                     </a>
                 </li>
-
-                <li class="nxl-item {{ request()->routeIs('rt.*') ? 'active' : '' }}">
-                    <a href="{{ route('rt.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-home"></i></span>
-                        <span class="nxl-mtext">RT</span>
-                    </a>
-                </li>
-
                 <li class="nxl-item {{ request()->routeIs('rw.*') ? 'active' : '' }}">
                     <a href="{{ route('rw.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-home"></i></span>
                         <span class="nxl-mtext">RW</span>
+                    </a>
+                </li>
+                <li class="nxl-item {{ request()->routeIs('rt.*') ? 'active' : '' }}">
+                    <a href="{{ route('rt.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-home"></i></span>
+                        <span class="nxl-mtext">RT</span>
                     </a>
                 </li>
 

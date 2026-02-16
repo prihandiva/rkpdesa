@@ -69,8 +69,15 @@ Route::prefix('admin')->group(function () {
     Route::get('berita-acara/{id}/print', [BeritaAcaraController::class, 'print'])->name('berita-acara.print');
     Route::post('rkpdesa/store-from-usulan', [RKPController::class, 'storeFromUsulan'])->name('rkp.store_from_usulan');
     Route::post('rkpdesa/store-from-rpjm', [RKPController::class, 'storeFromRpjm'])->name('rkp.store_from_rpjm');
+    
+    // Priority Update Routes (Operator Desa / Admin)
+    Route::put('rkpdesa/{id}/prioritas', [RKPController::class, 'updatePrioritas'])->name('rkpdesa.update_prioritas');
+    Route::put('rpjm/{id}/prioritas', [RPJMController::class, 'updatePrioritas'])->name('rpjm.update_prioritas');
+
     Route::post('usulan/upload-berita-acara', [UsulanController::class, 'uploadBeritaAcara'])->name('usulan.upload_ba');
     Route::resource('usulan', UsulanController::class);
+    Route::put('rkpdesa/{id}/status', [RKPController::class, 'updateStatus'])->name('rkpdesa.update_status');
+    Route::post('rkpdesa/submit-bpd', [RKPController::class, 'submitToBPD'])->name('rkpdesa.submit_bpd');
     Route::resource('rkpdesa', RKPController::class);
     Route::resource('rpjm', RPJMController::class);
     Route::resource('notifikasi', NotifikasiController::class);
@@ -101,4 +108,6 @@ Route::prefix('admin')->group(function () {
         // Monitoring
         Route::get('monitoring', [\App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring.index');
     });
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });

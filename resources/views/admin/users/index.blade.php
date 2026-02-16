@@ -66,6 +66,7 @@
                                     <tr>
                                         <th style="width: 50px;">No</th>
                                         <th>Nama</th>
+                                        <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Status</th>
@@ -77,6 +78,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $user->nama }}</td>
+                                            <td>{{ $user->username ?? '-' }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
                                                 <span class="badge {{ $user->role == 'admin' ? 'bg-danger' : 

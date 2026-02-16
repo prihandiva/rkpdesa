@@ -89,6 +89,7 @@ class UsulanController extends Controller
         // Validasi input
         $validated = $request->validate([
             'jenis_kegiatan' => 'required|string',
+            'jenis' => 'nullable|string',
             'deskripsi' => 'nullable|string',
             'id_dusun' => 'required|exists:dusun,id_dusun',
             'id_rw' => 'required|exists:rw,id_rw',
