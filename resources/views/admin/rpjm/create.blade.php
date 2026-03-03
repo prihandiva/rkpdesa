@@ -92,11 +92,20 @@
                                     <label class="form-label">Waktu Pelaksanaan</label>
                                     <input type="text" class="form-control" name="waktu" value="{{ old('waktu') }}" placeholder="Contoh: 3 Bulan">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Tahun Pelaksanaan</label>
+                                    <select class="form-select" name="tahun_pelaksanaan">
+                                        <option value="">-- Pilih Tahun --</option>
+                                        @for($i = 1; $i <= 8; $i++)
+                                            <option value="{{ $i }}" {{ old('tahun_pelaksanaan') == $i ? 'selected' : '' }}>Tahun ke-{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Perkiraan Biaya (Rp)</label>
                                     <input type="number" class="form-control" name="jumlah" value="{{ old('jumlah') }}" placeholder="0">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Sumber Dana</label>
                                     <select class="form-select" name="sumber_biaya">
                                         <option value="">-- Pilih Sumber --</option>
@@ -207,8 +216,8 @@
                              <div class="timeline-item">
                                  <div class="icon-holder bg-light text-muted">3</div>
                                  <div class="content">
-                                     <h6 class="mb-0 text-muted">Masuk ke RKP Desa</h6>
-                                     <p class="text-muted small mb-0">Kegiatan terpilih masuk RKP Tahunan</p>
+                                     <h6 class="mb-0 text-muted">Pembuatan Usulan</h6>
+                                     <p class="text-muted small mb-0">Setiap dusun melihat rpjm yang tertera untuk pembuatan Usulan</p>
                                  </div>
                              </div>
                          </div>

@@ -30,16 +30,7 @@
                     </a>
                 </li>
                 <!--! [End] Dashboard Menu !-->
-
-                <!--! [Start] Usulan Menu !-->
-                <li class="nxl-item {{ request()->routeIs('usulan.*') ? 'active' : '' }}">
-                    <a href="{{ route('usulan.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-edit-2"></i></span>
-                        <span class="nxl-mtext">Usulan</span>
-                    </a>
-                </li>
-                <!--! [End] Usulan Menu !-->
-
+                
                 <!--! [Start] RPJM Desa Menu !-->
                 <li class="nxl-item {{ request()->routeIs('rpjm.*') ? 'active' : '' }}">
                     <a href="{{ route('rpjm.index') }}" class="nxl-link">
@@ -48,6 +39,15 @@
                     </a>
                 </li>
                 <!--! [End] RPJM Desa Menu !-->
+                
+                <!--! [Start] Usulan Menu !-->
+                <li class="nxl-item {{ request()->routeIs('usulan.*') ? 'active' : '' }}">
+                    <a href="{{ route('usulan.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-edit-2"></i></span>
+                        <span class="nxl-mtext">Usulan</span>
+                    </a>
+                </li>
+                <!--! [End] Usulan Menu !-->
 
                 <!--! [Start] RKP Desa Menu !-->
                 <li class="nxl-item {{ request()->routeIs('rkpdesa.*') ? 'active' : '' }}">

@@ -85,6 +85,7 @@ class RPJMController extends Controller
             'sasaran' => 'nullable|string',
             'waktu' => 'nullable|string',
             'jumlah' => 'nullable|numeric',
+            'tahun_pelaksanaan' => 'nullable|string',
             'sumber_biaya' => 'nullable|exists:sumber_biaya,id_biaya', 
             'pola_pelaksanaan' => 'nullable|exists:pola_pelaksanaan,id_pelaksanaan',
             'prioritas' => [
@@ -161,6 +162,7 @@ class RPJMController extends Controller
             'sasaran' => 'nullable|string',
             'waktu' => 'nullable|string',
             'jumlah' => 'nullable|numeric',
+            'tahun_pelaksanaan' => 'nullable|string',
             'sumber_biaya' => 'nullable|exists:sumber_biaya,id_biaya',
             'pola_pelaksanaan' => 'nullable|exists:pola_pelaksanaan,id_pelaksanaan',
             'prioritas' => [

@@ -68,6 +68,10 @@
                                         <td>{{ $rpjm->sasaran ?? '-' }}</td>
                                     </tr>
                                     <tr>
+                                        <th>Tahun Pelaksanaan</th>
+                                        <td>{{ $rpjm->tahun_pelaksanaan ? 'Tahun ke-' . $rpjm->tahun_pelaksanaan : '-' }}</td>
+                                    </tr>
+                                    <tr>
                                         <th>Waktu Pelaksanaan</th>
                                         <td>{{ $rpjm->waktu ?? '-' }}</td>
                                     </tr>

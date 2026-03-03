@@ -146,11 +146,20 @@
                                     <label class="form-label">Waktu Pelaksanaan</label>
                                     <input type="text" class="form-control" name="waktu" value="{{ old('waktu') ?? $rpjm->waktu }}" placeholder="Contoh: 3 Bulan">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Tahun Pelaksanaan</label>
+                                    <select class="form-select" name="tahun_pelaksanaan">
+                                        <option value="">-- Pilih Tahun --</option>
+                                        @for($i = 1; $i <= 8; $i++)
+                                            <option value="{{ $i }}" {{ (old('tahun_pelaksanaan') ?? $rpjm->tahun_pelaksanaan) == $i ? 'selected' : '' }}>Tahun ke-{{ $i }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Perkiraan Biaya (Rp)</label>
                                     <input type="number" class="form-control" name="jumlah" value="{{ old('jumlah') ?? $rpjm->jumlah }}" placeholder="0">
                                 </div>
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Sumber Dana</label>
                                     <select class="form-select" name="sumber_biaya">
                                         <option value="">-- Pilih Sumber --</option>

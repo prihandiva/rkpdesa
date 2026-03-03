@@ -54,13 +54,13 @@
                         </form>
                         
                         {{-- Button Masuk RKP hanya untuk Operator Desa / Admin --}}
-                        @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                        {{-- @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                         <div class="p-3 bg-light border-bottom d-flex justify-content-end">
                             <button type="button" class="btn btn-primary" id="btn-masuk-rkp" disabled>
                                 <i class="feather-check-square me-1"></i> Masuk ke RKP Desa
                             </button>
                         </div>
-                        @endif
+                        @endif --}}
 
                         <div class="accordion" id="accordionBidang">
                             @forelse($bidangs as $bidang)
@@ -82,9 +82,9 @@
                                                     <thead class="table-light">
                                                         <tr>
                                                             {{-- Checkbox Column only for Operator Desa --}}
-                                                            @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                                            {{-- @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                                                                 <th width="50" class="text-center">#</th>
-                                                            @endif
+                                                            @endif --}}
                                                             <th>Jenis Kegiatan</th>
                                                             <th>Lokasi</th>
                                                             <th>Volume</th>
@@ -98,7 +98,7 @@
                                                         @forelse($bidang->rpjm as $rpjm)
                                                             <tr>
                                                                 {{-- Checkbox Input --}}
-                                                                @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                                                {{-- @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                                                                     <td class="text-center">
                                                                         @if($rpjm->status == 'Proses')
                                                                             <input type="checkbox" value="{{ $rpjm->id_rpjm }}" class="form-check-input rpjm-checkbox">
@@ -106,7 +106,7 @@
                                                                             <i class="feather-check text-success"></i>
                                                                         @endif
                                                                     </td>
-                                                                @endif
+                                                                @endif --}}
                                                                 
                                                                 <td>{{ $rpjm->jenis_kegiatan }}</td>
                                                                 <td>{{ $rpjm->lokasi }}</td>

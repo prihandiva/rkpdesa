@@ -24,7 +24,7 @@ class RPJM extends Model
         'sasaran',
         'waktu',
         'jumlah',
-        'jumlah',
+        'tahun_pelaksanaan',
         'sumber_biaya',
         'pola_pelaksanaan',
         'catatan_verifikasi',

@@ -37,12 +37,7 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Dashboard (protected route)
-Route::get('/dashboard', function () {
-    if (!session()->get('user_authenticated')) {
-        return redirect('/login')->with('error', 'Silakan login terlebih dahulu');
-    }
-    return view('dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
 // Admin Auth Routes
 Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
@@ -54,12 +49,7 @@ Route::get('/admin', function () {
     return redirect()->route('admin.dashboard');
 });
 
-Route::get('/admin/dashboard', function () {
-    if (!session()->get('admin_authenticated')) {
-        return redirect()->route('admin.login');
-    }
-    return view('admin.dashboard');
-})->name('admin.dashboard');
+Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Admin CRUD Routes (Resource Routes)
 // DEVELOPMENT MODE: Bypass authentication
