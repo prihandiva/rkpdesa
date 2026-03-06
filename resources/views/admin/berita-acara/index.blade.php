@@ -9,7 +9,7 @@
                     <h5 class="m-b-10">Daftar Berita Acara {{ $jenis ?? 'Semua' }}</h5>
                 </div>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather-home"></i></a></li>
                     <li class="breadcrumb-item"><a href="#!">Berita Acara</a></li>
                 </ul>
             </div>
@@ -26,15 +26,15 @@
                 <div>
                      @if(request('jenis') == 'Musdus')
                         @if(in_array(session('user_role'), ['operator_dusun', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}" class="btn btn-primary btn-sm rounded"><i class="feather icon-plus"></i> Tambah Musdus</a>
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musdus</a>
                         @endif
                      @elseif(request('jenis') == 'Musrenbang')
                         @if(in_array(session('user_role'), ['operator_desa', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}" class="btn btn-primary btn-sm rounded"><i class="feather icon-plus"></i> Tambah Musrenbang</a>
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musrenbang</a>
                         @endif
                      @elseif(request('jenis') == 'BPD')
                         @if(in_array(session('user_role'), ['bpd', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}" class="btn btn-primary btn-sm rounded"><i class="feather icon-plus"></i> Tambah Musyawarah BPD</a>
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musyawarah BPD</a>
                         @endif
                      @else
                         <!-- General Add Button - Show only allowed options -->
@@ -49,7 +49,7 @@
                         @if($canMusdus || $canMusrenbang || $canBPD)
                          <div class="btn-group">
                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="feather icon-plus"></i> Tambah Baru
+                                <i class="feather-plus"></i> Tambah Baru
                             </button>
                             <div class="dropdown-menu">
                                 @if($canMusdus)
@@ -102,7 +102,7 @@
                                 <tr>
                                     <td>{{ $beritaAcaras->firstItem() + $key }}</td>
                                     <td>
-                                        <span class="badge badge-{{ $ba->jenis == 'Musdus' ? 'info' : ($ba->jenis == 'Musrenbang' ? 'success' : 'warning') }}">
+                                        <span class="badge {{ $ba->jenis == 'Musdus' ? 'bg-info' : ($ba->jenis == 'Musrenbang' ? 'bg-success' : 'bg-warning text-dark') }}">
                                             {{ $ba->jenis }}
                                         </span>
                                         @if($ba->dusun)
@@ -113,8 +113,20 @@
                                     <td>{{ Str::limit($ba->tempat, 30) }}</td>
                                     <td>{{ $ba->pemimpinPegawai->nama ?? '-' }}</td>
                                     <td>
-                                        <div class="btn-group">
-                                            <a href="{{ route('berita-acara.show', $ba->id_berita) }}" class="btn btn-sm btn-info" title="Lihat"><i class="feather icon-eye"></i></a>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadPdfModal" onclick="setUploadUrl({{ $ba->id_berita }})">
+                                                <i class="feather-upload"></i> Unggah PDF
+                                            </button>
+                                            
+                                            @if($ba->file_pdf)
+                                                <a href="{{ asset($ba->file_pdf) }}" class="btn btn-sm btn-outline-info" target="_blank" title="Lihat BA">
+                                                    <i class="feather-eye"></i> Lihat BA
+                                                </a>
+                                            @else
+                                                <button type="button" class="btn btn-sm btn-outline-info" onclick="showAlertNotUploaded()" title="Lihat BA">
+                                                    <i class="feather-eye"></i> Lihat BA
+                                                </button>
+                                            @endif
                                             
                                             @php
                                                 $role = session('user_role');
@@ -131,15 +143,15 @@
                                             @endphp
 
                                             @if($canEdit)
-                                            <a href="{{ route('berita-acara.edit', $ba->id_berita) }}" class="btn btn-sm btn-warning" title="Edit"><i class="feather icon-edit"></i></a>
+                                            <a href="{{ route('berita-acara.edit', $ba->id_berita) }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="feather-edit"></i></a>
                                             <form action="{{ route('berita-acara.destroy', $ba->id_berita) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="feather icon-trash"></i></button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="feather-trash-2"></i></button>
                                             </form>
                                             @endif
                                             
-                                            <a href="{{ route('berita-acara.print', $ba->id_berita) }}" class="btn btn-sm btn-dark" title="Cetak PDF" target="_blank"><i class="feather icon-printer"></i></a>
+                                            <a href="{{ route('berita-acara.print', $ba->id_berita) }}" class="btn btn-sm btn-outline-dark" title="Cetak PDF" target="_blank"><i class="feather-printer"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -156,4 +168,57 @@
         </div>
     </div>
 </div>
+
+<!-- Upload PDF Modal -->
+<div class="modal fade" id="uploadPdfModal" tabindex="-1" aria-labelledby="uploadPdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadPdfModalLabel">Unggah Berita Acara (PDF)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="uploadPdfForm" action="" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="file_pdf" class="form-label">Pilih File PDF Tanda Tangan Basah</label>
+                        <input class="form-control" type="file" id="file_pdf" name="file_pdf" accept="application/pdf" required>
+                        <div class="form-text text-muted">Maksimal ukuran file: 5MB. Format: .pdf</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Unggah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById('uploadPdfModal');
+        if (modal) {
+            document.body.appendChild(modal);
+        }
+    });
+
+    function showAlertNotUploaded() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Informasi',
+                text: 'File PDF Berita Acara belum diunggah. Silakan unggah terlebih dahulu!'
+            });
+        } else {
+            alert('File PDF Berita Acara belum diunggah. Silakan unggah terlebih dahulu!');
+        }
+    }
+
+    function setUploadUrl(id) {
+        const form = document.getElementById('uploadPdfForm');
+        form.action = `/admin/berita-acara/${id}/upload-pdf`;
+    }
+</script>
+
 @endsection

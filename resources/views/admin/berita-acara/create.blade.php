@@ -9,7 +9,7 @@
                     <h5 class="m-b-10">Tambah Berita Acara {{ $jenis ?? '' }}</h5>
                 </div>
                 <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather icon-home"></i></a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather-home"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('berita-acara.index', ['jenis' => $jenis]) }}">Daftar Berita Acara</a></li>
                     <li class="breadcrumb-item"><a href="#!">Tambah</a></li>
                 </ul>
@@ -196,7 +196,7 @@
                                     <td><input type="text" name="peserta_jabatan[]" class="form-control" placeholder="Contoh: Tokoh Masyarakat" value="Peserta"></td>
                                     <td class="text-center">
                                         <button type="button" class="btn btn-sm btn-danger removePeserta" title="Hapus">
-                                            <i class="feather icon-trash"></i>
+                                            <i class="feather-trash-2"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -206,7 +206,7 @@
                     
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-sm btn-info" id="addPeserta">
-                            <i class="feather icon-plus me-1"></i> Tambah Peserta
+                            <i class="feather-plus me-1"></i> Tambah Peserta
                         </button>
                     </div>
 
@@ -260,7 +260,7 @@
         cell1.innerHTML = '<input type="text" name="peserta_nama[]" class="form-control" placeholder="Nama Peserta" required>';
         cell2.innerHTML = '<input type="text" name="peserta_alamat[]" class="form-control" placeholder="Alamat">';
         cell3.innerHTML = '<input type="text" name="peserta_jabatan[]" class="form-control" placeholder="Contoh: Tokoh Masyarakat" value="Peserta">';
-        cell4.innerHTML = '<button type="button" class="btn btn-sm btn-danger removePeserta" title="Hapus"><i class="feather icon-trash"></i></button>';
+        cell4.innerHTML = '<button type="button" class="btn btn-sm btn-danger removePeserta" title="Hapus"><i class="feather-trash-2"></i></button>';
     });
 
     document.querySelector('#pesertaTable').addEventListener('click', function(e) {

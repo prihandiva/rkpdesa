@@ -8,6 +8,7 @@ use App\Models\RKPDesa;
 use App\Models\Tahun;
 use App\Models\Dusun;
 use App\Models\User;
+use App\Models\Rpjm;
 
 class DashboardController extends Controller
 {
@@ -28,7 +29,7 @@ class DashboardController extends Controller
         $actualYear = $selectedTahun ? $selectedTahun->tahun : date('Y'); // Get actual string '2026'
 
         // Basic Stats
-        $totalUsers = User::count();
+        $totalRpjm = Rpjm::count();
         $totalUsulan = Usulan::when($actualYear, function ($query) use ($actualYear) {
             return $query->where('tahun', $actualYear);
         })->count();
@@ -75,7 +76,7 @@ class DashboardController extends Controller
             'tahunList', 
             'selectedTahunId', 
             'selectedTahun',
-            'totalUsers',
+            'totalRpjm',
             'totalUsulan',
             'totalRkp',
             'usulanPerDusunData',

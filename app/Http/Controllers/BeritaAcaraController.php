@@ -263,4 +263,46 @@ class BeritaAcaraController extends Controller
 
         return view('admin.berita-acara.print', compact('beritaAcara', 'judul'));
     }
+
+    /**
+     * Upload signed PDF for Berita Acara
+     */
+    public function uploadPdf(Request $request, $id)
+    {
+        $beritaAcara = BeritaAcara::findOrFail($id);
+
+        // Permission Check
+        if (!$this->checkPermission($beritaAcara->jenis)) {
+            return redirect()->route('berita-acara.index')->with('error', 'Anda tidak memiliki hak akses untuk mengunggah PDF ini.');
+        }
+
+        $request->validate([
+            'file_pdf' => 'required|mimes:pdf|max:5120', // 5MB max
+        ]);
+
+        try {
+            if ($request->hasFile('file_pdf')) {
+                // Return existing file if any?
+                // Logic to delete old file could be added here if needed to avoid storage bloat.
+                if ($beritaAcara->file_pdf && file_exists(public_path($beritaAcara->file_pdf))) {
+                     unlink(public_path($beritaAcara->file_pdf));
+                }
+
+                $file = $request->file('file_pdf');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $destinationPath = public_path('/uploads/berita_acara');
+                $file->move($destinationPath, $filename);
+                
+                $beritaAcara->update([
+                    'file_pdf' => '/uploads/berita_acara/' . $filename
+                ]);
+
+                return redirect()->back()->with('success', 'File PDF berhasil diunggah.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengunggah file: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with('error', 'Tidak ada file yang diunggah.');
+    }
 }

@@ -56,6 +56,7 @@ Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class,
 // Route::middleware(['auth.admin'])->prefix('admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::resource('berita-acara', BeritaAcaraController::class);
+    Route::post('berita-acara/{id}/upload-pdf', [BeritaAcaraController::class, 'uploadPdf'])->name('berita-acara.upload_pdf');
     Route::get('berita-acara/{id}/print', [BeritaAcaraController::class, 'print'])->name('berita-acara.print');
     Route::post('rkpdesa/store-from-usulan', [RKPController::class, 'storeFromUsulan'])->name('rkp.store_from_usulan');
     Route::post('rkpdesa/store-from-rpjm', [RKPController::class, 'storeFromRpjm'])->name('rkp.store_from_rpjm');

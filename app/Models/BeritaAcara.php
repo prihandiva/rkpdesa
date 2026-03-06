@@ -35,6 +35,7 @@ class BeritaAcara extends Model
         'asal_notulis1',
         'notulis2',
         'asal_notulis2',
+        'file_pdf',
     ];
 
     /**
