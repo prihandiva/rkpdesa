@@ -87,6 +87,14 @@ class BeritaAcara extends Model
     }
 
     /**
+     * Relationship to Absensi (Daftar Hadir)
+     */
+    public function absensi()
+    {
+        return $this->hasMany(AbsensiBeritaAcara::class, 'id_berita', 'id_berita');
+    }
+
+    /**
      * The attributes that should be cast.
      *
      * @return array<string, string>

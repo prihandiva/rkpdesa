@@ -28,7 +28,7 @@
         
         .signature-section { margin-top: 50px; }
         .signature-table { width: 100%; }
-        .signature-table td { text-align: center; vertical-align: top; padding-bottom: 80px; }
+        .signature-table td { text-align: center; vertical-align: top; padding-bottom: 30px; }
         
         .peserta-table { margin-top: 20px; width: 100%; border: 1px solid #000; }
         .peserta-table th, .peserta-table td { border: 1px solid #000; padding: 8px; font-size: 11pt; }
@@ -150,8 +150,8 @@
             </tr>
             <tr>
                 <!-- Space for signature -->
-                <td style="height: 60px;"></td>
-                <td style="height: 60px;"></td>
+                <td style="height: 10px;"></td>
+                <td style="height: 10px;"></td>
             </tr>
             <tr>
                 <td>
@@ -162,26 +162,53 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2" style="padding-top: 40px;">
+                <td colspan="2" style="padding-top: 10px;">
                     Mengetahui/Menyetujui:<br><br>
                 </td>
             </tr>
             <tr>
                 <td style="width: 50%;">
                     Kepala Desa<br>
-                    <div style="height: 60px;"></div>
-                    <u><b>WIROSO HADI</b></u>
+                    <div style="height: 40px;"></div>
+                    <u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u>
                 </td>
                 @if($beritaAcara->jenis == 'BPD')
                 <td style="width: 50%;">
                     Ketua BPD<br>
-                    <div style="height: 60px;"></div>
+                    <div style="height: 40px;"></div>
                     <u><b>{{ $beritaAcara->nama_bpd ?? '.........................' }}</b></u>
                 </td>
                 @endif
             </tr>
         </table>
     </div>
+
+    <div class="text-center mt-5 mb-3">
+        <b>Mengetahui dan menyetujui,<br>
+        Wakil dan peserta musyawarah</b>
+    </div>
+
+    <!-- 10 Wakil TTD (Format 3 Kolom: Nama, Alamat, Ttd) -->
+    <table class="table-borderless mt-3" style="width: 100%; font-size: 11pt; text-align: center;">
+        <tr>
+            <td style="width: 33%; padding-bottom: 20px;">Nama</td>
+            <td style="width: 33%; padding-bottom: 20px;">Alamat</td>
+            <td style="width: 34%; padding-bottom: 20px;">Ttd</td>
+        </tr>
+        @foreach($beritaAcara->peserta as $index => $p)
+        <tr>
+            <td style="padding-bottom: 30px; text-align: left;">
+                {{ $index + 1 }}. {{ $p->nama }}
+            </td>
+            <td style="padding-bottom: 30px; text-align: center;">
+                {{ $p->alamat }}
+            </td>
+            <td style="padding-bottom: 30px; text-align: left; padding-left: 20px;">
+                ..........................................
+            </td>
+        </tr>
+        @endforeach
+    </table>
 
     <!-- PAGE BREAK & ATTENDANCE -->
     <div class="page-break"></div>
@@ -190,26 +217,23 @@
         DAFTAR HADIR PESERTA MUSYAWARAH
     </div>
     
-    <div class="text-center mb-4">
-        Mengetahui dan menyetujui,<br>
-        Wakil dan peserta musyawarah
-    </div>
-
     <table class="peserta-table">
         <thead>
             <tr>
                 <th style="width: 5%; text-align: center;">No</th>
                 <th style="width: 30%;">Nama</th>
-                <th style="width: 35%;">Alamat</th>
+                <th style="width: 25%;">Unsur/Jabatan</th>
+                <th style="width: 25%;">Alamat</th>
                 <th style="width: 15%; text-align: center;">Tanda Tangan</th>
             </tr>
         </thead>
         <tbody>
-            @forelse($beritaAcara->peserta as $index => $peserta)
+            @forelse($beritaAcara->absensi as $index => $abs)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
-                <td>{{ $peserta->nama }}</td>
-                <td>{{ $peserta->alamat }}</td>
+                <td>{{ $abs->nama }}</td>
+                <td>{{ $abs->unsur }}</td>
+                <td>{{ $abs->alamat }}</td>
                 <td></td> <!-- Empty for manual signature -->
             </tr>
             @empty
@@ -219,15 +243,17 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
             @endfor
             @endforelse
             
             {{-- Fill up to at least 15 rows for printed form feeling if few participants --}}
-            @if($beritaAcara->peserta->count() > 0 && $beritaAcara->peserta->count() < 10)
-                @for($i=$beritaAcara->peserta->count() + 1; $i<=10; $i++)
+            @if($beritaAcara->absensi->count() > 0 && $beritaAcara->absensi->count() < 15)
+                @for($i=$beritaAcara->absensi->count() + 1; $i<=15; $i++)
                 <tr>
                     <td class="text-center">{{ $i }}</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

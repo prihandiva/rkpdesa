@@ -178,7 +178,8 @@
                     </datalist>
 
                     <hr class="my-4">
-                    <h5 class="mb-3">Daftar Peserta Hadir (Yang Menandatangani)</h5>
+                    <h5 class="mb-1">Wakil Peserta Musyawarah (Yang Bertanda Tangan)</h5>
+                    <p class="text-muted small mb-3">Masukkan nama perwakilan peserta yang akan menandatangani Berita Acara (Maksimal 10 orang).</p>
                     <div class="table-responsive">
                         <table class="table table-bordered mb-0" id="pesertaTable">
                             <thead class="bg-light">
@@ -206,7 +207,41 @@
                     
                     <div class="text-end mt-2">
                         <button type="button" class="btn btn-sm btn-info" id="addPeserta">
-                            <i class="feather-plus me-1"></i> Tambah Peserta
+                            <i class="feather-plus me-1"></i> Tambah Wakil TTD
+                        </button>
+                    </div>
+
+                    <hr class="my-4">
+                    <h5 class="mb-1">Daftar Hadir (Absensi)</h5>
+                    <p class="text-muted small mb-3">Masukkan nama seluruh peserta musyawarah yang hadir sebagai lampiran daftar hadir.</p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0" id="absensiTable">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th style="width: 30%">Nama</th>
+                                    <th style="width: 35%">Alamat</th>
+                                    <th style="width: 25%">Unsur / Jabatan</th>
+                                    <th style="width: 10%" class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="absensi_nama[]" class="form-control" placeholder="Nama Hadirin"></td>
+                                    <td><input type="text" name="absensi_alamat[]" class="form-control" placeholder="Alamat"></td>
+                                    <td><input type="text" name="absensi_unsur[]" class="form-control" placeholder="Contoh: Tokoh Masyarakat" value="Peserta"></td>
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-sm btn-danger removeAbsensi" title="Hapus">
+                                            <i class="feather-trash-2"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="text-end mt-2">
+                        <button type="button" class="btn btn-sm btn-success" id="addAbsensi">
+                            <i class="feather-plus me-1"></i> Tambah Daftar Hadir
                         </button>
                     </div>
 
@@ -273,7 +308,40 @@
             if(document.getElementById('pesertaTable').getElementsByTagName('tbody')[0].rows.length > 1) {
                 row.remove();
             } else {
-                alert("Minimal satu peserta harus ada.");
+                alert("Minimal satu peserta (Wakil TTD) harus ada.");
+            }
+        }
+    });
+
+    document.getElementById('addAbsensi').addEventListener('click', function() {
+        var table = document.getElementById('absensiTable').getElementsByTagName('tbody')[0];
+        var row = table.insertRow(table.rows.length);
+        
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+
+        cell4.className = "text-center";
+
+        cell1.innerHTML = '<input type="text" name="absensi_nama[]" class="form-control" placeholder="Nama Hadirin">';
+        cell2.innerHTML = '<input type="text" name="absensi_alamat[]" class="form-control" placeholder="Alamat">';
+        cell3.innerHTML = '<input type="text" name="absensi_unsur[]" class="form-control" placeholder="Contoh: Tokoh Masyarakat" value="Peserta">';
+        cell4.innerHTML = '<button type="button" class="btn btn-sm btn-danger removeAbsensi" title="Hapus"><i class="feather-trash-2"></i></button>';
+    });
+
+    document.querySelector('#absensiTable').addEventListener('click', function(e) {
+        var target = e.target;
+        var btn = target.closest('.removeAbsensi');
+        
+        if (btn) {
+            var row = btn.closest('tr');
+            if(document.getElementById('absensiTable').getElementsByTagName('tbody')[0].rows.length > 1) {
+                row.remove();
+            } else {
+                // We can allow 0 if needed, but let's just clear the values if it's the last row
+                var inputs = row.querySelectorAll('input');
+                inputs.forEach(input => input.value = '');
             }
         }
     });

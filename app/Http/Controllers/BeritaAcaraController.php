@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BeritaAcara;
 use App\Models\PesertaBeritaAcara;
+use App\Models\AbsensiBeritaAcara;
 use App\Models\Tahun;
 use App\Models\Dusun;
 use App\Models\Pegawai;
@@ -109,6 +110,9 @@ class BeritaAcaraController extends Controller
             'peserta_nama.*' => 'required|string',
             'peserta_alamat.*' => 'nullable|string',
             'peserta_jabatan.*' => 'nullable|string',
+            'absensi_nama.*' => 'nullable|string',
+            'absensi_alamat.*' => 'nullable|string',
+            'absensi_unsur.*' => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -138,12 +142,28 @@ class BeritaAcaraController extends Controller
             // Save Participants
             if ($request->has('peserta_nama')) {
                 foreach ($request->peserta_nama as $key => $nama) {
-                    PesertaBeritaAcara::create([
-                        'id_berita' => $beritaAcara->id_berita,
-                        'nama' => $nama,
-                        'alamat' => $request->peserta_alamat[$key] ?? null,
-                        'jabatan' => $request->peserta_jabatan[$key] ?? 'Peserta',
-                    ]);
+                    if ($nama) {
+                        PesertaBeritaAcara::create([
+                            'id_berita' => $beritaAcara->id_berita,
+                            'nama' => $nama,
+                            'alamat' => $request->peserta_alamat[$key] ?? null,
+                            'jabatan' => $request->peserta_jabatan[$key] ?? 'Peserta',
+                        ]);
+                    }
+                }
+            }
+
+            // Save Absensi
+            if ($request->has('absensi_nama')) {
+                foreach ($request->absensi_nama as $key => $nama) {
+                    if ($nama) {
+                        AbsensiBeritaAcara::create([
+                            'id_berita' => $beritaAcara->id_berita,
+                            'nama' => $nama,
+                            'alamat' => $request->absensi_alamat[$key] ?? null,
+                            'unsur' => $request->absensi_unsur[$key] ?? null,
+                        ]);
+                    }
                 }
             }
 
@@ -209,6 +229,11 @@ class BeritaAcaraController extends Controller
             'asal_notulis2' => 'nullable|string',
             'peserta_nama' => 'required|array|min:1',
             'peserta_nama.*' => 'required|string',
+            'peserta_alamat.*' => 'nullable|string',
+            'peserta_jabatan.*' => 'nullable|string',
+            'absensi_nama.*' => 'nullable|string',
+            'absensi_alamat.*' => 'nullable|string',
+            'absensi_unsur.*' => 'nullable|string',
         ]);
         
         // Prevent changing jenis if unauthorized for target jenis? 
@@ -226,11 +251,49 @@ class BeritaAcaraController extends Controller
 
 
 
-        // Update berita acara
-        $beritaAcara->update($validated);
+        DB::beginTransaction();
+        try {
+            // Update berita acara basic info
+            $beritaAcara->update($validated);
 
-        return redirect()->route('berita-acara.index')
-            ->with('success', 'Berita Acara berhasil diperbarui');
+            // Update Participants (Wakil TTD) - Delete and Recreate
+            PesertaBeritaAcara::where('id_berita', $beritaAcara->id_berita)->delete();
+            if ($request->has('peserta_nama')) {
+                foreach ($request->peserta_nama as $key => $nama) {
+                    if ($nama) {
+                        PesertaBeritaAcara::create([
+                            'id_berita' => $beritaAcara->id_berita,
+                            'nama' => $nama,
+                            'alamat' => $request->peserta_alamat[$key] ?? null,
+                            'jabatan' => $request->peserta_jabatan[$key] ?? 'Peserta',
+                        ]);
+                    }
+                }
+            }
+
+            // Update Absensi (Daftar Hadir) - Delete and Recreate
+            AbsensiBeritaAcara::where('id_berita', $beritaAcara->id_berita)->delete();
+            if ($request->has('absensi_nama')) {
+                foreach ($request->absensi_nama as $key => $nama) {
+                    if ($nama) {
+                        AbsensiBeritaAcara::create([
+                            'id_berita' => $beritaAcara->id_berita,
+                            'nama' => $nama,
+                            'alamat' => $request->absensi_alamat[$key] ?? null,
+                            'unsur' => $request->absensi_unsur[$key] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('berita-acara.index', ['jenis' => $beritaAcara->jenis])
+                ->with('success', 'Berita Acara berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withInput()->with('error', 'Gagal mengubah Berita Acara: ' . $e->getMessage());
+        }
     }
 
     public function destroy($id)
@@ -252,7 +315,7 @@ class BeritaAcaraController extends Controller
      */
     public function print($id)
     {
-        $beritaAcara = BeritaAcara::with(['dusun', 'tahun', 'peserta'])->findOrFail($id);
+        $beritaAcara = BeritaAcara::with(['dusun', 'tahun', 'peserta', 'absensi'])->findOrFail($id);
         
         $judul = match($beritaAcara->jenis) {
             'Musdus' => 'MUSYAWARAH DUSUN',
@@ -261,7 +324,9 @@ class BeritaAcaraController extends Controller
             default => 'MUSYAWARAH',
         };
 
-        return view('admin.berita-acara.print', compact('beritaAcara', 'judul'));
+        $kades = \App\Models\Pegawai::where('posisi', 'Kepala Desa')->first();
+
+        return view('admin.berita-acara.print', compact('beritaAcara', 'judul', 'kades'));
     }
 
     /**
