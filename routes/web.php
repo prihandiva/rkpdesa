@@ -69,6 +69,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('usulan', UsulanController::class);
     Route::put('rkpdesa/{id}/status', [RKPController::class, 'updateStatus'])->name('rkpdesa.update_status');
     Route::post('rkpdesa/submit-bpd', [RKPController::class, 'submitToBPD'])->name('rkpdesa.submit_bpd');
+    Route::get('rkpdesa/export-excel', [RKPController::class, 'exportExcel'])->name('rkpdesa.export_excel');
     Route::resource('rkpdesa', RKPController::class);
     Route::resource('rpjm', RPJMController::class);
     Route::resource('notifikasi', NotifikasiController::class);

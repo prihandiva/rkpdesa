@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\RKPDesa;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RKPDesaExport;
 
 class RKPController extends Controller
 {
@@ -462,5 +464,13 @@ class RKPController extends Controller
         }
 
         return redirect()->back()->with('success', $count . ' data RKP Desa berhasil diajukan untuk persetujuan BPD.');
+    }
+
+    /**
+     * Export RKP Desa to Excel
+     */
+    public function exportExcel()
+    {
+        return Excel::download(new RKPDesaExport, 'RKPDesa_'.date('Y').'.xlsx');
     }
 }

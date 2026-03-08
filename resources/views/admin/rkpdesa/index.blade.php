@@ -56,9 +56,9 @@
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
                         <h6 class="mb-0">Rencana Kerja Pembangunan Desa</h6>
                         <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                <i class="feather-download me-1"></i>Export
-                            </button>
+                            <a href="{{ route('rkpdesa.export_excel') }}" class="btn btn-sm btn-outline-success">
+                                <i class="feather-download me-1"></i>Cetak RKP Desa
+                            </a>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -122,7 +122,7 @@
                                                 </span>
                                             </a>
                                         </th>
-                                        <th>Sumber</th>
+                                        <!-- <th>Sumber</th> -->
                                         <th>Dusun</th>
                                         <th>Status</th>
                                         <th style="width: 100px;">Aksi</th>
@@ -156,7 +156,7 @@
                                                     <span class="text-muted">-</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <!-- <td>
                                                 @if($item->id_usulan)
                                                     <span class="badge bg-info text-dark">Usulan Masyarakat</span>
                                                 @elseif($item->id_rpjm)
@@ -164,7 +164,7 @@
                                                 @else
                                                     <span class="badge bg-secondary">Lainnya</span>
                                                 @endif
-                                            </td>
+                                            </td> -->
                                             <td>
                                                 {{ $item->usulan?->dusun?->nama ?? ($item->lokasi ?? '-') }}
                                             </td>
