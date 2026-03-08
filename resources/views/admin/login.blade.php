@@ -71,8 +71,8 @@
                             @csrf
                             
                             <div class="mb-4">
-                                <label for="email" class="form-label fw-bold">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email" required autofocus>
+                                <label for="login" class="form-label fw-bold">Email atau Username</label>
+                                <input type="text" class="form-control" id="login" name="login" value="{{ old('login') }}" placeholder="Masukkan email atau username" required autofocus>
                             </div>
 
                             <div class="mb-4">
