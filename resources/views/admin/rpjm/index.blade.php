@@ -90,7 +90,7 @@
                                                             <th>Volume</th>
                                                             <th>Waktu</th>
                                                             <th>Biaya</th>
-                                                            <th>Status</th>
+                                                            <!-- <th>Status</th> -->
                                                             <th>Aksi</th>
                                                         </tr>
                                                     </thead>
@@ -113,7 +113,7 @@
                                                                 <td>{{ $rpjm->volume }}</td>
                                                                 <td>{{ $rpjm->waktu }}</td>
                                                                 <td>Rp {{ number_format($rpjm->jumlah, 0, ',', '.') }}</td>
-                                                                 <td>
+                                                                 <!-- <td>
                                                                     @php
                                                                         $statusColor = 'secondary';
                                                                         switch($rpjm->status) {
@@ -128,7 +128,7 @@
                                                                         }
                                                                     @endphp
                                                                     <span class="badge bg-{{ $statusColor }}">{{ $rpjm->status ?? 'Proses' }}</span>
-                                                                </td>
+                                                                </td> -->
                                                                 <td>
                                                                     <div class="d-flex gap-2">
                                                                         <a href="{{ route('rpjm.show', $rpjm->id_rpjm) }}" class="btn btn-sm btn-outline-info" title="Detail">

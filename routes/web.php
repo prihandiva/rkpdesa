@@ -10,6 +10,7 @@ use App\Http\Controllers\TahunController;
 use App\Http\Controllers\UsulanController;
 use App\Http\Controllers\DusunController;
 use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PolaPelaksanaanController;
 use App\Http\Controllers\RoleController;
@@ -73,6 +74,10 @@ Route::prefix('admin')->group(function () {
     Route::resource('rkpdesa', RKPController::class);
     Route::resource('rpjm', RPJMController::class);
     Route::resource('notifikasi', NotifikasiController::class);
+    
+    // Notification action routes
+    Route::get('notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.read');
+    Route::get('notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.markAllRead');
     
     // Restricted Routes for "Admin Sistem" only
     Route::group(['middleware' => function ($request, $next) {

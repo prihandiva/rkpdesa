@@ -39,32 +39,39 @@
             </div> -->
             <!--! [End] Header Search !-->
             <!--! [Start] Header Notifications !-->
-            <!--! [Start] Header Notifications !-->
+            @php
+                $currentUser = auth()->user();
+                if (!$currentUser && session('user_id')) {
+                    $currentUser = \App\Models\User::find(session('user_id'));
+                }
+                $userName = $currentUser ? $currentUser->nama : 'User';
+                $userImage = $currentUser ? $currentUser->profile_image : null;
+            @endphp
             <div class="nxl-h-item">
                 <div class="dropdown">
                     <a href="javascript:void(0);" class="nxl-head-link" data-bs-toggle="dropdown" role="button" aria-expanded="false">
                         <div class="avatar-text avatar-md bg-light-primary text-primary rounded-pill">
                             <i class="feather-bell"></i>
-                            @auth
-                                @if(auth()->user()->unreadNotifications->count() > 0)
+                            @if($currentUser)
+                                @if($currentUser->unreadNotifications->count() > 0)
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
-                                        {{ auth()->user()->unreadNotifications->count() }}
+                                        {{ $currentUser->unreadNotifications->count() }}
                                         <span class="visually-hidden">unread messages</span>
                                     </span>
                                 @endif
-                            @endauth
+                            @endif
                         </div>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown text-center border-0 p-0" style="width: 350px; left: auto; right: 0;">
                         <div class="dropdown-header d-flex align-items-center justify-content-between p-3 border-bottom">
                             <h6 class="m-0">Notifications</h6>
-                            <a href="javascript:void(0);" class="text-muted text-decoration-none f-12">Mark all as read</a>
+                            <a href="{{ route('admin.notifications.markAllRead') }}" class="text-muted text-decoration-none f-12">Mark all as read</a>
                         </div>
                         <div class="dropdown-body nxl-h-dropdown-scroll" style="max-height: 400px; overflow-y: auto;">
-                            @auth
-                                @forelse(auth()->user()->unreadNotifications as $notification)
-                                    <a href="{{ $notification->data['url'] ?? '#' }}" class="dropdown-item d-flex align-items-center gap-3 p-3 border-bottom text-start">
-                                        <div class="avatar-text avatar-md bg-soft-primary text-primary rounded">
+                            @if($currentUser)
+                                @forelse($currentUser->unreadNotifications as $notification)
+                                    <a href="{{ route('admin.notifications.read', $notification->id) }}" class="dropdown-item d-flex align-items-center gap-3 p-3 border-bottom text-start">
+                                        <div class="avatar-text avatar-md bg-soft-primary text-primary rounded d-flex justify-content-center align-items-center">
                                             {{-- Map Color based on data or fallback --}}
                                             @php
                                                 $colorClass = 'text-primary bg-light-primary';
@@ -80,9 +87,24 @@
                                                         default: $colorClass = 'text-primary bg-light-primary';
                                                     }
                                                 }
+                                                
+                                                $icon = $notification->data['icon'] ?? '';
+                                                $messageStr = strtolower($notification->data['message'] ?? '');
+                                                
+                                                if(str_contains($messageStr, 'usulan')) {
+                                                    $icon = 'edit-2';
+                                                } elseif(str_contains($messageStr, 'rpjm')) {
+                                                    $icon = 'file-text';
+                                                } elseif(str_contains($messageStr, 'rkpdesa') || str_contains($messageStr, 'rkp desa')) {
+                                                    $icon = 'send';
+                                                } elseif(str_contains($messageStr, 'berita acara')) {
+                                                    $icon = 'book-open';
+                                                } else {
+                                                    $icon = 'bell';
+                                                }
                                             @endphp
-                                            <div class="avatar-text avatar-sm {{ $colorClass }} rounded">
-                                                <i class="feather-{{ $notification->data['icon'] ?? 'activity' }}"></i>
+                                            <div class="avatar-text avatar-sm {{ $colorClass }} rounded d-flex justify-content-center align-items-center">
+                                                <i class="feather-{{ $icon }}"></i>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
@@ -100,7 +122,7 @@
                                 <div class="p-4 text-center">
                                     <p class="text-muted mb-0">Silahkan login untuk melihat notifikasi.</p>
                                 </div>
-                            @endauth
+                            @endif
                         </div>
                         <div class="dropdown-footer p-3 border-top">
                             <a href="javascript:void(0);" class="btn btn-primary w-100">Lihat Semua Notifikasi</a>
@@ -113,14 +135,6 @@
             <div class="nxl-h-item nxl-profile-menu">
                 <div class="dropdown">
                     <a href="javascript:void(0);" data-bs-toggle="dropdown" role="button" data-bs-auto-close="outside">
-                        @php
-                            $currentUser = auth()->user();
-                            if (!$currentUser && session('user_id')) {
-                                $currentUser = \App\Models\User::find(session('user_id'));
-                            }
-                            $userName = $currentUser ? $currentUser->nama : 'User';
-                            $userImage = $currentUser ? $currentUser->profile_image : null;
-                        @endphp
                         
                         @if($userImage)
                             <img src="{{ asset('storage/' . $userImage) }}" alt="user-image" class="avatar-md rounded-circle border" style="object-fit: cover;">
