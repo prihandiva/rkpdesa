@@ -16,7 +16,7 @@
                     </ul>
                     @if(isset($currentUser))
                         <div class="mt-2">
-                            <span class="badge bg-info text-white">Role: {{ $currentUser->role }}</span>
+                            <!-- <span class="badge bg-info text-white">Role: {{ $currentUser->role }}</span> -->
                         </div>
                     @endif
                 </div>

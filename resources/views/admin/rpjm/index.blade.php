@@ -16,7 +16,7 @@
                     </ul>
                     @if(isset($currentUser))
                         <div class="mt-2">
-                            <span class="badge bg-info text-white">Role: {{ $currentUser->role }}</span>
+                            <!-- <span class="badge bg-info text-white">Role: {{ $currentUser->role }}</span> -->
                         </div>
                     @endif
                 </div>
@@ -24,6 +24,10 @@
                     <div class="page-header-right-items">
                          <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
+                                <a href="{{ route('rpjm.export_excel', ['periode' => request('periode')]) }}" class="btn btn-md btn-success me-2">
+                                    <i class="feather-download me-2"></i>
+                                    <span>Cetak RPJM (Excel)</span>
+                                </a>
                                 <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary">
                                     <i class="feather-plus me-2"></i>
                                     <span>Tambah RPJM</span>
@@ -41,9 +45,22 @@
                 <div class="card border-0 shadow-sm">
                     <!--! [Start] Card Header !-->
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Data RPJM Desa Grouped by Bidang</h6>
+                        <h6 class="mb-0">Data RPJM Desa</h6>
                     </div>
                     <!--! [End] Card Header !-->
+                    
+                    <!-- Filter Section -->
+                    <div class="card-body border-bottom bg-light py-2">
+                        <form method="GET" action="{{ route('rpjm.index') }}" class="d-flex align-items-center gap-2">
+                            <label class="form-label mb-0 fw-bold">Filter Periode:</label>
+                            <select name="periode" class="form-select form-select-sm" style="width: auto; min-width: 150px;" onchange="this.form.submit()">
+                                <option value="">Semua Periode</option>
+                                @foreach($periodes ?? [] as $p)
+                                    <option value="{{ $p }}" {{ request('periode') == $p ? 'selected' : '' }}>{{ $p }}</option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
 
                     <!--! [Start] Card Body !-->
                     <div class="card-body p-0">

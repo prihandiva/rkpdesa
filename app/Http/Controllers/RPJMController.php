@@ -26,12 +26,20 @@ class RPJMController extends Controller
             return redirect()->route('admin.login')->with('error', 'Sesi anda berakhir.');
         }
 
-        // Fetch Bidang with RPJM relation
-        $bidangs = Bidang::with(['rpjm' => function($query) {
+        // Fetch Bidang with RPJM relation, filtered by periode if requested
+        $periode = request('periode');
+
+        $bidangs = Bidang::with(['rpjm' => function($query) use ($periode) {
+            if ($periode) {
+                $query->where('periode', $periode);
+            }
             $query->orderBy('created_at', 'desc');
         }])->get();
 
-        return view('admin.rpjm.index', compact('bidangs', 'currentUser'));
+        // Get unique periods for the filter dropdown
+        $periodes = RPJM::whereNotNull('periode')->distinct()->pluck('periode');
+
+        return view('admin.rpjm.index', compact('bidangs', 'periodes', 'currentUser', 'periode'));
     }
 
     /**
@@ -80,6 +88,8 @@ class RPJMController extends Controller
             'subbidang' => 'nullable|string',
             'jenis_kegiatan' => 'required|string',
             'jenis' => 'nullable|string',
+            'periode_mulai' => 'required|numeric',
+            'periode_selesai' => 'required|numeric',
             'lokasi' => 'nullable|string',
             'volume' => 'nullable|string',
             'sasaran' => 'nullable|string',
@@ -96,6 +106,9 @@ class RPJMController extends Controller
                 }),
             ], 
         ]);
+
+        $validated['periode'] = $request->periode_mulai . ' sd ' . $request->periode_selesai;
+        unset($validated['periode_mulai'], $validated['periode_selesai']);
 
         $validated['status'] = 'Proses'; 
         
@@ -157,6 +170,8 @@ class RPJMController extends Controller
             'bidang' => 'required|exists:bidang,id_bidang',
             'subbidang' => 'nullable|string',
             'jenis_kegiatan' => 'required|string',
+            'periode_mulai' => 'required|numeric',
+            'periode_selesai' => 'required|numeric',
             'lokasi' => 'nullable|string',
             'volume' => 'nullable|string',
             'sasaran' => 'nullable|string',
@@ -174,6 +189,9 @@ class RPJMController extends Controller
             ],
             'status' => 'sometimes|string',
         ]);
+
+        $validated['periode'] = $request->periode_mulai . ' sd ' . $request->periode_selesai;
+        unset($validated['periode_mulai'], $validated['periode_selesai']);
 
         $rpjm->update($validated);
 
@@ -233,5 +251,14 @@ class RPJMController extends Controller
         $rpjm->update(['prioritas' => $validated['prioritas']]);
 
         return redirect()->back()->with('success', 'Prioritas berhasil diperbarui');
+    }
+
+    /**
+     * Export RPJM to Excel
+     */
+    public function exportExcel(Request $request)
+    {
+        $periode = $request->get('periode');
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\RPJMExport($periode), 'RPJM_Desa.xlsx');
     }
 }

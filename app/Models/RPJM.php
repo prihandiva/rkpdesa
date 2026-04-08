@@ -14,6 +14,7 @@ class RPJM extends Model
     
     protected $fillable = [
         'status',
+        'periode',
         'prioritas',
         'bidang',
         'subbidang',

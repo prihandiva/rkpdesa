@@ -41,6 +41,18 @@
                         <form method="POST" action="{{ route('rpjm.store') }}">
                             @csrf
 
+                            <div class="row bg-light rounded p-3 mb-4 mx-0 border">
+                                <div class="col-12">
+                                    <label class="form-label fw-bold text-primary mb-2">Periode RPJM</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="number" class="form-control" name="periode_mulai" value="{{ old('periode_mulai') }}" placeholder="Tahun Mulai" style="width: 150px;" required min="1900" max="2100">
+                                        <span class="fw-bold text-muted">S/D</span>
+                                        <input type="number" class="form-control" name="periode_selesai" value="{{ old('periode_selesai') }}" placeholder="Tahun Selesai" style="width: 150px;" required min="1900" max="2100">
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">Contoh: 2023 s/d 2027</small>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Bidang <span class="text-danger">*</span></label>
