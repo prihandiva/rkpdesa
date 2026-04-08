@@ -146,6 +146,12 @@
             margin-bottom: 0 !important;
         }
 
+        /* Fix right edge clipping in table-responsive */
+        .table-responsive .table th:last-child,
+        .table-responsive .table td:last-child {
+            padding-right: 1.25rem !important;
+        }
+
         /* Allow overflow on desktop to prevent clipping of dropdowns/shadows */
         @media (min-width: 992px) {
             .table-responsive {
@@ -163,6 +169,14 @@
             display: flex;
             align-items: center;
             height: 30px;
+        }
+
+        /* Sesuaikan ukuran font select form */
+        .form-select {
+            font-size: 13px !important;
+        }
+        .form-select option[value=""] {
+            color: #6c757d;
         }
     
         /* Sidebar Mini (Collapsed) - Added for responsiveness */
