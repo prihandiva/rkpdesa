@@ -114,13 +114,16 @@ class UsulanController extends Controller
         
         $usulan = Usulan::create($validated);
 
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
         Notifikasi::create([
             'judul' => 'Usulan Baru',
+            'jenis' => 'usulan',
             'deskripsi' => 'Usulan baru dari Dusun ' . $usulan->dusun->nama . ': ' . substr($validated['jenis_kegiatan'], 0, 50),
             'id_kegiatan' => $usulan->id_usulan,
             'judul_kegiatan' => $validated['jenis_kegiatan'],
             'status' => 'info',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 
@@ -243,17 +246,39 @@ class UsulanController extends Controller
             $validated['file_berita_acara'] = 'uploads/berita_acara/' . $filename;
         }
 
+        $original = $usulan->getOriginal();
+
         // Update usulan
         $usulan->update($validated);
+        $changes = $usulan->getChanges();
+
+        $currentUser = User::find(session('user_id'));
+        $userName = $currentUser ? $currentUser->nama : 'Sistem';
+
+        $deskripsiEdit = 'Data usulan ' . substr($usulan->jenis_kegiatan, 0, 30) . ' telah diperbarui.';
+        $changeDetails = [];
+        foreach ($changes as $key => $value) {
+            if ($key == 'updated_at' || $key == 'created_at') continue;
+            if (array_key_exists($key, $original)) {
+                $oldValue = $original[$key];
+                $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+            }
+        }
+        if (count($changeDetails) > 0) {
+            $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
+        }
+
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
 
         // Log Update Activity
         Notifikasi::create([
             'judul' => 'Usulan Diedit',
-            'deskripsi' => 'Data usulan ' . substr($usulan->jenis_kegiatan, 0, 30) . ' telah diperbarui.',
+            'jenis' => 'usulan',
+            'deskripsi' => $deskripsiEdit,
             'id_kegiatan' => $usulan->id_usulan,
             'judul_kegiatan' => $usulan->jenis_kegiatan,
             'status' => 'info',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 
@@ -269,14 +294,17 @@ class UsulanController extends Controller
     {
         $usulan = Usulan::findOrFail($id);
         
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
         // Log Delete Activity
         Notifikasi::create([
             'judul' => 'Usulan Dihapus',
+            'jenis' => 'usulan',
             'deskripsi' => 'Usulan ' . substr($usulan->jenis_kegiatan, 0, 30) . ' telah dihapus.',
             'id_kegiatan' => $usulan->id_usulan,
             'judul_kegiatan' => $usulan->jenis_kegiatan,
             'status' => 'danger',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 

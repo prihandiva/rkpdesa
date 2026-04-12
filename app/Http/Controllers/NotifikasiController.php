@@ -9,8 +9,21 @@ class NotifikasiController extends Controller
 {
     public function index()
     {
-        $notifikasis = Notifikasi::paginate(10);
-        return view('admin.notifikasi.index', compact('notifikasis'));
+        $user = auth()->user() ?? \App\Models\User::find(session('user_id'));
+        
+        $query = Notifikasi::orderBy('created_at', 'desc');
+        
+        // Uncomment below to restrict to only notifications for current user
+        // if ($user) {
+        //     $query->where(function($q) use ($user) {
+        //         $q->whereRaw('FIND_IN_SET(?, id_penerima)', [$user->id_user])
+        //           ->orWhereNull('id_penerima');
+        //     });
+        // }
+        
+        $notifikasis = $query->paginate(15);
+        
+        return view('admin.notifikasi.index', compact('notifikasis', 'user'));
     }
 
     public function create()

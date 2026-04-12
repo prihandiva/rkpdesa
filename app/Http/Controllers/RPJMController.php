@@ -114,13 +114,16 @@ class RPJMController extends Controller
         
         $rpjm = RPJM::create($validated);
 
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
         Notifikasi::create([
             'judul' => 'Input RPJM Baru',
+            'jenis' => 'rpjm',
             'deskripsi' => 'Item RPJM baru: ' . substr($validated['jenis_kegiatan'], 0, 50),
             'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
             'judul_kegiatan' => $validated['jenis_kegiatan'],
             'status' => 'info',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 
@@ -193,15 +196,37 @@ class RPJMController extends Controller
         $validated['periode'] = $request->periode_mulai . ' sd ' . $request->periode_selesai;
         unset($validated['periode_mulai'], $validated['periode_selesai']);
 
+        $original = $rpjm->getOriginal();
+
         $rpjm->update($validated);
+        $changes = $rpjm->getChanges();
+
+        $currentUser = User::find(session('user_id'));
+        $userName = $currentUser ? $currentUser->nama : 'Sistem';
+
+        $deskripsiEdit = 'Data RPJM diperbarui: ' . substr($rpjm->jenis_kegiatan, 0, 50) . '.';
+        $changeDetails = [];
+        foreach ($changes as $key => $value) {
+            if ($key == 'updated_at' || $key == 'created_at') continue;
+            if (array_key_exists($key, $original)) {
+                $oldValue = $original[$key];
+                $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+            }
+        }
+        if (count($changeDetails) > 0) {
+            $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
+        }
+
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
 
         Notifikasi::create([
             'judul' => 'RPJM Diedit',
-            'deskripsi' => 'Data RPJM diperbarui: ' . substr($rpjm->jenis_kegiatan, 0, 50),
+            'jenis' => 'rpjm',
+            'deskripsi' => $deskripsiEdit,
             'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
             'judul_kegiatan' => $rpjm->jenis_kegiatan,
             'status' => 'info',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 
@@ -215,13 +240,16 @@ class RPJMController extends Controller
     {
         $rpjm = RPJM::findOrFail($id);
         
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
         Notifikasi::create([
             'judul' => 'RPJM Dihapus',
+            'jenis' => 'rpjm',
             'deskripsi' => 'Item RPJM dihapus: ' . $rpjm->jenis_kegiatan,
             'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
             'judul_kegiatan' => $rpjm->jenis_kegiatan,
             'status' => 'danger',
-            'id_penerima' => null,
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 

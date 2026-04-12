@@ -46,6 +46,20 @@
                 }
                 $userName = $currentUser ? $currentUser->nama : 'User';
                 $userImage = $currentUser ? $currentUser->profile_image : null;
+
+                $userNotifs = collect();
+                $unreadCount = 0;
+                if ($currentUser) {
+                    $userNotifs = \App\Models\Notifikasi::orderBy('created_at', 'desc')
+                    ->take(10)
+                    ->get();
+                    
+                    $unreadCount = \App\Models\Notifikasi::where(function($query) use ($currentUser) {
+                        $query->whereRaw('FIND_IN_SET(?, id_penerima)', [$currentUser->id_user])
+                              ->orWhereNull('id_penerima')->where('dibaca', 0);
+                    })
+                    ->count();
+                }
             @endphp
             <div class="nxl-h-item">
                 <div class="dropdown">
@@ -53,63 +67,89 @@
                         <div class="avatar-text avatar-md bg-light-primary text-primary rounded-pill">
                             <i class="feather-bell"></i>
                             @if($currentUser)
-                                @if($currentUser->unreadNotifications->count() > 0)
+                                @if($unreadCount > 0)
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
-                                        {{ $currentUser->unreadNotifications->count() }}
+                                        {{ $unreadCount }}
                                         <span class="visually-hidden">unread messages</span>
                                     </span>
                                 @endif
                             @endif
                         </div>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown text-center border-0 p-0" style="width: 350px; left: auto; right: 0;">
+                    <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown text-center border-0 p-0" style="width: 320px; left: auto; right: 0;">
                         <div class="dropdown-header d-flex align-items-center justify-content-between p-3 border-bottom">
                             <h6 class="m-0">Notifications</h6>
                             <a href="{{ route('admin.notifications.markAllRead') }}" class="text-muted text-decoration-none f-12">Mark all as read</a>
                         </div>
-                        <div class="dropdown-body nxl-h-dropdown-scroll" style="max-height: 400px; overflow-y: auto;">
+                        <div class="dropdown-body nxl-h-dropdown-scroll" style="max-height: 500px; overflow-y: auto;">
                             @if($currentUser)
-                                @forelse($currentUser->unreadNotifications as $notification)
-                                    <a href="{{ route('admin.notifications.read', $notification->id) }}" class="dropdown-item d-flex align-items-center gap-3 p-3 border-bottom text-start">
-                                        <div class="avatar-text avatar-md bg-soft-primary text-primary rounded d-flex justify-content-center align-items-center">
-                                            {{-- Map Color based on data or fallback --}}
-                                            @php
+                                @forelse($userNotifs as $notification)
+                                    @php
+                                        $isUnread = false;
+                                        if ($notification->id_penerima) {
+                                            $arr = explode(',', $notification->id_penerima);
+                                            if (in_array($currentUser->id_user, $arr)) {
+                                                $isUnread = true;
+                                            }
+                                        } elseif ($notification->dibaca == 0) {
+                                            $isUnread = true;
+                                        }
+                                        $bgClass = $isUnread ? 'bg-light border-start border-3 border-primary' : 'bg-white';
+                                    @endphp
+                                    <a href="{{ route('admin.notifications.read', $notification->id_notif) }}" class="dropdown-item d-flex align-items-start gap-3 p-3 border-bottom text-start {{ $bgClass }}">
+                                        @php
+                                            $colorClass = 'text-primary bg-light-primary';
+                                            $statusStr = strtolower($notification->status ?? '');
+                                            $judulStr = strtolower($notification->judul ?? '');
+                                            $deskripsiStr = strtolower($notification->deskripsi ?? '');
+                                            
+                                            // Evaluasi berdasarkan status dashboard yang persis
+                                            if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
+                                                $colorClass = 'text-dark bg-warning';
+                                            } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
+                                                $colorClass = 'text-white bg-danger';
+                                            } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
+                                                $colorClass = 'text-white bg-purple';
+                                            } elseif (str_contains($statusStr, 'menunggu persetujuan bpd') || str_contains($judulStr, 'menunggu persetujuan bpd') || str_contains($deskripsiStr, 'menunggu persetujuan bpd')) {
+                                                $colorClass = 'text-dark bg-light border';
+                                            } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
+                                                $colorClass = 'text-white bg-success';
+                                            } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
+                                                $colorClass = 'text-white bg-dark';
+                                            } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses')) {
+                                                $colorClass = 'text-white bg-primary';
+                                            } elseif ($statusStr == 'danger') {
+                                                $colorClass = 'text-white bg-danger';
+                                            } elseif ($statusStr == 'warning') {
+                                                $colorClass = 'text-dark bg-warning';
+                                            } elseif ($statusStr == 'success') {
+                                                $colorClass = 'text-white bg-success';
+                                            } else {
                                                 $colorClass = 'text-primary bg-light-primary';
-                                                if(isset($notification->data['color'])) {
-                                                    switch($notification->data['color']) {
-                                                        case 'primary': $colorClass = 'text-primary bg-light-primary'; break;
-                                                        case 'warning': $colorClass = 'text-warning bg-light-warning'; break;
-                                                        case 'purple': $colorClass = 'text-white bg-purple'; break;
-                                                        case 'danger': $colorClass = 'text-danger bg-light-danger'; break; // or text-white bg-danger
-                                                        case 'success': $colorClass = 'text-success bg-light-success'; break;
-                                                        case 'light': $colorClass = 'text-dark bg-light'; break;
-                                                        case 'dark': $colorClass = 'text-white bg-dark'; break;
-                                                        default: $colorClass = 'text-primary bg-light-primary';
-                                                    }
-                                                }
-                                                
-                                                $icon = $notification->data['icon'] ?? '';
-                                                $messageStr = strtolower($notification->data['message'] ?? '');
-                                                
-                                                if(str_contains($messageStr, 'usulan')) {
-                                                    $icon = 'edit-2';
-                                                } elseif(str_contains($messageStr, 'rpjm')) {
-                                                    $icon = 'file-text';
-                                                } elseif(str_contains($messageStr, 'rkpdesa') || str_contains($messageStr, 'rkp desa')) {
-                                                    $icon = 'send';
-                                                } elseif(str_contains($messageStr, 'berita acara')) {
-                                                    $icon = 'book-open';
-                                                } else {
-                                                    $icon = 'bell';
-                                                }
-                                            @endphp
-                                            <div class="avatar-text avatar-sm {{ $colorClass }} rounded d-flex justify-content-center align-items-center">
-                                                <i class="feather-{{ $icon }}"></i>
-                                            </div>
+                                            }
+                                            
+                                            $icon = 'bell';
+                                            $jenis = strtolower($notification->jenis ?? '');
+                                            
+                                            if($jenis == 'usulan' || str_contains($judulStr, 'usulan')) {
+                                                $icon = 'edit-2';
+                                            } elseif($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
+                                                $icon = 'file-text';
+                                            } elseif($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
+                                                $icon = 'send';
+                                            } elseif($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
+                                                $icon = 'book-open';
+                                            }
+                                        @endphp
+                                        <div class="{{ $colorClass }} rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 34px; height: 34px;">
+                                            <i class="feather-{{ $icon }}" style="font-size: 15px; margin: 0; line-height: 1;"></i>
                                         </div>
-                                        <div class="flex-grow-1">
-                                            <h6 class="mb-1 text-wrap text-break lh-base f-14">{{ $notification->data['message'] ?? 'No Message' }}</h6>
-                                            <span class="f-12 text-muted">{{ $notification->created_at->diffForHumans() }}</span>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                                <div class="m-0 text-wrap text-break fw-bold lh-sm pe-2 text-primary" style="font-size: 11px;">{{ $notification->judul }}</div>
+                                                <span class="f-10 text-muted fw-normal flex-shrink-0 text-end" style="font-size: 11px;">{{ date('d/m/Y', strtotime($notification->created_at)) }}</span>
+                                            </div>
+                                            <p class="m-0 text-wrap text-break text-muted fw-normal f-11 lh-sm">{{ $notification->deskripsi }}</p>
                                         </div>
                                     </a>
                                 @empty
@@ -124,8 +164,8 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="dropdown-footer p-3 border-top">
-                            <a href="javascript:void(0);" class="btn btn-primary w-100">Lihat Semua Notifikasi</a>
+                        <div class="dropdown-footer p-2 border-top">
+                            <a href="{{ route('notifikasi.index') }}" class="btn btn-sm btn-primary w-100">Lihat Semua Notifikasi</a>
                         </div>
                     </div>
                 </div>

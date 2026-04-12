@@ -221,8 +221,40 @@ class RKPController extends Controller
         $oldStatus = $rkpDesa->status;
         $newStatus = $validated['status'];
 
-        // Update RKP Desa (excluding status first if we want service to handle it, but service updates it too. Safe to just update all)
+        $original = $rkpDesa->getOriginal();
+
+        // Update RKP Desa
         $rkpDesa->update($validated);
+        $changes = $rkpDesa->getChanges();
+
+        $currentUser = \App\Models\User::find(session('user_id'));
+        $userName = $currentUser ? $currentUser->nama : 'Sistem';
+
+        $deskripsiEdit = 'Data RKP Desa diperbarui: ' . substr($rkpDesa->jenis_kegiatan, 0, 50) . '.';
+        $changeDetails = [];
+        foreach ($changes as $key => $value) {
+            if ($key == 'updated_at' || $key == 'created_at') continue;
+            if (array_key_exists($key, $original)) {
+                $oldValue = $original[$key];
+                $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+            }
+        }
+        if (count($changeDetails) > 0) {
+            $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
+        }
+
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
+        \App\Models\Notifikasi::create([
+            'judul' => 'RKP Desa Diedit',
+            'jenis' => 'rkpdesa',
+            'deskripsi' => $deskripsiEdit,
+            'id_kegiatan' => 'rkpdesa_' . $rkpDesa->id_kegiatan,
+            'judul_kegiatan' => $rkpDesa->jenis_kegiatan,
+            'status' => 'info',
+            'id_penerima' => $allUsersIds,
+            'dibaca' => 0
+        ]);
 
         // Status Update via Service if changed
         if ($oldStatus !== $newStatus) {
@@ -399,13 +431,16 @@ class RKPController extends Controller
             $action = 'Keputusan BPD';
         }
 
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
         \App\Models\Notifikasi::create([
             'judul' => 'Status RKP: ' . $newStatus,
+            'jenis' => 'rkpdesa',
             'deskripsi' => 'Status berubah menjadi ' . $newStatus . ($request->catatan_verifikasi ? '. Catatan: ' . $request->catatan_verifikasi : ''),
             'id_kegiatan' => 'rkpdesa_' . $rkpDesa->id_kegiatan, // Assuming format
             'judul_kegiatan' => $rkpDesa->jenis_kegiatan,
             'status' => 'info',
-            'id_penerima' => null, // Broadcast
+            'id_penerima' => $allUsersIds,
             'dibaca' => 0
         ]);
 

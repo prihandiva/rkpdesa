@@ -6,7 +6,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">Daftar Berita Acara {{ $jenis ?? 'Semua' }}</h5>
+                    <h5 class="m-b-10">Daftar Berita Acara {{ $jenis ?? '' }}</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather-home"></i></a></li>

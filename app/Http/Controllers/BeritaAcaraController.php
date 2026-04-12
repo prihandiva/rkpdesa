@@ -253,8 +253,39 @@ class BeritaAcaraController extends Controller
 
         DB::beginTransaction();
         try {
+            $original = $beritaAcara->getOriginal();
             // Update berita acara basic info
             $beritaAcara->update($validated);
+            $changes = $beritaAcara->getChanges();
+
+            $currentUser = \App\Models\User::find(session('user_id'));
+            $userName = $currentUser ? $currentUser->nama : 'Sistem';
+
+            $deskripsiEdit = 'Data Berita Acara ' . $beritaAcara->jenis . ' diperbarui.';
+            $changeDetails = [];
+            foreach ($changes as $key => $value) {
+                if ($key == 'updated_at' || $key == 'created_at') continue;
+                if (array_key_exists($key, $original)) {
+                    $oldValue = $original[$key];
+                    $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+                }
+            }
+            if (count($changeDetails) > 0) {
+                $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
+            }
+
+            $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
+            \App\Models\Notifikasi::create([
+                'judul' => 'Berita Acara Diedit',
+                'jenis' => 'beritaacara',
+                'deskripsi' => $deskripsiEdit,
+                'id_kegiatan' => 'beritaacara_' . $beritaAcara->id_berita,
+                'judul_kegiatan' => 'Berita Acara ' . $beritaAcara->jenis,
+                'status' => 'info',
+                'id_penerima' => $allUsersIds,
+                'dibaca' => 0
+            ]);
 
             // Update Participants (Wakil TTD) - Delete and Recreate
             PesertaBeritaAcara::where('id_berita', $beritaAcara->id_berita)->delete();
@@ -360,6 +391,19 @@ class BeritaAcaraController extends Controller
                 
                 $beritaAcara->update([
                     'file_pdf' => '/uploads/berita_acara/' . $filename
+                ]);
+
+                $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+                
+                \App\Models\Notifikasi::create([
+                    'judul' => 'Berita Acara Diunggah',
+                    'jenis' => 'beritaacara',
+                    'deskripsi' => 'File PDF Berita Acara ' . $beritaAcara->jenis . ' berhasil diunggah dan bisa diakses.',
+                    'id_kegiatan' => 'beritaacara_' . $beritaAcara->id_berita,
+                    'judul_kegiatan' => 'Berita Acara ' . $beritaAcara->jenis,
+                    'status' => 'info',
+                    'id_penerima' => $allUsersIds,
+                    'dibaca' => 0
                 ]);
 
                 return redirect()->back()->with('success', 'File PDF berhasil diunggah.');

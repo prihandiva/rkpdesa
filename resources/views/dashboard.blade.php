@@ -209,15 +209,15 @@
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-success w-100 py-2 text-wrap" style="line-height: 1.2;">Disetujui</span>
-                                </div>
-                                <div class="col-7 ps-1 small text-muted lh-sm">Telah disetujui oleh BPD.</div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-5 pe-1">
                                     <span class="badge bg-light text-dark border w-100 py-2 text-wrap" style="line-height: 1.2;">Menunggu persetujuan BPD</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Proses validasi, menunggu approval BPD.</div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-5 pe-1">
+                                    <span class="badge bg-success w-100 py-2 text-wrap" style="line-height: 1.2;">Disetujui</span>
+                                </div>
+                                <div class="col-7 ps-1 small text-muted lh-sm">Telah disetujui oleh BPD.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
