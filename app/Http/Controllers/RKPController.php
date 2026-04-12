@@ -145,7 +145,7 @@ class RKPController extends Controller
     public function show($id)
     {
         $rkpDesa = RKPDesa::findOrFail($id);
-        $logs = \App\Models\Notifikasi::where('id_kegiatan', $id)
+        $logs = \App\Models\Notifikasi::where('id_kegiatan', 'rkpdesa_' . $id)
                     ->orderBy('created_at', 'desc')
                     ->get();
         

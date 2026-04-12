@@ -322,18 +322,61 @@
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush">
                         @forelse($logs as $log)
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start">
-                                <div>
-                                    <h6 class="mb-1 small fw-bold">{{ $log->judul ?? 'Update' }}</h6>
-                                    <p class="mb-1 small text-muted">{{ $log->deskripsi }}</p>
+                            @php
+                                $colorClass = 'text-primary bg-light-primary';
+                                $statusStr = strtolower($log->status ?? '');
+                                $judulStr = strtolower($log->judul ?? '');
+                                $deskripsiStr = strtolower($log->deskripsi ?? '');
+                                
+                                if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
+                                    $colorClass = 'text-dark bg-warning';
+                                } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
+                                    $colorClass = 'text-white bg-danger';
+                                } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
+                                    $colorClass = 'text-white bg-purple';
+                                } elseif (str_contains($statusStr, 'menunggu persetujuan bpd') || str_contains($judulStr, 'menunggu persetujuan bpd') || str_contains($deskripsiStr, 'menunggu persetujuan bpd')) {
+                                    $colorClass = 'text-dark bg-light border';
+                                } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
+                                    $colorClass = 'text-white bg-success';
+                                } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
+                                    $colorClass = 'text-white bg-dark';
+                                } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
+                                    $colorClass = 'text-info bg-light-info';
+                                } elseif ($statusStr == 'danger') {
+                                    $colorClass = 'text-white bg-danger';
+                                } elseif ($statusStr == 'warning') {
+                                    $colorClass = 'text-dark bg-warning';
+                                } elseif ($statusStr == 'success') {
+                                    $colorClass = 'text-white bg-success';
+                                } else {
+                                    $colorClass = 'text-info bg-light-info';
+                                }
+                                
+                                $icon = 'bell';
+                                $jenis = strtolower($log->jenis ?? '');
+                                
+                                if($jenis == 'usulan' || str_contains($judulStr, 'usulan')) {
+                                    $icon = 'edit-2';
+                                } elseif($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
+                                    $icon = 'file-text';
+                                } elseif($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
+                                    $icon = 'send';
+                                } elseif($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
+                                    $icon = 'book-open';
+                                }
+                            @endphp
+                            <li class="list-group-item d-flex align-items-start gap-3 p-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div class="{{ $colorClass }} rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 32px; height: 32px;">
+                                    <i class="feather-{{ $icon }}" style="font-size: 14px; margin: 0; line-height: 1;"></i>
                                 </div>
-                                <span class="badge bg-light text-dark border" style="font-size: 0.65rem;">
-                                    {{ $log->created_at->diffForHumans() }}
-                                </span>
-                            </div>
-                            <span class="badge bg-secondary rounded-pill" style="font-size: 0.6rem;">{{ $log->status }}</span>
-                        </li>
+                                <div class="flex-grow-1 min-w-0">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <div class="m-0 text-wrap text-break fw-bold lh-sm pe-2 text-primary" style="font-size: 11px;">{{ $log->judul ?? 'Update' }}</div>
+                                        <span class="f-10 text-muted fw-normal flex-shrink-0 text-end" style="font-size: 11px;">{{ $log->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <p class="m-0 text-wrap text-break text-muted fw-normal f-11 lh-sm">{{ $log->deskripsi }}</p>
+                                </div>
+                            </li>
                         @empty
                         <li class="list-group-item text-center text-muted py-4">
                             <i class="feather-bell-off fs-4 d-block mb-2"></i>

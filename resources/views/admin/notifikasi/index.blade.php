@@ -50,8 +50,8 @@
                                 $statusStr = strtolower($notification->status ?? '');
                                 $judulStr = strtolower($notification->judul ?? '');
                                 $deskripsiStr = strtolower($notification->deskripsi ?? '');
+                                $jenis = strtolower($notification->jenis ?? '');
                                 
-                                // Evaluasi berdasarkan status dashboard yang persis
                                 if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
                                     $colorClass = 'text-dark bg-warning';
                                 } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
@@ -64,8 +64,8 @@
                                     $colorClass = 'text-white bg-success';
                                 } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
                                     $colorClass = 'text-white bg-dark';
-                                } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses')) {
-                                    $colorClass = 'text-white bg-primary';
+                                } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
+                                    $colorClass = 'text-info bg-light-info';
                                 } elseif ($statusStr == 'danger') {
                                     $colorClass = 'text-white bg-danger';
                                 } elseif ($statusStr == 'warning') {
@@ -73,11 +73,10 @@
                                 } elseif ($statusStr == 'success') {
                                     $colorClass = 'text-white bg-success';
                                 } else {
-                                    $colorClass = 'text-primary bg-light-primary';
+                                    $colorClass = 'text-info bg-light-info';
                                 }
                                 
                                 $icon = 'bell';
-                                $jenis = strtolower($notification->jenis ?? '');
                                 
                                 if($jenis == 'usulan' || str_contains($judulStr, 'usulan')) {
                                     $icon = 'edit-2';

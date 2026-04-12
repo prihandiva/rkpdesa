@@ -103,7 +103,7 @@
                                             $judulStr = strtolower($notification->judul ?? '');
                                             $deskripsiStr = strtolower($notification->deskripsi ?? '');
                                             
-                                            // Evaluasi berdasarkan status dashboard yang persis
+                                            // Evaluasi berdasarkan status
                                             if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
                                                 $colorClass = 'text-dark bg-warning';
                                             } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
@@ -116,8 +116,8 @@
                                                 $colorClass = 'text-white bg-success';
                                             } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
                                                 $colorClass = 'text-white bg-dark';
-                                            } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses')) {
-                                                $colorClass = 'text-white bg-primary';
+                                            } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
+                                                $colorClass = 'text-info bg-light-info';
                                             } elseif ($statusStr == 'danger') {
                                                 $colorClass = 'text-white bg-danger';
                                             } elseif ($statusStr == 'warning') {
@@ -125,7 +125,7 @@
                                             } elseif ($statusStr == 'success') {
                                                 $colorClass = 'text-white bg-success';
                                             } else {
-                                                $colorClass = 'text-primary bg-light-primary';
+                                                $colorClass = 'text-info bg-light-info';
                                             }
                                             
                                             $icon = 'bell';
@@ -149,7 +149,7 @@
                                                 <div class="m-0 text-wrap text-break fw-bold lh-sm pe-2 text-primary" style="font-size: 11px;">{{ $notification->judul }}</div>
                                                 <span class="f-10 text-muted fw-normal flex-shrink-0 text-end" style="font-size: 11px;">{{ date('d/m/Y', strtotime($notification->created_at)) }}</span>
                                             </div>
-                                            <p class="m-0 text-wrap text-break text-muted fw-normal f-11 lh-sm">{{ $notification->deskripsi }}</p>
+                                            <p class="m-0 text-wrap text-break text-muted fw-normal f-11 lh-sm" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">{{ $notification->deskripsi }}</p>
                                         </div>
                                     </a>
                                 @empty

@@ -178,6 +178,14 @@
         .form-select option[value=""] {
             color: #6c757d;
         }
+        
+        /* Custom Background Colors for Notifications */
+        .bg-light-primary { background-color: rgba(75, 59, 219, 0.1) !important; }
+        .bg-light-success { background-color: rgba(40, 167, 69, 0.1) !important; }
+        .bg-light-info { background-color: rgba(23, 162, 184, 0.1) !important; }
+        .bg-light-danger { background-color: rgba(220, 53, 69, 0.1) !important; }
+        .bg-light-warning { background-color: rgba(255, 193, 7, 0.1) !important; }
+        .bg-purple { background-color: #6f42c1 !important; color: #fff !important; }
     
         /* Sidebar Mini (Collapsed) - Added for responsiveness */
 
