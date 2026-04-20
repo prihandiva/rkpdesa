@@ -353,7 +353,12 @@
                     type: 'donut',
                     height: 350
                 },
-                colors: ['#4b3bdb', '#28a745', '#17a2b8', '#ffc107', '#dc3545', '#6c757d', '#e83e8c', '#fd7e14']
+                colors: ['#4b3bdb', '#28a745', '#17a2b8', '#ffc107', '#dc3545', '#6c757d', '#e83e8c', '#fd7e14'],
+                dataLabels: {
+                    formatter: function (val) {
+                        return Math.round(val) + "%";
+                    }
+                }
             };
             var chartDusun = new ApexCharts(document.querySelector("#usulanPerDusunChart"), optionsDusun);
             chartDusun.render();
@@ -394,7 +399,12 @@
                     axisTicks: { show: false }
                 },
                 yaxis: {
-                     labels: { style: { colors: '#6c757d' } }
+                     labels: { 
+                         formatter: function(val) {
+                             return Math.round(val);
+                         },
+                         style: { colors: '#6c757d' } 
+                     }
                 },
                 colors: chartColors,
                 grid: {
@@ -421,7 +431,12 @@
                     type: 'donut',
                     height: 350
                 },
-                colors: rkpChartColors
+                colors: rkpChartColors,
+                dataLabels: {
+                    formatter: function (val) {
+                        return Math.round(val) + "%";
+                    }
+                }
             };
             var chartRkpStatus = new ApexCharts(document.querySelector("#rkpPerStatusChart"), optionsRkpStatus);
             chartRkpStatus.render();
