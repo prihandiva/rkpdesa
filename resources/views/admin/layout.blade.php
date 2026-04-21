@@ -134,32 +134,77 @@
             }
         }
         
-        /* Fix for last row being cut off in tables */
+        /* 
+         * TABLE LAYOUT FIXES
+         * ---------------------------------------------------------
+         */
+        
+        /* 1. Ensure table container has bottom padding to reveal bottom border/shadows */
         .table-responsive {
-            margin-bottom: 0;
-            padding-bottom: 20px !important;
-            overflow-x: auto;
+            margin-bottom: 0 !important;
+            padding-bottom: 12px !important;
+        }
+
+        /* 2. Prevent cells from clipping their contents vertically */
+        .table > tbody > tr > td, 
+        .table > tbody > tr > th {
+            vertical-align: middle;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        /* 3. Action Buttons Standardization */
+        /* Remove explicit min-height or margin that might push it out of bounds */
+        .table td .btn-sm {
+            padding: 0.35rem 0.5rem !important;
+            font-size: 11px !important;
+            line-height: 1 !important;
+            height: auto !important; /* Let padding define height */
+            margin: 0 !important; /* Remove margin to fix alignment */
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 4px !important; /* Spacing between icon and text */
+            border: 1px solid transparent !important; /* PREVENT HOVER JUMPING */
+            box-sizing: border-box !important;
+        }
+
+        /* Specifically address outline buttons that get borders on hover */
+        .table td .btn-outline-primary, 
+        .table td .btn-outline-secondary, 
+        .table td .btn-outline-success, 
+        .table td .btn-outline-danger, 
+        .table td .btn-outline-warning, 
+        .table td .btn-outline-info,
+        .table td .btn-outline-dark {
+            border-color: currentColor !important; /* Forces border to exist constantly, matching text color */
+        }
+
+        /* Standardize icon sizing within buttons */
+        .table td .btn-sm i, 
+        .table td .btn-sm svg {
+            width: 12px !important;
+            height: 12px !important;
+            font-size: 12px !important; /* For icon fonts */
+            line-height: 1 !important;
         }
         
-        /* Force margin at the bottom of the table to prevent clipping of shadows/borders and push footer down */
-        .table-responsive > .table.mb-0 {
-            margin-bottom: 0 !important;
+        /* Ensure the flex container for buttons doesn't cause overflow */
+        .table td .d-flex {
+            align-items: center;
+            gap: 0.5rem !important; /* Use gap instead of margin on buttons */
         }
 
-        /* Fix right edge clipping in table-responsive */
-        .table-responsive .table th:last-child,
-        .table-responsive .table td:last-child {
-            padding-right: 1.25rem !important;
-        }
-
-        /* Allow overflow on desktop to prevent clipping of dropdowns/shadows */
+        /* Desktop specific tweaks */
         @media (min-width: 992px) {
             .table-responsive {
-                overflow: visible !important;
+                overflow: visible !important; /* Safe to turn off scrolling on desktop */
+                padding-bottom: 0 !important; /* Remove padding if overflow is visible */
+            }
+            .table-responsive > .table {
+                margin-bottom: 0 !important;
             }
         }
-
-        /* Smaller Pagination */
         .page-link {
             font-size: 11px !important;
             padding: 0.4rem 0.6rem !important;
