@@ -141,43 +141,40 @@
     <div class="signature-section">
         <table class="signature-table">
             <tr>
-                <td style="width: 50%;">
-                    Pimpinan Musyawarah<br>
-                </td>
-                <td style="width: 50%;">
-                    Notulis/Sekretaris<br>
+                <td style="width: 50%;">Pimpinan Musyawarah</td>
+                <td style="width: 50%;">Notulis/Sekretaris</td>
+            </tr>
+            <tr>
+                <td style="height: 50px;"></td>
+                <td style="height: 50px;"></td>
+            </tr>
+            <tr>
+                <td><u><b>{{ $beritaAcara->pemimpin ?? '.........................' }}</b></u></td>
+                <td><u><b>{{ $beritaAcara->notulis1 ?? '.........................' }}</b></u></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding-top: 30px;">
+                    Mengetahui/Menyetujui:
                 </td>
             </tr>
             <tr>
-                <!-- Space for signature -->
-                <td style="height: 10px;"></td>
-                <td style="height: 10px;"></td>
-            </tr>
-            <tr>
-                <td>
-                    <u><b>{{ $beritaAcara->pemimpin ?? '.........................' }}</b></u>
-                </td>
-                <td>
-                    <u><b>{{ $beritaAcara->notulis1 ?? '.........................' }}</b></u>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2" style="padding-top: 10px;">
-                    Mengetahui/Menyetujui:<br><br>
-                </td>
-            </tr>
-            <tr>
-                <td style="width: 50%;">
-                    Kepala Desa<br>
-                    <div style="height: 40px;"></div>
-                    <u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u>
-                </td>
+                <td style="width: 50%;">Kepala Desa</td>
                 @if($beritaAcara->jenis == 'BPD')
-                <td style="width: 50%;">
-                    Ketua BPD<br>
-                    <div style="height: 40px;"></div>
-                    <u><b>{{ $userBpd ? strtoupper($userBpd->nama) : ($beritaAcara->nama_bpd ?? '.........................') }}</b></u>
-                </td>
+                <td style="width: 50%;">Ketua BPD</td>
+                @else
+                <td></td>
+                @endif
+            </tr>
+            <tr>
+                <td style="height: 50px;"></td>
+                <td style="height: 50px;"></td>
+            </tr>
+            <tr>
+                <td><u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u></td>
+                @if($beritaAcara->jenis == 'BPD')
+                <td><u><b>{{ $userBpd ? strtoupper($userBpd->nama) : ($beritaAcara->nama_bpd ?? '.........................') }}</b></u></td>
+                @else
+                <td></td>
                 @endif
             </tr>
         </table>

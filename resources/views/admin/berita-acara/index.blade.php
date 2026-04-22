@@ -6,7 +6,7 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">Daftar Berita Acara {{ $jenis ?? '' }}</h5>
+                    <h5 class="m-b-10 fw-bold text-dark">Daftar Berita Acara</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}"><i class="feather-home"></i></a></li>
@@ -19,58 +19,55 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5>Data Berita Acara</h5>
+        <div class="card border-0 shadow-sm">
+            {{-- Card Header --}}
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-4">
+                <h6 class="m-0 fw-bold text-primary">Data Berita Acara</h6>
                 <div>
-                <div>
-                     @if(request('jenis') == 'Musdus')
-                        @if(in_array(session('user_role'), ['operator_dusun', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musdus</a>
-                        @endif
-                     @elseif(request('jenis') == 'Musrenbang')
-                        @if(in_array(session('user_role'), ['operator_desa', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musrenbang</a>
-                        @endif
-                     @elseif(request('jenis') == 'BPD')
-                        @if(in_array(session('user_role'), ['bpd', 'admin']))
-                        <a href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}" class="btn btn-primary btn-sm rounded"><i class="feather-plus"></i> Tambah Musyawarah BPD</a>
-                        @endif
-                     @else
-                        <!-- General Add Button - Show only allowed options -->
-                        @php
-                            $role = session('user_role');
-                            $isAdmin = $role === 'admin';
-                            $canMusdus = $isAdmin || $role === 'operator_dusun';
-                            $canMusrenbang = $isAdmin || $role === 'operator_desa';
-                            $canBPD = $isAdmin || $role === 'bpd';
-                        @endphp
+                    @php
+                        $role = session('user_role');
+                        $isAdmin = $role === 'admin';
+                        $canMusdus = $isAdmin || $role === 'operator_dusun';
+                        $canMusrenbang = $isAdmin || $role === 'operator_desa';
+                        $canBPD = $isAdmin || $role === 'bpd';
+                    @endphp
 
-                        @if($canMusdus || $canMusrenbang || $canBPD)
-                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="feather-plus"></i> Tambah Baru
+                    @if(request('jenis') == 'Musdus' && $canMusdus)
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}" class="btn btn-sm btn-primary shadow-sm">
+                            <i class="feather-plus me-1"></i> Tambah Musdus
+                        </a>
+                    @elseif(request('jenis') == 'Musrenbang' && $canMusrenbang)
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}" class="btn btn-sm btn-primary shadow-sm">
+                            <i class="feather-plus me-1"></i> Tambah Musrenbang
+                        </a>
+                    @elseif(request('jenis') == 'BPD' && $canBPD)
+                        <a href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}" class="btn btn-sm btn-primary shadow-sm">
+                            <i class="feather-plus me-1"></i> Tambah Musyawarah BPD
+                        </a>
+                    @elseif(!request('jenis') && ($canMusdus || $canMusrenbang || $canBPD))
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-sm btn-primary shadow-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="feather-plus me-1"></i> Tambah Baru
                             </button>
-                            <div class="dropdown-menu">
+                            <ul class="dropdown-menu dropdown-menu-end">
                                 @if($canMusdus)
-                                <a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}">Musdus</a>
+                                    <li><a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'Musdus']) }}">Musdus</a></li>
                                 @endif
                                 @if($canMusrenbang)
-                                <a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}">Musrenbang</a>
+                                    <li><a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'Musrenbang']) }}">Musrenbang</a></li>
                                 @endif
                                 @if($canBPD)
-                                <a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}">Musyawarah BPD</a>
+                                    <li><a class="dropdown-item" href="{{ route('berita-acara.create', ['jenis' => 'BPD']) }}">Musyawarah BPD</a></li>
                                 @endif
-                            </div>
+                            </ul>
                         </div>
-                        @endif
-                     @endif
-                </div>
+                    @endif
                 </div>
             </div>
-            <div class="card-body">
+
+            <div class="card-body p-4">
                 {{-- Filter Tabs --}}
-                <ul class="nav nav-tabs mb-3">
+                <ul class="nav nav-tabs mb-4">
                     <li class="nav-item">
                         <a class="nav-link {{ request('jenis') == '' ? 'active' : '' }}" href="{{ route('berita-acara.index') }}">Semua</a>
                     </li>
@@ -85,96 +82,136 @@
                     </li>
                 </ul>
 
+                {{-- Alert --}}
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="feather-check-circle me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="feather-alert-circle me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                {{-- Table --}}
                 <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light text-dark">
                             <tr>
-                                <th>No</th>
-                                <th>Jenis</th>
-                                <th>Tanggal</th>
-                                <th>Tempat</th>
-                                <th>Pimpinan</th>
-                                <th>Aksi</th>
+                                <th style="width: 5%">No</th>
+                                <th style="width: 15%">Jenis</th>
+                                <th style="width: 20%">Tanggal & Waktu</th>
+                                <th style="width: 25%">Tempat</th>
+                                <th style="width: 10%">File BA</th>
+                                <th style="width: 25%" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($beritaAcaras as $key => $ba)
                                 <tr>
-                                    <td>{{ $beritaAcaras->firstItem() + $key }}</td>
+                                    <td class="text-muted small">{{ $beritaAcaras->firstItem() + $key }}</td>
                                     <td>
-                                        <span class="badge {{ $ba->jenis == 'Musdus' ? 'bg-info' : ($ba->jenis == 'Musrenbang' ? 'bg-success' : 'bg-warning text-dark') }}">
-                                            {{ $ba->jenis }}
-                                        </span>
+                                        @php
+                                            $badgeClass = match($ba->jenis) {
+                                                'Musdus'     => 'badge-status-proses',
+                                                'Musrenbang' => 'badge-status-disetujui',
+                                                'BPD'        => 'badge-status-menunggu-bpd',
+                                                default      => 'badge bg-secondary',
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $badgeClass }} rounded-pill px-2 py-1">{{ $ba->jenis }}</span>
                                         @if($ba->dusun)
                                             <br><small class="text-muted">{{ $ba->dusun->nama_dusun }}</small>
                                         @endif
                                     </td>
-                                    <td>{{ $ba->hari }}, {{ \Carbon\Carbon::parse($ba->tanggal)->translatedFormat('d F Y') }}</td>
-                                    <td>{{ Str::limit($ba->tempat, 30) }}</td>
-                                    <td>{{ $ba->pemimpinPegawai->nama ?? '-' }}</td>
                                     <td>
-                                        <div class="d-flex gap-2">
-                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadPdfModal" onclick="setUploadUrl({{ $ba->id_berita }})">
-                                                <i class="feather-upload"></i> Unggah PDF
+                                        <span class="fw-semibold">{{ $ba->hari }}</span><br>
+                                        <small class="text-muted">{{ \Carbon\Carbon::parse($ba->tanggal)->translatedFormat('d F Y') }}</small><br>
+                                        <small class="text-muted"><i class="feather-clock me-1" style="font-size:10px;"></i>{{ $ba->jam_mulai }} – {{ $ba->jam_selesai }}</small>
+                                    </td>
+                                    <td class="text-muted small">{{ Str::limit($ba->tempat, 50) }}</td>
+                                    <td class="text-center">
+                                        @if($ba->file_pdf)
+                                            <span class="badge badge-status-disetujui px-2 py-1"><i class="feather-file me-1"></i>Ada</span>
+                                        @else
+                                            <span class="badge badge-status-gagal px-2 py-1"><i class="feather-x me-1"></i>Belum</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-1 justify-content-center flex-wrap">
+                                            {{-- Cetak --}}
+                                            <a href="{{ route('berita-acara.print', $ba->id_berita) }}" class="btn btn-sm bg-light-primary text-primary border-0 shadow-sm" title="Cetak" target="_blank">
+                                                <i class="feather-printer"></i>
+                                            </a>
+
+                                            {{-- Unggah PDF --}}
+                                            <button type="button" class="btn btn-sm bg-light-info text-info border-0 shadow-sm" title="Unggah PDF" data-bs-toggle="modal" data-bs-target="#uploadPdfModal" onclick="setUploadUrl({{ $ba->id_berita }})">
+                                                <i class="feather-upload"></i>
                                             </button>
-                                            
+
+                                            {{-- Lihat BA --}}
                                             @if($ba->file_pdf)
-                                                <a href="{{ asset($ba->file_pdf) }}" class="btn btn-sm btn-outline-info" target="_blank" title="Lihat BA">
-                                                    <i class="feather-eye"></i> Lihat BA
+                                                <a href="{{ asset($ba->file_pdf) }}" class="btn btn-sm bg-light-success text-success border-0 shadow-sm" target="_blank" title="Lihat BA">
+                                                    <i class="feather-eye"></i>
                                                 </a>
                                             @else
-                                                <button type="button" class="btn btn-sm btn-outline-info" onclick="showAlertNotUploaded()" title="Lihat BA">
-                                                    <i class="feather-eye"></i> Lihat BA
+                                                <button type="button" class="btn btn-sm bg-light-secondary text-secondary border-0 shadow-sm" onclick="showAlertNotUploaded()" title="Lihat BA">
+                                                    <i class="feather-eye"></i>
                                                 </button>
                                             @endif
-                                            
-                                            @php
-                                                $role = session('user_role');
-                                                $isAdmin = $role === 'admin';
-                                                $canEdit = false;
 
-                                                if ($ba->jenis == 'Musdus') {
-                                                    $canEdit = $isAdmin || $role === 'operator_dusun';
-                                                } elseif ($ba->jenis == 'Musrenbang') {
-                                                    $canEdit = $isAdmin || $role === 'operator_desa';
-                                                } elseif ($ba->jenis == 'BPD') {
-                                                    $canEdit = $isAdmin || $role === 'bpd';
-                                                }
+                                            @php
+                                                $canEditRow = false;
+                                                if ($ba->jenis == 'Musdus')      $canEditRow = $isAdmin || $role === 'operator_dusun';
+                                                elseif ($ba->jenis == 'Musrenbang') $canEditRow = $isAdmin || $role === 'operator_desa';
+                                                elseif ($ba->jenis == 'BPD')     $canEditRow = $isAdmin || $role === 'bpd';
                                             @endphp
 
-                                            @if($canEdit)
-                                            <a href="{{ route('berita-acara.edit', $ba->id_berita) }}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="feather-edit"></i></a>
-                                            <form action="{{ route('berita-acara.destroy', $ba->id_berita) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus"><i class="feather-trash-2"></i></button>
-                                            </form>
+                                            @if($canEditRow)
+                                                {{-- Edit --}}
+                                                <a href="{{ route('berita-acara.edit', $ba->id_berita) }}" class="btn btn-sm bg-light-warning text-warning border-0 shadow-sm" title="Edit">
+                                                    <i class="feather-edit-2"></i>
+                                                </a>
+                                                {{-- Hapus --}}
+                                                <form action="{{ route('berita-acara.destroy', $ba->id_berita) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0 shadow-sm" title="Hapus">
+                                                        <i class="feather-trash-2"></i>
+                                                    </button>
+                                                </form>
                                             @endif
-                                            
-                                            <a href="{{ route('berita-acara.print', $ba->id_berita) }}" class="btn btn-sm btn-outline-dark" title="Cetak PDF" target="_blank"><i class="feather-printer"></i></a>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">Belum ada data berita acara.</td>
+                                    <td colspan="6" class="text-center py-5 text-muted">
+                                        <i class="feather-file-text mb-2 d-block" style="font-size: 2rem;"></i>
+                                        Belum ada data berita acara.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                {{ $beritaAcaras->links() }}
+                <div class="mt-3">
+                    {{ $beritaAcaras->links() }}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Upload PDF Modal -->
+{{-- Upload PDF Modal --}}
 <div class="modal fade" id="uploadPdfModal" tabindex="-1" aria-labelledby="uploadPdfModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content border-0 shadow">
             <div class="modal-header">
-                <h5 class="modal-title" id="uploadPdfModalLabel">Unggah Berita Acara (PDF)</h5>
+                <h5 class="modal-title fw-bold" id="uploadPdfModalLabel">Unggah Berita Acara (PDF)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="uploadPdfForm" action="" method="POST" enctype="multipart/form-data">
@@ -187,8 +224,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Unggah</button>
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-sm btn-primary">Unggah</button>
                 </div>
             </form>
         </div>
