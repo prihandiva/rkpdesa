@@ -125,16 +125,18 @@
         .form-floating > .form-control {
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            height: calc(3.5rem + 10px);
-            padding: 1rem 1.25rem;
-            font-size: 1rem;
+            height: calc(3.8rem);
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            font-size: 1.05rem;
             color: #334155;
             transition: all 0.3s ease;
             box-shadow: none !important;
         }
 
         .form-floating > label {
-            padding: 1rem 1.25rem;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
             color: #94a3b8;
             font-weight: 500;
         }
@@ -147,7 +149,6 @@
         .form-floating > .form-control:not(:placeholder-shown) ~ label,
         .form-floating > .form-control:focus ~ label {
             color: var(--primary-color);
-            transform: scale(0.85) translateY(-0.8rem) translateX(0.15rem);
             font-weight: 600;
         }
 
@@ -285,7 +286,7 @@
                                     Ingat Saya
                                 </label>
                             </div>
-                            <a href="#" class="link-primary text-decoration-none">Lupa Password?</a>
+                            <a href="{{ route('admin.forgot-password') }}" class="link-primary text-decoration-none">Lupa Password?</a>
                         </div>
 
                         <div class="d-grid mb-4">

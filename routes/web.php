@@ -42,6 +42,18 @@ Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'inde
 
 // Admin Auth Routes
 Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
+Route::get('/admin/forgot-password', function () {
+    $admin = \App\Models\User::where('role', 'admin')->first();
+    $adminPhone = $admin && $admin->telp ? $admin->telp : '0895355779622';
+    
+    // Format to 62...
+    $waNumber = preg_replace('/[^0-9]/', '', $adminPhone);
+    if (strpos($waNumber, '0') === 0) {
+        $waNumber = '62' . substr($waNumber, 1);
+    }
+
+    return view('admin.forgot-password', compact('waNumber'));
+})->name('admin.forgot-password');
 Route::post('/admin/login', [LoginController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
