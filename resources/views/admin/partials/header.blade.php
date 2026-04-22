@@ -105,27 +105,27 @@
                                             
                                             // Evaluasi berdasarkan status
                                             if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
-                                                $colorClass = 'text-dark bg-warning';
+                                                $colorClass = 'badge-status-pending';
                                             } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
-                                                $colorClass = 'text-white bg-danger';
+                                                $colorClass = 'badge-status-gagal';
                                             } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
-                                                $colorClass = 'text-white bg-purple';
+                                                $colorClass = 'badge-status-terverifikasi';
                                             } elseif (str_contains($statusStr, 'menunggu persetujuan bpd') || str_contains($judulStr, 'menunggu persetujuan bpd') || str_contains($deskripsiStr, 'menunggu persetujuan bpd')) {
-                                                $colorClass = 'text-dark bg-light border';
+                                                $colorClass = 'badge-status-menunggu-bpd';
                                             } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
-                                                $colorClass = 'text-white bg-success';
+                                                $colorClass = 'badge-status-disetujui';
                                             } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
-                                                $colorClass = 'text-white bg-dark';
+                                                $colorClass = 'badge-status-ditolak-bpd';
                                             } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
-                                                $colorClass = 'text-info bg-light-info';
+                                                $colorClass = 'badge-status-proses';
                                             } elseif ($statusStr == 'danger') {
-                                                $colorClass = 'text-white bg-danger';
+                                                $colorClass = 'badge-status-gagal';
                                             } elseif ($statusStr == 'warning') {
-                                                $colorClass = 'text-dark bg-warning';
+                                                $colorClass = 'badge-status-pending';
                                             } elseif ($statusStr == 'success') {
-                                                $colorClass = 'text-white bg-success';
+                                                $colorClass = 'badge-status-disetujui';
                                             } else {
-                                                $colorClass = 'text-info bg-light-info';
+                                                $colorClass = 'badge-status-proses';
                                             }
                                             
                                             $icon = 'bell';
@@ -136,7 +136,7 @@
                                             } elseif($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
                                                 $icon = 'file-text';
                                             } elseif($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
-                                                $icon = 'send';
+                                                $icon = 'file';
                                             } elseif($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
                                                 $icon = 'book-open';
                                             }

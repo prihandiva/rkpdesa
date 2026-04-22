@@ -8,7 +8,7 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">RPJM Desa</h5>
+                        <h5 class="m-b-10 fw-bold text-dark">RPJM Desa</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
@@ -24,11 +24,11 @@
                     <div class="page-header-right-items">
                          <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
-                                <a href="{{ route('rpjm.export_excel', ['periode' => request('periode')]) }}" class="btn btn-md btn-success me-2">
+                                <a href="{{ route('rpjm.export_excel', ['periode' => request('periode')]) }}" class="btn btn-md btn-success shadow-sm me-2">
                                     <i class="feather-download me-2"></i>
                                     <span>Cetak RPJM (Excel)</span>
                                 </a>
-                                <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary">
+                                <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary shadow-sm">
                                     <i class="feather-plus me-2"></i>
                                     <span>Tambah RPJM</span>
                                 </a>
@@ -44,8 +44,8 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <!--! [Start] Card Header !-->
-                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Data RPJM Desa</h6>
+                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between p-4">
+                        <h6 class="m-0 fw-bold text-primary">Data RPJM Desa</h6>
                     </div>
                     <!--! [End] Card Header !-->
                     
@@ -148,19 +148,19 @@
                                                                 </td> -->
                                                                 <td>
                                                                     <div class="d-flex gap-2">
-                                                                        <a href="{{ route('rpjm.show', $rpjm->id_rpjm) }}" class="btn btn-sm btn-outline-info" title="Detail">
+                                                                        <a href="{{ route('rpjm.show', $rpjm->id_rpjm) }}" class="btn btn-sm bg-light-info text-info border-0" title="Detail">
                                                                             <i class="feather-eye"></i>
                                                                         </a>
                                                                          @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                                                                             <a href="{{ route('rpjm.edit', $rpjm->id_rpjm) }}"
-                                                                                class="btn btn-sm btn-outline-warning">
+                                                                                class="btn btn-sm bg-light-warning text-warning border-0" title="Edit">
                                                                                 <i class="feather-edit"></i>
                                                                             </a>
                                                                             <form action="{{ route('rpjm.destroy', $rpjm->id_rpjm) }}" method="POST"
                                                                                 class="d-inline" onsubmit="return confirm('Yakin hapus RPJM ini?')">
                                                                                 @csrf
                                                                                 @method('DELETE')
-                                                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                                <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
                                                                                     <i class="feather-trash-2"></i>
                                                                                 </button>
                                                                             </form>

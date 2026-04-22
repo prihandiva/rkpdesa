@@ -8,7 +8,7 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">Usulan</h5>
+                        <h5 class="m-b-10 fw-bold text-dark">Usulan</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
@@ -30,7 +30,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             @if(isset($currentUser) && ($currentUser->role == 'operator_dusun' || $currentUser->role == 'admin'))
-                                <a href="{{ route('usulan.create') }}" class="btn btn-md btn-primary">
+                                <a href="{{ route('usulan.create') }}" class="btn btn-md btn-primary shadow-sm">
                                     <i class="feather-plus me-2"></i>
                                     <span>Tambah Usulan</span>
                                 </a>
@@ -51,8 +51,8 @@
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
                     <!--! [Start] Card Header !-->
-                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Data Usulan Pembangunan Desa</h6>
+                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between p-4">
+                        <h6 class="m-0 fw-bold text-primary">Data Usulan Pembangunan Desa</h6>
                         <div class="btn-group" role="group">
                            {{-- Filter/Export placehodlers --}}
                         </div>
@@ -135,28 +135,28 @@
                                                                             
                                                                             switch($status) {
                                                                                 case 'Proses': 
-                                                                                    $badgeClass = 'bg-primary'; // Biru
+                                                                                    $badgeClass = 'badge-status-proses';
                                                                                     break;
                                                                                 case 'Pending': 
-                                                                                    $badgeClass = 'bg-warning text-dark'; // Kuning
+                                                                                    $badgeClass = 'badge-status-pending';
                                                                                     break;
                                                                                 case 'Terverifikasi': 
-                                                                                    $badgeClass = 'bg-purple text-white'; // Ungu
+                                                                                    $badgeClass = 'badge-status-terverifikasi';
                                                                                     break;
                                                                                 case 'Gagal Terverifikasi': 
-                                                                                    $badgeClass = 'bg-danger'; // Merah
+                                                                                    $badgeClass = 'badge-status-gagal';
                                                                                     break;
                                                                                 case 'Disetujui': 
-                                                                                    $badgeClass = 'bg-success'; // Hijau
+                                                                                    $badgeClass = 'badge-status-disetujui';
                                                                                     break;
                                                                                 case 'Menunggu persetujuan BPD': 
-                                                                                    $badgeClass = 'bg-light text-dark border'; // Putih
+                                                                                    $badgeClass = 'badge-status-menunggu-bpd';
                                                                                     break;
                                                                                 case 'Ditolak BPD': 
-                                                                                    $badgeClass = 'bg-dark text-white'; // Hitam
+                                                                                    $badgeClass = 'badge-status-ditolak-bpd';
                                                                                     break;
                                                                                 default:
-                                                                                    $badgeClass = 'bg-secondary';
+                                                                                    $badgeClass = 'bg-secondary text-white';
                                                                             }
                                                                         @endphp
                                                                         <span class="badge {{ $badgeClass }}">
@@ -174,19 +174,19 @@
                                                                     </td> -->
                                                                     <td>
                                                                         <div class="d-flex gap-2">
-                                                                            <a href="{{ route('usulan.show', $usulan->id_usulan) }}" class="btn btn-sm btn-outline-info" title="Detail">
+                                                                            <a href="{{ route('usulan.show', $usulan->id_usulan) }}" class="btn btn-sm bg-light-info text-info border-0" title="Detail">
                                                                                 <i class="feather-eye"></i>
                                                                             </a>
                                                                              @if(isset($currentUser) && ($currentUser->role == 'operator_dusun' || $currentUser->role == 'admin'))
                                                                                 <a href="{{ route('usulan.edit', $usulan->id_usulan) }}"
-                                                                                    class="btn btn-sm btn-outline-warning">
+                                                                                    class="btn btn-sm bg-light-warning text-warning border-0" title="Edit">
                                                                                     <i class="feather-edit"></i>
                                                                                 </a>
                                                                                 <form action="{{ route('usulan.destroy', $usulan->id_usulan) }}" method="POST"
                                                                                     class="d-inline" onsubmit="return confirm('Yakin hapus usulan ini?')">
                                                                                     @csrf
                                                                                     @method('DELETE')
-                                                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                                    <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
                                                                                         <i class="feather-trash-2"></i>
                                                                                     </button>
                                                                                 </form>

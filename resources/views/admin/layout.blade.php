@@ -224,7 +224,16 @@
             color: #6c757d;
         }
         
-        /* Custom Background Colors for Notifications */
+        /* Custom Status Badges (Soft Palette) */
+        .badge-status-proses { background-color: #e0f2fe !important; color: #0284c7 !important; border: 1px solid #bae6fd; } /* Light Blue */
+        .badge-status-pending { background-color: #fef3c7 !important; color: #d97706 !important; border: 1px solid #fde68a; } /* Light Amber/Yellow */
+        .badge-status-terverifikasi { background-color: #ccfbf1 !important; color: #0f766e !important; border: 1px solid #99f6e4; } /* Light Teal */
+        .badge-status-gagal { background-color: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fecaca; } /* Light Red */
+        .badge-status-disetujui { background-color: #dcfce7 !important; color: #15803d !important; border: 1px solid #bbf7d0; } /* Light Green */
+        .badge-status-menunggu-bpd { background-color: #f3e8ff !important; color: #7e22ce !important; border: 1px solid #e9d5ff; } /* Light Purple */
+        .badge-status-ditolak-bpd { background-color: #fff1f2 !important; color: #be123c !important; border: 1px solid #fecdd3; } /* Light Rose/Pink */
+
+        /* Existing utility backgrounds if needed by old parts */
         .bg-light-primary { background-color: rgba(75, 59, 219, 0.1) !important; }
         .bg-light-success { background-color: rgba(40, 167, 69, 0.1) !important; }
         .bg-light-info { background-color: rgba(23, 162, 184, 0.1) !important; }

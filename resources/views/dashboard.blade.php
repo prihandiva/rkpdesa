@@ -185,43 +185,43 @@
                         <div class="d-flex flex-column gap-2">
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-primary w-100 py-2 text-wrap" style="line-height: 1.2;">Proses</span>
+                                    <span class="badge badge-status-proses w-100 py-2 text-wrap" style="line-height: 1.2;">Proses</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Usulan dan RPJM yang sudah tersubmit ke database.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-warning text-dark w-100 py-2 text-wrap" style="line-height: 1.2;">Pending</span>
+                                    <span class="badge badge-status-pending w-100 py-2 text-wrap" style="line-height: 1.2;">Pending</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Usulan dan RPJM yang masuk daftar tunggu RKP Desa.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-purple text-white w-100 py-2 text-wrap" style="line-height: 1.2;">Terverifikasi</span>
+                                    <span class="badge badge-status-terverifikasi w-100 py-2 text-wrap" style="line-height: 1.2;">Terverifikasi</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Telah diverifikasi oleh Tim Verifikasi.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-danger w-100 py-2 text-wrap" style="line-height: 1.2;">Gagal Terverifikasi</span>
+                                    <span class="badge badge-status-gagal w-100 py-2 text-wrap" style="line-height: 1.2;">Gagal Terverifikasi</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Tim Verifikasi menyatakan gagal verifikasi.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-light text-dark border w-100 py-2 text-wrap" style="line-height: 1.2;">Menunggu persetujuan BPD</span>
+                                    <span class="badge badge-status-menunggu-bpd w-100 py-2 text-wrap" style="line-height: 1.2;">Menunggu persetujuan BPD</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Proses validasi, menunggu approval BPD.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-success w-100 py-2 text-wrap" style="line-height: 1.2;">Disetujui</span>
+                                    <span class="badge badge-status-disetujui w-100 py-2 text-wrap" style="line-height: 1.2;">Disetujui</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">Telah disetujui oleh BPD.</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-5 pe-1">
-                                    <span class="badge bg-dark text-white w-100 py-2 text-wrap" style="line-height: 1.2;">Ditolak BPD</span>
+                                    <span class="badge badge-status-ditolak-bpd w-100 py-2 text-wrap" style="line-height: 1.2;">Ditolak BPD</span>
                                 </div>
                                 <div class="col-7 ps-1 small text-muted lh-sm">BPD menolak usulan terkait.</div>
                             </div>
@@ -330,15 +330,15 @@
     document.addEventListener("DOMContentLoaded", function() {
         // Map status names to specific hex colors to match dashboard badges.
         const statusColorsMap = {
-            'Proses': '#4b3bdb', // bg-primary
-            'Pending': '#ffc107', // bg-warning
-            'Terverifikasi': '#6f42c1', // bg-purple
-            'Gagal Terverifikasi': '#dc3545', // bg-danger
-            'Disetujui': '#28a745', // bg-success
-            'Menunggu persetujuan BPD': '#e2e3e5', // bg-light
-            'Ditolak BPD': '#212529' // bg-dark
+            'Proses': '#bae6fd', // border/darker color from soft blue
+            'Pending': '#fde68a', // amber
+            'Terverifikasi': '#99f6e4', // teal
+            'Gagal Terverifikasi': '#fecaca', // red
+            'Disetujui': '#bbf7d0', // green
+            'Menunggu persetujuan BPD': '#e9d5ff', // purple
+            'Ditolak BPD': '#fecdd3' // rose
         };
-        const getStatusColor = (status) => statusColorsMap[status] || '#6c757d'; // fallback bg-secondary
+        const getStatusColor = (status) => statusColorsMap[status] || '#f1f5f9'; // fallback bg-secondary
 
         // --- 1. Usulan Per Dusun (Pie Chart) ---
         var usulanDusunData = {!! json_encode($usulanPerDusunData ?? []) !!};

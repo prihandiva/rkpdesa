@@ -52,7 +52,7 @@
                 <!--! [Start] RKP Desa Menu !-->
                 <li class="nxl-item {{ request()->routeIs('rkpdesa.*') ? 'active' : '' }}">
                     <a href="{{ route('rkpdesa.index') }}" class="nxl-link">
-                        <span class="nxl-micon"><i class="feather-send"></i></span>
+                        <span class="nxl-micon"><i class="feather-file"></i></span>
                         <span class="nxl-mtext">RKP Desa</span>
                     </a>
                 </li>

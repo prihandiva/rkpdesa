@@ -8,7 +8,7 @@
             <div class="page-header">
                 <div class="page-header-left d-flex align-items-center">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">RKP Desa</h5>
+                        <h5 class="m-b-10 fw-bold text-dark">RKP Desa</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
@@ -25,7 +25,7 @@
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']))
-                                <button type="button" class="btn btn-md btn-warning text-dark" onclick="submitToBPD()">
+                                <button type="button" class="btn btn-md btn-warning shadow-sm text-dark" onclick="submitToBPD()">
                                     <i class="feather-send me-2"></i>
                                     <span>Ajukan Persetujuan BPD</span>
                                 </button>
@@ -35,7 +35,7 @@
                                 </form>
                             @endif
 
-                            <a href="{{ route('rkpdesa.create') }}" class="btn btn-md btn-primary">
+                            <a href="{{ route('rkpdesa.create') }}" class="btn btn-md btn-primary shadow-sm">
                                 <i class="feather-plus me-2"></i>
                                 <span>Tambah RKP</span>
                             </a>
@@ -53,10 +53,10 @@
         <div class="row">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
-                        <h6 class="mb-0">Rencana Kerja Pembangunan Desa</h6>
+                    <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between p-4">
+                        <h6 class="m-0 fw-bold text-primary">Rencana Kerja Pembangunan Desa</h6>
                         <div class="btn-group" role="group">
-                            <a href="{{ route('rkpdesa.export_excel') }}" class="btn btn-sm btn-outline-success">
+                            <a href="{{ route('rkpdesa.export_excel') }}" class="btn btn-sm btn-success shadow-sm">
                                 <i class="feather-download me-1"></i>Cetak RKP Desa
                             </a>
                         </div>
@@ -174,14 +174,14 @@
                                                     $badgeClass = 'bg-secondary text-white';
                                                     
                                                     switch($status) {
-                                                        case 'Proses': $badgeClass = 'bg-primary'; break;
-                                                        case 'Pending': $badgeClass = 'bg-warning text-dark'; break;
-                                                        case 'Terverifikasi': $badgeClass = 'bg-purple text-white'; break;
-                                                        case 'Gagal Terverifikasi': $badgeClass = 'bg-danger'; break;
-                                                        case 'Disetujui': $badgeClass = 'bg-success'; break;
-                                                        case 'Menunggu persetujuan BPD': $badgeClass = 'bg-light text-dark border'; break;
-                                                        case 'Ditolak BPD': $badgeClass = 'bg-dark text-white'; break;
-                                                        default: $badgeClass = 'bg-secondary';
+                                                        case 'Proses': $badgeClass = 'badge-status-proses'; break;
+                                                        case 'Pending': $badgeClass = 'badge-status-pending'; break;
+                                                        case 'Terverifikasi': $badgeClass = 'badge-status-terverifikasi'; break;
+                                                        case 'Gagal Terverifikasi': $badgeClass = 'badge-status-gagal'; break;
+                                                        case 'Disetujui': $badgeClass = 'badge-status-disetujui'; break;
+                                                        case 'Menunggu persetujuan BPD': $badgeClass = 'badge-status-menunggu-bpd'; break;
+                                                        case 'Ditolak BPD': $badgeClass = 'badge-status-ditolak-bpd'; break;
+                                                        default: $badgeClass = 'bg-secondary text-white';
                                                     }
                                                 @endphp
                                                 <span class="badge {{ $badgeClass }}">{{ $status }}</span>
@@ -189,11 +189,11 @@
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('rkpdesa.show', $item->id_kegiatan) }}"
-                                                        class="btn btn-sm btn-outline-info" title="Lihat">
+                                                        class="btn btn-sm bg-light-info text-info border-0" title="Lihat">
                                                         <i class="feather-eye"></i>
                                                     </a>
                                                     <!-- <a href="{{ route('rkpdesa.edit', $item->id_kegiatan) }}"
-                                                        class="btn btn-sm btn-outline-warning" title="Edit">
+                                                        class="btn btn-sm bg-light-warning text-warning border-0" title="Edit">
                                                         <i class="feather-edit"></i>
                                                     </a> -->
                                                     @if(auth()->check() && (auth()->user()->role == 'admin' || auth()->user()->role == 'operator_desa'))
@@ -201,7 +201,7 @@
                                                         class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus">
+                                                        <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
                                                             <i class="feather-trash-2"></i>
                                                         </button>
                                                     </form>
