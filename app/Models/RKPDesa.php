@@ -64,6 +64,15 @@ class RKPDesa extends Model
         return $this->belongsTo(PolaPelaksanaan::class, 'pola_pelaksanaan', 'id_pelaksanaan');
     }
 
+    public function getSumberBiayaModelsAttribute()
+    {
+        if (empty($this->sumber_biaya)) {
+            return collect();
+        }
+        $ids = is_array($this->sumber_biaya) ? $this->sumber_biaya : [$this->sumber_biaya];
+        return \App\Models\SumberBiaya::whereIn('id_biaya', $ids)->get();
+    }
+
     /**
      * The attributes that should be cast.
      *
@@ -75,6 +84,7 @@ class RKPDesa extends Model
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',
+            'sumber_biaya' => 'array',
         ];
     }
     /**

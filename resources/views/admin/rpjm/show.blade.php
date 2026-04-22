@@ -81,7 +81,13 @@
                                     </tr>
                                     <tr>
                                         <th>Sumber Dana</th>
-                                        <td>{{ $rpjm->masterSumberBiaya->nama ?? '-' }}</td>
+                                        <td>
+                                            @if($rpjm->sumberBiayaModels->count() > 0)
+                                                {{ $rpjm->sumberBiayaModels->pluck('nama')->implode(', ') }}
+                                            @else
+                                                {{ is_array($rpjm->sumber_biaya) ? implode(', ', $rpjm->sumber_biaya) : ($rpjm->sumber_biaya ?? '-') }}
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Pola Pelaksanaan</th>

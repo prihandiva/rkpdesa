@@ -110,7 +110,7 @@
                 @endfor
                 
                 <td style="border: 1px solid #000; text-align: right;">{{ $item->jumlah ?? 0 }}</td>
-                <td style="border: 1px solid #000; text-align: center;">{{ $item->masterSumberBiaya->nama ?? '-' }}</td>
+                <td style="border: 1px solid #000; text-align: center;">{{ $item->sumberBiayaModels->count() > 0 ? $item->sumberBiayaModels->pluck('nama')->implode(', ') : (is_array($item->sumber_biaya) ? implode(', ', $item->sumber_biaya) : ($item->sumber_biaya ?? '-')) }}</td>
             </tr>
             @endforeach
             

@@ -159,7 +159,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-4 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label class="form-label">Waktu Pelaksanaan</label>
                                     <input type="text" class="form-control" name="waktu" value="{{ old('waktu') ?? $rpjm->waktu }}" placeholder="Contoh: 3 Bulan">
                                 </div>
@@ -178,12 +178,27 @@
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="form-label">Sumber Dana</label>
-                                    <select class="form-select" name="sumber_biaya">
-                                        <option value="">-- Pilih Sumber --</option>
-                                        @foreach($sumber_biayas as $sb)
-                                            <option value="{{ $sb->id_biaya }}" {{ (old('sumber_biaya') ?? $rpjm->sumber_biaya) == $sb->id_biaya ? 'selected' : '' }}>{{ $sb->nama }}</option>
-                                        @endforeach
-                                    </select>
+                                    @php
+                                        $selectedBiaya = old('sumber_biaya', is_array($rpjm->sumber_biaya) ? $rpjm->sumber_biaya : [$rpjm->sumber_biaya]);
+                                    @endphp
+                                    <div class="dropdown">
+                                        <button class="btn btn-light border dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center bg-white" type="button" id="dropdownSumberDana" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="padding: 0.5rem 0.75rem;">
+                                            <span class="text-muted" id="dropdownSumberDanaText" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-- Pilih Sumber Dana --</span>
+                                        </button>
+                                        <ul class="dropdown-menu w-100 px-3 py-2 shadow-sm" aria-labelledby="dropdownSumberDana" style="max-height: 250px; overflow-y: auto;">
+                                            @foreach($sumber_biayas as $sb)
+                                            <li class="mb-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="sumber_biaya[]" value="{{ $sb->id_biaya }}" id="sb_edit_{{ $sb->id_biaya }}" {{ in_array($sb->id_biaya, (array)$selectedBiaya) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="sb_edit_{{ $sb->id_biaya }}">
+                                                        {{ $sb->nama }}
+                                                    </label>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    @error('sumber_biaya') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                                 </div>
                             </div>
                             
@@ -233,4 +248,35 @@
             <!--! [End] Right Sidebar !-->
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Checkbox Dropdown Text Update
+            const sumberDanaCheckboxes = document.querySelectorAll('input[name="sumber_biaya[]"]');
+            const dropdownText = document.getElementById('dropdownSumberDanaText');
+            
+            function updateDropdownText() {
+                if(!dropdownText) return;
+                const selected = Array.from(sumberDanaCheckboxes)
+                    .filter(cb => cb.checked)
+                    .map(cb => cb.nextElementSibling.textContent.trim());
+                
+                if (selected.length > 0) {
+                    dropdownText.textContent = selected.join(', ');
+                    dropdownText.classList.remove('text-muted');
+                } else {
+                    dropdownText.textContent = '-- Pilih Sumber Dana --';
+                    dropdownText.classList.add('text-muted');
+                }
+            }
+
+            sumberDanaCheckboxes.forEach(cb => {
+                cb.addEventListener('change', updateDropdownText);
+            });
+            
+            // Initialize on load
+            if(sumberDanaCheckboxes.length > 0) {
+                updateDropdownText();
+            }
+        });
+    </script>
 @endsection

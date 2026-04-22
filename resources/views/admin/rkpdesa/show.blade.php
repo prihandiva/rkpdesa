@@ -59,7 +59,13 @@
                             </tr>
                             <tr>
                                 <th>Sumber Dana</th>
-                                <td>{{ $rkpDesa->masterSumberBiaya->nama ?? $rkpDesa->sumber_biaya }}</td>
+                                <td>
+                                    @if($rkpDesa->sumberBiayaModels->count() > 0)
+                                        {{ $rkpDesa->sumberBiayaModels->pluck('nama')->implode(', ') }}
+                                    @else
+                                        {{ is_array($rkpDesa->sumber_biaya) ? implode(', ', $rkpDesa->sumber_biaya) : $rkpDesa->sumber_biaya }}
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Pola Pelaksanaan</th>

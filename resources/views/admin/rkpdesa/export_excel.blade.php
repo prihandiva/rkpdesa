@@ -79,7 +79,7 @@
                 <td style="border: 1px solid #000; font-style: italic;">{{ $item->penerima ?? '-' }}</td>
                 <td style="border: 1px solid #000; text-align: center; font-style: italic;">{{ $item->waktu ?? '-' }}</td>
                 <td style="border: 1px solid #000; text-align: right; font-style: italic;">{{ $item->jumlah ?? 0 }}</td>
-                <td style="border: 1px solid #000; text-align: center; font-style: italic;">{{ $item->masterSumberBiaya->nama ?? '-' }}</td>
+                <td style="border: 1px solid #000; text-align: center; font-style: italic;">{{ $item->sumberBiayaModels->count() > 0 ? $item->sumberBiayaModels->pluck('nama')->implode(', ') : (is_array($item->sumber_biaya) ? implode(', ', $item->sumber_biaya) : ($item->sumber_biaya ?? '-')) }}</td>
                 <td style="border: 1px solid #000; text-align: center; font-style: italic;">{{ $item->masterPola->nama ?? ($item->pola_pelaksanaan ?? 'Swakelola') }}</td>
             </tr>
             @endforeach
