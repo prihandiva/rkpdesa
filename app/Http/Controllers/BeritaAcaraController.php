@@ -70,6 +70,7 @@ class BeritaAcaraController extends Controller
         }
 
         $tahun = Tahun::all(); 
+        $activeTahun = Tahun::where('status', 'Aktif')->first();
         $dusun = Dusun::all();
         $pegawai = Pegawai::all();
 
@@ -78,7 +79,7 @@ class BeritaAcaraController extends Controller
              $userDusunId = session('dusun_id');
         }
 
-        return view('admin.berita-acara.create', compact('jenis', 'tahun', 'dusun', 'pegawai', 'userDusunId'));
+        return view('admin.berita-acara.create', compact('jenis', 'tahun', 'activeTahun', 'dusun', 'pegawai', 'userDusunId'));
     }
 
     public function store(Request $request)
@@ -356,8 +357,9 @@ class BeritaAcaraController extends Controller
         };
 
         $kades = \App\Models\Pegawai::where('posisi', 'Kepala Desa')->first();
+        $userBpd = \App\Models\User::where('role', 'bpd')->first();
 
-        return view('admin.berita-acara.print', compact('beritaAcara', 'judul', 'kades'));
+        return view('admin.berita-acara.print', compact('beritaAcara', 'judul', 'kades', 'userBpd'));
     }
 
     /**

@@ -176,7 +176,7 @@
                 <td style="width: 50%;">
                     Ketua BPD<br>
                     <div style="height: 40px;"></div>
-                    <u><b>{{ $beritaAcara->nama_bpd ?? '.........................' }}</b></u>
+                    <u><b>{{ $userBpd ? strtoupper($userBpd->nama) : ($beritaAcara->nama_bpd ?? '.........................') }}</b></u>
                 </td>
                 @endif
             </tr>
@@ -228,7 +228,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($beritaAcara->absensi as $index => $abs)
+        @forelse($beritaAcara->absensi as $index => $abs)
             <tr>
                 <td class="text-center">{{ $loop->iteration }}</td>
                 <td>{{ $abs->nama }}</td>
@@ -237,29 +237,10 @@
                 <td></td> <!-- Empty for manual signature -->
             </tr>
             @empty
-            @for($i=1; $i<=15; $i++)
             <tr>
-                <td class="text-center">{{ $i }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td colspan="5" class="text-center" style="padding: 20px; color: #888;">Belum ada data daftar hadir.</td>
             </tr>
-            @endfor
             @endforelse
-            
-            {{-- Fill up to at least 15 rows for printed form feeling if few participants --}}
-            @if($beritaAcara->absensi->count() > 0 && $beritaAcara->absensi->count() < 15)
-                @for($i=$beritaAcara->absensi->count() + 1; $i<=15; $i++)
-                <tr>
-                    <td class="text-center">{{ $i }}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                @endfor
-            @endif
         </tbody>
     </table>
 
