@@ -37,23 +37,26 @@
         <!-- [ page-header ] end -->
 
         <!-- Filter Row -->
-        <div class="row border-bottom pb-4 mb-4 g-4 d-flex justify-content-between align-items-center">
-            <div class="col-md-6">
-                 <h4 class="mb-0 fw-bold">Statistik Data {{ $selectedTahun ? $selectedTahun->tahun : 'Semua Tahun' }}</h4>
+        <!-- Filter Row -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                     <h4 class="mb-0 fw-bold text-dark">Statistik Data {{ $selectedTahun ? $selectedTahun->tahun : 'Semua Tahun' }}</h4>
+                </div>
+                <div>
+                     <form method="GET" action="{{ route('dashboard') }}" class="d-flex align-items-center bg-light p-2 rounded border border-light-subtle">
+                         <i class="feather-filter text-primary me-2 ms-1"></i>
+                         <label for="tahun" class="me-3 fw-bold mb-0 text-dark small">Tahun Data:</label>
+                         <select name="tahun" id="tahun" class="form-select form-select-sm border-0 bg-transparent" onchange="this.form.submit()" style="min-width: 150px; cursor:pointer;">
+                             @foreach($tahunList as $tahun)
+                                 <option value="{{ $tahun->id_tahun }}" {{ $selectedTahunId == $tahun->id_tahun ? 'selected' : '' }}>
+                                     {{ $tahun->tahun }} {{ $tahun->status == 'Aktif' ? '(Aktif)' : '' }}
+                                 </option>
+                             @endforeach
+                         </select>
+                     </form>
+                 </div>
             </div>
-            <div class="col-md-auto">
-                 <form method="GET" action="{{ route('dashboard') }}" class="d-flex align-items-center bg-white p-2 rounded shadow-sm border">
-                     <i class="feather-filter text-primary me-2 ms-1"></i>
-                     <label for="tahun" class="me-3 fw-bold mb-0 text-dark">Tahun Data:</label>
-                     <select name="tahun" id="tahun" class="form-select form-select-sm border-0 bg-light" onchange="this.form.submit()" style="min-width: 150px; cursor:pointer;">
-                         @foreach($tahunList as $tahun)
-                             <option value="{{ $tahun->id_tahun }}" {{ $selectedTahunId == $tahun->id_tahun ? 'selected' : '' }}>
-                                 {{ $tahun->tahun }} {{ $tahun->status == 'Aktif' ? '(Aktif)' : '' }}
-                             </option>
-                         @endforeach
-                     </select>
-                 </form>
-             </div>
         </div>
 
         <!--! [Start] Main Dashboard Card !-->

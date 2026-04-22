@@ -8,7 +8,7 @@
     <div class="page-header">
         <div class="page-header-left d-flex align-items-center">
             <div class="page-header-title">
-                <h5 class="m-b-10">Detail RKP Desa</h5>
+                <h5 class="m-b-10 fw-bold text-dark">Detail RKP Desa</h5>
             </div>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
@@ -22,8 +22,8 @@
         <!-- Left Column: Details & Actions -->
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">Informasi Kegiatan</h6>
+                <div class="card-header bg-white border-bottom p-4">
+                    <h6 class="m-0 fw-bold text-primary">Informasi Kegiatan</h6>
                 </div>
                 <div class="card-body">
                     <!-- Read-Only Details -->
@@ -180,8 +180,8 @@
         <div class="col-lg-4">
             <!-- Status & Priority Card -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">Status & Prioritas</h6>
+                <div class="card-header bg-white border-bottom p-4">
+                    <h6 class="m-0 fw-bold text-primary">Status & Prioritas</h6>
                 </div>
                 <div class="card-body">
                      <!-- Priority Section -->
@@ -240,7 +240,7 @@
                             <div class="ms-4">
                                 <h6 class="mb-0 {{ $level >= 1 ? 'fw-bold text-dark' : 'text-muted' }}">Usulan Masuk</h6>
                                 <small class="text-muted">Draft RKP</small>
-                                @if($status == 'Proses') <span class="badge bg-primary ms-2">Saat Ini</span> @endif
+                                @if($status == 'Proses') <span class="badge badge-status-proses ms-2">Saat Ini</span> @endif
                             </div>
                         </div>
 
@@ -253,7 +253,7 @@
                             <div class="ms-4">
                                 <h6 class="mb-0 {{ $level >= 2 ? 'fw-bold text-dark' : 'text-muted' }}">Menunggu Verifikasi</h6>
                                 <small class="text-muted">Siap Diverifikasi</small>
-                                @if($status == 'Pending') <span class="badge bg-warning ms-2">Saat Ini</span> @endif
+                                @if($status == 'Pending') <span class="badge badge-status-pending ms-2">Saat Ini</span> @endif
                             </div>
                         </div>
 
@@ -276,8 +276,8 @@
                             <div class="ms-4">
                                 <h6 class="mb-0 {{ $level >= 3 ? 'fw-bold text-dark' : 'text-muted' }}">Verifikasi Teknis</h6>
                                 <small class="text-muted">Tim Penyusun / Verifikator</small>
-                                @if($status == 'Terverifikasi') <span class="badge bg-info ms-2">OK</span>
-                                @elseif($status == 'Gagal Terverifikasi') <span class="badge bg-danger ms-2">Gagal</span> @endif
+                                @if($status == 'Terverifikasi') <span class="badge badge-status-terverifikasi ms-2">OK</span>
+                                @elseif($status == 'Gagal Terverifikasi') <span class="badge badge-status-gagal ms-2">Gagal</span> @endif
                             </div>
                         </div>
 
@@ -306,11 +306,11 @@
                                 <h6 class="mb-0 {{ $level == 4 ? 'fw-bold text-dark' : 'text-muted' }}">Approval BPD</h6>
                                 <small class="text-muted">Musyawarah BPD</small>
                                 @if($status == 'Disetujui') 
-                                    <span class="badge bg-success ms-2">DISETUJUI</span>
+                                    <span class="badge badge-status-disetujui ms-2">DISETUJUI</span>
                                 @elseif($status == 'Ditolak BPD') 
-                                    <span class="badge bg-danger ms-2">DITOLAK</span>
+                                    <span class="badge badge-status-ditolak-bpd ms-2">DITOLAK</span>
                                 @elseif($status == 'Menunggu persetujuan BPD')
-                                    <span class="badge bg-warning ms-2">Menunggu</span>
+                                    <span class="badge badge-status-menunggu-bpd ms-2">Menunggu</span>
                                 @endif
                             </div>
                         </div>
@@ -321,8 +321,8 @@
 
             <!-- Timeline/Notification Log -->
              <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0">Riwayat & Notifikasi</h6>
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-4">
+                    <h6 class="m-0 fw-bold text-primary">Riwayat & Notifikasi</h6>
                     <small class="text-muted">Desending</small>
                 </div>
                 <div class="card-body p-0">
@@ -335,27 +335,27 @@
                                 $deskripsiStr = strtolower($log->deskripsi ?? '');
                                 
                                 if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
-                                    $colorClass = 'text-dark bg-warning';
+                                    $colorClass = 'badge-status-pending';
                                 } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
-                                    $colorClass = 'text-white bg-danger';
+                                    $colorClass = 'badge-status-gagal';
                                 } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
-                                    $colorClass = 'text-white bg-purple';
+                                    $colorClass = 'badge-status-terverifikasi';
                                 } elseif (str_contains($statusStr, 'menunggu persetujuan bpd') || str_contains($judulStr, 'menunggu persetujuan bpd') || str_contains($deskripsiStr, 'menunggu persetujuan bpd')) {
-                                    $colorClass = 'text-dark bg-light border';
+                                    $colorClass = 'badge-status-menunggu-bpd';
                                 } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
-                                    $colorClass = 'text-white bg-success';
+                                    $colorClass = 'badge-status-disetujui';
                                 } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
-                                    $colorClass = 'text-white bg-dark';
+                                    $colorClass = 'badge-status-ditolak-bpd';
                                 } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
-                                    $colorClass = 'text-info bg-light-info';
+                                    $colorClass = 'badge-status-proses';
                                 } elseif ($statusStr == 'danger') {
-                                    $colorClass = 'text-white bg-danger';
+                                    $colorClass = 'badge-status-gagal';
                                 } elseif ($statusStr == 'warning') {
-                                    $colorClass = 'text-dark bg-warning';
+                                    $colorClass = 'badge-status-pending';
                                 } elseif ($statusStr == 'success') {
-                                    $colorClass = 'text-white bg-success';
+                                    $colorClass = 'badge-status-disetujui';
                                 } else {
-                                    $colorClass = 'text-info bg-light-info';
+                                    $colorClass = 'badge-status-proses';
                                 }
                                 
                                 $icon = 'bell';
@@ -366,7 +366,7 @@
                                 } elseif($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
                                     $icon = 'file-text';
                                 } elseif($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
-                                    $icon = 'send';
+                                    $icon = 'file';
                                 } elseif($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
                                     $icon = 'book-open';
                                 }
