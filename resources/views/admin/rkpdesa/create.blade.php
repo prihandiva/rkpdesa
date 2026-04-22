@@ -85,7 +85,7 @@
                                     <select class="form-select" name="bidang" required>
                                         <option value="">-- Pilih Bidang --</option>
                                         @foreach($bidangs as $b)
-                                            <option value="{{ $b->id_bidang }}">{{ $b->nama_bidang }}</option>
+                                            <option value="{{ $b->id_bidang }}">{{ $b->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -106,7 +106,7 @@
                                 <select class="form-select" name="id_rpjm">
                                     <option value="">-- Pilih RPJM --</option>
                                     @foreach($rpjms as $r)
-                                        <option value="{{ $r->id_rpjm }}">{{ $r->visi ?? 'RPJM' }} ({{ $r->tahun_mulai }}-{{ $r->tahun_selesai }})</option>
+                                        <option value="{{ $r->id_rpjm }}">{{ $r->jenis_kegiatan }}</option>
                                     @endforeach
                                 </select>
                             </div>
