@@ -170,6 +170,21 @@ class BeritaAcaraController extends Controller
 
             DB::commit();
 
+            $currentUser = \App\Models\User::find(session('user_id'));
+            $userName = $currentUser ? $currentUser->nama : 'Sistem';
+            $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
+            \App\Models\Notifikasi::create([
+                'judul' => 'Berita Acara Baru',
+                'jenis' => 'beritaacara',
+                'deskripsi' => 'Berita Acara ' . $validated['jenis'] . ' baru telah dibuat oleh ' . $userName . '.',
+                'id_kegiatan' => 'beritaacara_' . $beritaAcara->id_berita,
+                'judul_kegiatan' => 'Berita Acara ' . $validated['jenis'],
+                'status' => 'info',
+                'id_penerima' => $allUsersIds,
+                'dibaca' => 0
+            ]);
+
             return redirect()->route('berita-acara.index', ['jenis' => $validated['jenis']])
                 ->with('success', 'Berita Acara berhasil ditambahkan');
 
@@ -187,14 +202,24 @@ class BeritaAcaraController extends Controller
 
     public function edit($id)
     {
-        $beritaAcara = BeritaAcara::findOrFail($id);
+        $beritaAcara = BeritaAcara::with(['peserta', 'absensi'])->findOrFail($id);
         
         // Permission Check
         if (!$this->checkPermission($beritaAcara->jenis)) {
             return redirect()->route('berita-acara.index')->with('error', 'Anda tidak memiliki hak akses untuk mengedit data ini.');
         }
 
-        return view('admin.berita-acara.edit', compact('beritaAcara'));
+        $tahun = Tahun::all();
+        $activeTahun = Tahun::where('status', 'Aktif')->first();
+        $dusun = Dusun::all();
+        $pegawai = Pegawai::all();
+
+        $userDusunId = null;
+        if (session('user_role') == 'operator_dusun' && session('dusun_id')) {
+             $userDusunId = session('dusun_id');
+        }
+
+        return view('admin.berita-acara.edit', compact('beritaAcara', 'tahun', 'activeTahun', 'dusun', 'pegawai', 'userDusunId'));
     }
 
     public function update(Request $request, $id)
@@ -336,6 +361,21 @@ class BeritaAcaraController extends Controller
         if (!$this->checkPermission($beritaAcara->jenis)) {
             return redirect()->route('berita-acara.index')->with('error', 'Anda tidak memiliki hak akses untuk menghapus data ini.');
         }
+
+        $currentUser = \App\Models\User::find(session('user_id'));
+        $userName = $currentUser ? $currentUser->nama : 'Sistem';
+        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
+        \App\Models\Notifikasi::create([
+            'judul' => 'Berita Acara Dihapus',
+            'jenis' => 'beritaacara',
+            'deskripsi' => 'Berita Acara ' . $beritaAcara->jenis . ' telah dihapus oleh ' . $userName . '.',
+            'id_kegiatan' => 'beritaacara_' . $beritaAcara->id_berita,
+            'judul_kegiatan' => 'Berita Acara ' . $beritaAcara->jenis,
+            'status' => 'danger',
+            'id_penerima' => $allUsersIds,
+            'dibaca' => 0
+        ]);
 
         $beritaAcara->delete();
 

@@ -135,9 +135,9 @@
                                     <td class="text-muted small">{{ Str::limit($ba->tempat, 50) }}</td>
                                     <td class="text-center">
                                         @if($ba->file_pdf)
-                                            <span class="badge badge-status-disetujui px-2 py-1"><i class="feather-file me-1"></i>Ada</span>
+                                            <span class="badge badge-status-disetujui d-inline-flex align-items-center gap-1 px-2 py-1"><i class="feather-file" style="font-size:11px;"></i>Ada</span>
                                         @else
-                                            <span class="badge badge-status-gagal px-2 py-1"><i class="feather-x me-1"></i>Belum</span>
+                                            <span class="badge badge-status-gagal d-inline-flex align-items-center gap-1 px-2 py-1"><i class="feather-x" style="font-size:11px;"></i>Belum</span>
                                         @endif
                                     </td>
                                     <td>
