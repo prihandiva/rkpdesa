@@ -239,7 +239,83 @@
         .bg-light-info { background-color: rgba(23, 162, 184, 0.1) !important; }
         .bg-light-danger { background-color: rgba(220, 53, 69, 0.1) !important; }
         .bg-light-warning { background-color: rgba(255, 193, 7, 0.1) !important; }
+        .bg-light-secondary { background-color: rgba(108, 117, 125, 0.1) !important; }
         .bg-purple { background-color: #6f42c1 !important; color: #fff !important; }
+
+        /* ─── Button Hover Transitions ─── */
+        .btn {
+            transition: all 0.2s ease-in-out !important;
+        }
+
+        /* Soft-colored button hover states */
+        .btn.bg-light-primary:hover {
+            background-color: rgba(75, 59, 219, 0.25) !important;
+            color: #3224a8 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(75, 59, 219, 0.2) !important;
+        }
+        .btn.bg-light-success:hover {
+            background-color: rgba(40, 167, 69, 0.25) !important;
+            color: #1e7e34 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.2) !important;
+        }
+        .btn.bg-light-info:hover {
+            background-color: rgba(23, 162, 184, 0.25) !important;
+            color: #117a8b !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(23, 162, 184, 0.2) !important;
+        }
+        .btn.bg-light-danger:hover {
+            background-color: rgba(220, 53, 69, 0.25) !important;
+            color: #bd2130 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(220, 53, 69, 0.2) !important;
+        }
+        .btn.bg-light-warning:hover {
+            background-color: rgba(255, 193, 7, 0.25) !important;
+            color: #d39e00 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(255, 193, 7, 0.2) !important;
+        }
+        .btn.bg-light-secondary:hover {
+            background-color: rgba(108, 117, 125, 0.25) !important;
+            color: #545b62 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(108, 117, 125, 0.2) !important;
+        }
+
+        /* Solid button hover states */
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(75, 59, 219, 0.35) !important;
+        }
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.35) !important;
+        }
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.35) !important;
+        }
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(255, 193, 7, 0.35) !important;
+        }
+        .btn-info:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.35) !important;
+        }
+        .btn-secondary:hover, .btn-light-secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.35) !important;
+        }
+
+        /* Active/pressed state - subtle press-down effect */
+        .btn:active {
+            transform: translateY(0px) !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+        }
     
         /* Sidebar Mini (Collapsed) - Added for responsiveness */
 
