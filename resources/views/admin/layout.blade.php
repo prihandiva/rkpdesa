@@ -224,14 +224,45 @@
             color: #6c757d;
         }
         
-        /* Custom Status Badges (Soft Palette) */
-        .badge-status-proses { background-color: #e0f2fe !important; color: #0284c7 !important; border: 1px solid #bae6fd; } /* Light Blue */
-        .badge-status-pending { background-color: #fef3c7 !important; color: #d97706 !important; border: 1px solid #fde68a; } /* Light Amber/Yellow */
-        .badge-status-terverifikasi { background-color: #ccfbf1 !important; color: #0f766e !important; border: 1px solid #99f6e4; } /* Light Teal */
-        .badge-status-gagal { background-color: #fee2e2 !important; color: #b91c1c !important; border: 1px solid #fecaca; } /* Light Red */
-        .badge-status-disetujui { background-color: #dcfce7 !important; color: #15803d !important; border: 1px solid #bbf7d0; } /* Light Green */
-        .badge-status-menunggu-bpd { background-color: #f3e8ff !important; color: #7e22ce !important; border: 1px solid #e9d5ff; } /* Light Purple */
-        .badge-status-ditolak-bpd { background-color: #fff1f2 !important; color: #be123c !important; border: 1px solid #fecdd3; } /* Light Rose/Pink */
+        /* ══════════════════════════════════════════════════
+         * STATUS BADGE SYSTEM — Vibrant Solid Palette
+         * Konsisten dengan dashboard redesign.
+         * ══════════════════════════════════════════════════ */
+        .badge[class*="badge-status-"] {
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 5px 12px;
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: filter 0.15s;
+        }
+        .badge[class*="badge-status-"]:before {
+            content: '';
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+
+        /* Proses — Indigo */
+        .badge-status-proses    { background:#dbeafe !important; color:#1d4ed8 !important; box-shadow: 0 1px 4px rgba(29,78,216,0.15); }
+        /* Pending — Amber */
+        .badge-status-pending   { background:#fef3c7 !important; color:#92400e !important; box-shadow: 0 1px 4px rgba(146,64,14,0.15); }
+        /* Terverifikasi — Emerald */
+        .badge-status-terverifikasi { background:#d1fae5 !important; color:#065f46 !important; box-shadow: 0 1px 4px rgba(6,95,70,0.15); }
+        /* Gagal Terverifikasi — Red */
+        .badge-status-gagal     { background:#fee2e2 !important; color:#991b1b !important; box-shadow: 0 1px 4px rgba(153,27,27,0.15); }
+        /* Disetujui — Green */
+        .badge-status-disetujui { background:#dcfce7 !important; color:#166534 !important; box-shadow: 0 1px 4px rgba(22,101,52,0.15); }
+        /* Menunggu BPD — Violet */
+        .badge-status-menunggu-bpd { background:#ede9fe !important; color:#5b21b6 !important; box-shadow: 0 1px 4px rgba(91,33,182,0.15); }
+        /* Ditolak BPD — Rose/Pink */
+        .badge-status-ditolak-bpd  { background:#fce7f3 !important; color:#9d174d !important; box-shadow: 0 1px 4px rgba(157,23,77,0.15); }
 
         /* Existing utility backgrounds if needed by old parts */
         .bg-light-primary { background-color: rgba(75, 59, 219, 0.1) !important; }

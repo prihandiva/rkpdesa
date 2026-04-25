@@ -145,15 +145,17 @@ class StatusService
     
     public function getStatusColor($status)
     {
+        // Returns Bootstrap-compatible color name used in notification icons.
+        // Mapped to match the new vibrant badge-status palette in layout.blade.php.
         return match ($status) {
-            'Proses' => 'primary',
-            'Pending' => 'warning',
-            'Terverifikasi' => 'purple', // Custom in blade probably, or map to 'secondary'
-            'Gagal Terverifikasi' => 'danger',
-            'Disetujui' => 'success',
-            'Menunggu persetujuan BPD' => 'light',
-            'Ditolak BPD' => 'dark',
-            default => 'secondary',
+            'Proses'                     => 'primary',   // Indigo  → badge-status-proses
+            'Pending'                    => 'warning',   // Amber   → badge-status-pending
+            'Terverifikasi'              => 'success',   // Emerald → badge-status-terverifikasi
+            'Gagal Terverifikasi'        => 'danger',    // Red     → badge-status-gagal
+            'Disetujui'                  => 'success',   // Green   → badge-status-disetujui
+            'Menunggu persetujuan BPD'   => 'purple',   // Violet  → badge-status-menunggu-bpd
+            'Ditolak BPD'               => 'pink',      // Rose    → badge-status-ditolak-bpd
+            default                      => 'secondary',
         };
     }
 }

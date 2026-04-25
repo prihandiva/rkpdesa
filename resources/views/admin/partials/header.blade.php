@@ -97,52 +97,53 @@
                                         $bgClass = $isUnread ? 'bg-light border-start border-3 border-primary' : 'bg-white';
                                     @endphp
                                     <a href="{{ route('admin.notifications.read', $notification->id_notif) }}" class="dropdown-item d-flex align-items-start gap-3 p-3 border-bottom text-start {{ $bgClass }}">
-                                        @php
-                                            $colorClass = 'text-primary bg-light-primary';
-                                            $statusStr = strtolower($notification->status ?? '');
-                                            $judulStr = strtolower($notification->judul ?? '');
-                                            $deskripsiStr = strtolower($notification->deskripsi ?? '');
-                                            
-                                            // Evaluasi berdasarkan status
-                                            if (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
-                                                $colorClass = 'badge-status-pending';
-                                            } elseif (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal terverifikasi') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
-                                                $colorClass = 'badge-status-gagal';
-                                            } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
-                                                $colorClass = 'badge-status-terverifikasi';
-                                            } elseif (str_contains($statusStr, 'menunggu persetujuan bpd') || str_contains($judulStr, 'menunggu persetujuan bpd') || str_contains($deskripsiStr, 'menunggu persetujuan bpd')) {
-                                                $colorClass = 'badge-status-menunggu-bpd';
-                                            } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
-                                                $colorClass = 'badge-status-disetujui';
-                                            } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
-                                                $colorClass = 'badge-status-ditolak-bpd';
-                                            } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
-                                                $colorClass = 'badge-status-proses';
-                                            } elseif ($statusStr == 'danger') {
-                                                $colorClass = 'badge-status-gagal';
-                                            } elseif ($statusStr == 'warning') {
-                                                $colorClass = 'badge-status-pending';
-                                            } elseif ($statusStr == 'success') {
-                                                $colorClass = 'badge-status-disetujui';
-                                            } else {
-                                                $colorClass = 'badge-status-proses';
-                                            }
-                                            
-                                            $icon = 'bell';
-                                            $jenis = strtolower($notification->jenis ?? '');
-                                            
-                                            if($jenis == 'usulan' || str_contains($judulStr, 'usulan')) {
-                                                $icon = 'edit-2';
-                                            } elseif($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
-                                                $icon = 'file-text';
-                                            } elseif($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
-                                                $icon = 'file';
-                                            } elseif($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
-                                                $icon = 'book-open';
-                                            }
-                                        @endphp
-                                        <div class="{{ $colorClass }} rounded d-flex justify-content-center align-items-center flex-shrink-0" style="width: 34px; height: 34px;">
-                                            <i class="feather-{{ $icon }}" style="font-size: 15px; margin: 0; line-height: 1;"></i>
+                                    @php
+                                        // Map status to vibrant bg/text matching the new badge-status palette
+                                        $notifBg    = '#dbeafe'; // default: indigo/proses
+                                        $notifColor = '#1d4ed8';
+                                        $statusStr  = strtolower($notification->status ?? '');
+                                        $judulStr   = strtolower($notification->judul ?? '');
+                                        $deskripsiStr = strtolower($notification->deskripsi ?? '');
+
+                                        if (str_contains($statusStr, 'gagal terverifikasi') || str_contains($judulStr, 'gagal') || str_contains($deskripsiStr, 'gagal terverifikasi')) {
+                                            $notifBg = '#fee2e2'; $notifColor = '#991b1b'; // Red
+                                        } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
+                                            $notifBg = '#d1fae5'; $notifColor = '#065f46'; // Emerald
+                                        } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak') || str_contains($deskripsiStr, 'ditolak')) {
+                                            $notifBg = '#fce7f3'; $notifColor = '#9d174d'; // Rose
+                                        } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
+                                            $notifBg = '#dcfce7'; $notifColor = '#166534'; // Green
+                                        } elseif (str_contains($statusStr, 'menunggu') || str_contains($judulStr, 'menunggu') || str_contains($deskripsiStr, 'menunggu bpd')) {
+                                            $notifBg = '#ede9fe'; $notifColor = '#5b21b6'; // Violet
+                                        } elseif (str_contains($statusStr, 'pending') || str_contains($judulStr, 'pending') || str_contains($deskripsiStr, 'pending')) {
+                                            $notifBg = '#fef3c7'; $notifColor = '#92400e'; // Amber
+                                        } elseif (str_contains($statusStr, 'hapus') || str_contains($judulStr, 'hapus') || str_contains($deskripsiStr, 'dihapus')) {
+                                            $notifBg = '#fee2e2'; $notifColor = '#991b1b'; // Red for delete
+                                        } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'baru') || str_contains($judulStr, 'dibuat') || str_contains($deskripsiStr, 'dibuat')) {
+                                            $notifBg = '#dbeafe'; $notifColor = '#1d4ed8'; // Indigo for new/proses
+                                        } elseif ($statusStr == 'danger') {
+                                            $notifBg = '#fee2e2'; $notifColor = '#991b1b';
+                                        } elseif ($statusStr == 'warning') {
+                                            $notifBg = '#fef3c7'; $notifColor = '#92400e';
+                                        } elseif ($statusStr == 'success') {
+                                            $notifBg = '#dcfce7'; $notifColor = '#166534';
+                                        }
+
+                                        $icon = 'bell';
+                                        $jenis = strtolower($notification->jenis ?? '');
+                                        if ($jenis == 'usulan' || str_contains($judulStr, 'usulan')) {
+                                            $icon = 'edit-2';
+                                        } elseif ($jenis == 'rpjm' || str_contains($judulStr, 'rpjm')) {
+                                            $icon = 'file-text';
+                                        } elseif ($jenis == 'rkpdesa' || str_contains($judulStr, 'rkp')) {
+                                            $icon = 'file';
+                                        } elseif ($jenis == 'beritaacara' || str_contains($judulStr, 'berita acara')) {
+                                            $icon = 'book-open';
+                                        }
+                                    @endphp
+                                        <div class="rounded d-flex justify-content-center align-items-center flex-shrink-0"
+                                             style="width:36px;height:36px;background:{{ $notifBg }};color:{{ $notifColor }};">
+                                            <i class="feather-{{ $icon }}" style="font-size:15px;margin:0;line-height:1;"></i>
                                         </div>
                                         <div class="flex-grow-1 min-w-0">
                                             <div class="d-flex justify-content-between align-items-start mb-1">
