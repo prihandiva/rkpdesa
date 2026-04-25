@@ -577,35 +577,107 @@
 
     <!--! Custom Scripts !-->
     <script>
+        /* ─── Sidebar Toggle System ─── */
         (function() {
-            // Mobile navigation toggle
-            var mobileToggle = document.getElementById('mobile-collapse');
-            var nav = document.querySelector('.nxl-navigation');
+            var nav          = document.querySelector('.nxl-navigation');
+            var body         = document.body;
+            var BREAKPOINT   = 992; // px — same as Bootstrap lg
 
-            if (mobileToggle && nav) {
+            /* ── helpers ── */
+            function isMobile() { return window.innerWidth < BREAKPOINT; }
+
+            /* ── backdrop overlay for mobile ── */
+            var overlay = document.createElement('div');
+            overlay.id = 'sidebar-overlay';
+            overlay.style.cssText = [
+                'display:none',
+                'position:fixed',
+                'inset:0',
+                'background:rgba(0,0,0,0.45)',
+                'z-index:999',
+                'transition:opacity 0.3s'
+            ].join(';');
+            document.body.appendChild(overlay);
+
+            function openMobileSidebar() {
+                nav.classList.add('active');
+                overlay.style.display = 'block';
+                setTimeout(function() { overlay.style.opacity = '1'; }, 10);
+                body.style.overflow = 'hidden'; // prevent background scroll
+            }
+
+            function closeMobileSidebar() {
+                nav.classList.remove('active');
+                overlay.style.opacity = '0';
+                setTimeout(function() { overlay.style.display = 'none'; }, 300);
+                body.style.overflow = '';
+            }
+
+            function collapseDesktopSidebar() {
+                body.classList.add('sidebar-mini');
+            }
+
+            function expandDesktopSidebar() {
+                body.classList.remove('sidebar-mini');
+            }
+
+            /* ── Hamburger (mobile ≤991px) ── */
+            var mobileToggle = document.getElementById('mobile-collapse');
+            if (mobileToggle) {
                 mobileToggle.addEventListener('click', function(e) {
                     e.preventDefault();
-                    nav.classList.toggle('active');
+                    if (isMobile()) {
+                        if (nav.classList.contains('active')) {
+                            closeMobileSidebar();
+                        } else {
+                            openMobileSidebar();
+                        }
+                    }
                 });
             }
 
-            // Desktop mini menu toggle
+            /* ── Overlay click → close mobile sidebar ── */
+            overlay.addEventListener('click', function() {
+                closeMobileSidebar();
+            });
+
+            /* ── Mini button (collapse desktop sidebar) ── */
             var miniToggle = document.getElementById('menu-mini-button');
-            var expendToggle = document.getElementById('menu-expend-button');
-            var body = document.body;
-
-            function toggleSidebar(e) {
-                e.preventDefault();
-                body.classList.toggle('sidebar-mini');
-            }
-
             if (miniToggle) {
-                miniToggle.addEventListener('click', toggleSidebar);
+                miniToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!isMobile()) {
+                        collapseDesktopSidebar();
+                    }
+                });
             }
-            
+
+            /* ── Expand button (restore full desktop sidebar) ── */
+            var expendToggle = document.getElementById('menu-expend-button');
             if (expendToggle) {
-                expendToggle.addEventListener('click', toggleSidebar);
+                expendToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!isMobile()) {
+                        expandDesktopSidebar();
+                    }
+                });
             }
+
+            /* ── Window resize: clean up stale state ── */
+            var resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (!isMobile()) {
+                        // Coming from/to desktop: close any mobile state
+                        closeMobileSidebar();
+                    } else {
+                        // Coming to mobile: remove desktop-only classes so sidebar
+                        // doesn't appear stuck in mini mode on mobile
+                        body.classList.remove('sidebar-mini');
+                    }
+                }, 150);
+            });
         })();
     </script>
 

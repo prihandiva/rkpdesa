@@ -3,12 +3,12 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 pt-4 pb-4">
 
     {{-- ════════════════════════════════════════════════════════ --}}
     {{-- HERO GREETING BAR                                        --}}
     {{-- ════════════════════════════════════════════════════════ --}}
-    <div class="db-hero mb-4">
+    <div class="db-hero mb-3">
         <div class="db-hero-left">
             <div class="db-hero-avatar">
                 <i class="feather-home"></i>
@@ -36,7 +36,7 @@
     {{-- ════════════════════════════════════════════════════════ --}}
     {{-- STAT CARDS                                              --}}
     {{-- ════════════════════════════════════════════════════════ --}}
-    <div class="row g-4 mb-4">
+    <div class="row g-3 mb-3">
         <div class="col-lg-4 col-md-6">
             <div class="db-stat-card db-stat-indigo">
                 <div class="db-stat-body">
@@ -81,8 +81,7 @@
     {{-- ════════════════════════════════════════════════════════ --}}
     {{-- TIMELINE + STATUS LEGEND                                --}}
     {{-- ════════════════════════════════════════════════════════ --}}
-    <div class="row g-4 mb-4">
-        {{-- Timeline --}}
+    <div class="row g-3 mb-3">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-bottom px-4 py-3 d-flex align-items-center gap-3">
@@ -157,8 +156,7 @@
     {{-- ════════════════════════════════════════════════════════ --}}
     {{-- CHARTS                                                   --}}
     {{-- ════════════════════════════════════════════════════════ --}}
-    <div class="row g-4 mb-4">
-        {{-- Chart 1: Usulan per Dusun --}}
+    <div class="row g-3 mb-3">
         <div class="col-lg-6">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-bottom px-4 py-3 d-flex align-items-center gap-3">
@@ -246,36 +244,36 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #06b6d4 100%);
-    border-radius: 16px;
-    padding: 24px 28px;
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(79,70,229,0.3);
-}
-.db-hero-left { display: flex; align-items: center; gap: 16px; }
-.db-hero-avatar {
-    width: 52px; height: 52px;
     border-radius: 14px;
+    padding: 18px 24px;
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(79,70,229,0.25);
+}
+.db-hero-left { display: flex; align-items: center; gap: 14px; }
+.db-hero-avatar {
+    width: 44px; height: 44px;
+    border-radius: 12px;
     background: rgba(255,255,255,0.2);
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
+    font-size: 18px;
     backdrop-filter: blur(4px);
 }
-.db-hero-sub { margin: 0; font-size: 13px; opacity: 0.8; }
-.db-hero-title { margin: 2px 0 0; font-size: 22px; font-weight: 700; }
+.db-hero-sub { margin: 0; font-size: 12px; opacity: 0.8; }
+.db-hero-title { margin: 2px 0 0; font-size: 18px; font-weight: 700; }
 
 .db-filter-form {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255,255,255,0.25);
     border-radius: 10px;
-    padding: 8px 16px;
+    padding: 6px 14px;
 }
-.db-filter-form i { font-size: 15px; opacity: 0.9; }
+.db-filter-form i { font-size: 14px; opacity: 0.9; }
 .db-filter-label { font-size: 13px; font-weight: 600; margin: 0; white-space: nowrap; }
 .db-filter-select {
     background: transparent;
@@ -291,41 +289,42 @@
 
 /* ─── Stat Cards ─── */
 .db-stat-card {
-    border-radius: 16px;
-    padding: 28px 24px;
+    border-radius: 14px;
+    padding: 20px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
     overflow: hidden;
     color: #fff;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
     transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
 }
-.db-stat-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.18); }
+.db-stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
 
 .db-stat-indigo { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); }
 .db-stat-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
 .db-stat-cyan    { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); }
 
-.db-stat-label { margin: 0 0 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.8; }
-.db-stat-num { font-size: 44px; font-weight: 800; margin: 0 0 4px; line-height: 1; }
-.db-stat-desc { margin: 0; font-size: 12px; opacity: 0.7; }
+.db-stat-label { margin: 0 0 2px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.8; }
+.db-stat-num { font-size: 36px; font-weight: 800; margin: 0 0 2px; line-height: 1.1; }
+.db-stat-desc { margin: 0; font-size: 11px; opacity: 0.7; }
 
 .db-stat-icon-wrap {
-    width: 72px; height: 72px;
+    width: 56px; height: 56px;
     border-radius: 50%;
     background: rgba(255,255,255,0.15);
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
 }
-.db-stat-icon { font-size: 32px; opacity: 0.9; }
+.db-stat-icon { font-size: 24px; opacity: 0.9; }
 .db-stat-glow {
     position: absolute;
-    width: 160px; height: 160px;
+    width: 130px; height: 130px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    bottom: -50px; left: -40px;
+    background: rgba(255,255,255,0.07);
+    bottom: -40px; left: -30px;
     pointer-events: none;
 }
 
