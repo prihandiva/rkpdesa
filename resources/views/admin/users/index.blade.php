@@ -46,22 +46,34 @@
                     <!--! [Start] Card Header !-->
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between">
                         <h6 class="mb-0">Daftar Pengguna</h6>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <div class="d-flex align-items-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-filter-btn>
                                 <i class="feather-filter me-1"></i>Filter
                             </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-export-btn data-export-name="data_pengguna">
                                 <i class="feather-download me-1"></i>Export
                             </button>
                         </div>
                     </div>
                     <!--! [End] Card Header !-->
 
+                    <!--! [Start] Filter Search Row !-->
+                    <div class="px-4 py-2 bg-light border-bottom align-items-center gap-2" id="masterFilterRow" style="display:none;">
+                        <div class="input-group input-group-sm" style="max-width:400px;">
+                            <span class="input-group-text bg-white"><i class="feather-search" style="font-size:13px;"></i></span>
+                            <input type="text" class="form-control" id="masterFilterInput" placeholder="Cari nama, username, email, role...">
+                            <button class="btn btn-outline-secondary" type="button" id="masterFilterClear" title="Reset">
+                                <i class="feather-x" style="font-size:13px;"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!--! [End] Filter Search Row !-->
+
                     <!--! [Start] Card Body !-->
                     <div class="card-body p-0">
                         <!--! [Start] Table Responsive !-->
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0" id="masterTable">
                                 <thead class="table-light">
                                     <tr>
                                         <th style="width: 50px;">No</th>
@@ -74,6 +86,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <tr id="masterFilterNoResult" style="display:none;">
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="feather-search me-1"></i>Tidak ada data yang cocok dengan pencarian.
+                                        </td>
+                                    </tr>
                                     @forelse($users as $user)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>

@@ -578,6 +578,121 @@
         })();
     </script>
 
+
+    <!--! [Start] Global Master Table Filter & Export -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // ─── FILTER: Toggle search bar & real-time filtering ───
+        var filterBtn = document.querySelector('[data-filter-btn]');
+        var filterRow = document.getElementById('masterFilterRow');
+        var filterInput = document.getElementById('masterFilterInput');
+        var filterClear = document.getElementById('masterFilterClear');
+        var masterTable = document.getElementById('masterTable');
+
+        if (filterBtn && filterRow && filterInput && masterTable) {
+            filterBtn.addEventListener('click', function() {
+                var isHidden = filterRow.style.display === 'none' || filterRow.style.display === '';
+                filterRow.style.display = isHidden ? 'flex' : 'none';
+                if (isHidden) {
+                    filterInput.focus();
+                } else {
+                    filterInput.value = '';
+                    filterTable('');
+                }
+            });
+
+            filterInput.addEventListener('input', function() {
+                filterTable(this.value);
+            });
+
+            if (filterClear) {
+                filterClear.addEventListener('click', function() {
+                    filterInput.value = '';
+                    filterTable('');
+                    filterInput.focus();
+                });
+            }
+
+            function filterTable(keyword) {
+                var rows = masterTable.querySelectorAll('tbody tr');
+                var lowerKeyword = keyword.toLowerCase().trim();
+                var visibleCount = 0;
+
+                rows.forEach(function(row) {
+                    if (row.querySelector('td[colspan]')) return; // skip empty-state row
+                    var cells = row.querySelectorAll('td');
+                    var text = '';
+                    cells.forEach(function(cell, idx) {
+                        // Skip last column (Aksi)
+                        if (idx < cells.length - 1) {
+                            text += ' ' + cell.textContent;
+                        }
+                    });
+                    var match = text.toLowerCase().indexOf(lowerKeyword) > -1;
+                    row.style.display = match ? '' : 'none';
+                    if (match) visibleCount++;
+                });
+
+                // Show/hide "no results" message
+                var noResult = document.getElementById('masterFilterNoResult');
+                if (noResult) {
+                    noResult.style.display = (visibleCount === 0 && lowerKeyword !== '') ? '' : 'none';
+                }
+            }
+        }
+
+        // ─── EXPORT: Download table data as CSV ───
+        var exportBtn = document.querySelector('[data-export-btn]');
+        if (exportBtn && masterTable) {
+            exportBtn.addEventListener('click', function() {
+                var exportName = exportBtn.getAttribute('data-export-name') || 'data_export';
+                var thead = masterTable.querySelector('thead');
+                var tbody = masterTable.querySelector('tbody');
+                var csvRows = [];
+
+                // Header row (skip last column = Aksi)
+                if (thead) {
+                    var headerCells = thead.querySelectorAll('th');
+                    var headers = [];
+                    for (var i = 0; i < headerCells.length - 1; i++) {
+                        headers.push('"' + headerCells[i].textContent.trim().replace(/"/g, '""') + '"');
+                    }
+                    csvRows.push(headers.join(','));
+                }
+
+                // Data rows
+                if (tbody) {
+                    var dataRows = tbody.querySelectorAll('tr');
+                    dataRows.forEach(function(row) {
+                        if (row.querySelector('td[colspan]')) return; // skip empty-state
+                        if (row.style.display === 'none') return; // skip filtered-out rows
+                        var cells = row.querySelectorAll('td');
+                        var rowData = [];
+                        for (var i = 0; i < cells.length - 1; i++) {
+                            var val = cells[i].textContent.trim().replace(/\s+/g, ' ').replace(/"/g, '""');
+                            rowData.push('"' + val + '"');
+                        }
+                        csvRows.push(rowData.join(','));
+                    });
+                }
+
+                // BOM for UTF-8 + download
+                var csvContent = '\uFEFF' + csvRows.join('\n');
+                var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                var url = URL.createObjectURL(blob);
+                var link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', exportName + '.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+        }
+    });
+    </script>
+    <!--! [End] Global Master Table Filter & Export -->
+
     @stack('scripts')
 </body>
 

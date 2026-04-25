@@ -157,49 +157,8 @@
                 @endif
                 <!--! [End] Draft List Card !-->
 
-                <!--! [Start] Finalize Section !-->
-                <div class="card border-0 shadow-sm mb-4 bg-light">
-                    <div class="card-header border-bottom">
-                        <h6 class="mb-0 text-dark"><i class="feather-file-text me-2"></i>Finalisasi & Berita Acara</h6>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted small mb-3">
-                            Setelah semua usulan dimasukkan:
-                            1. Cetak Berita Acara (Download PDF/Doc).
-                            2. Lakukan TTD Basah pada dokumen.
-                            3. Foto/Scan dokumen yang sudah ditandatangani.
-                            4. Unggah kembali file tersebut di bawah ini untuk menyelesaikan Musdus.
-                        </p>
-                        
-                        <div class="row align-items-end">
-                            <div class="col-md-5 mb-3">
-                                <label class="form-label btn btn-outline-primary w-100 p-3" style="border-style: dashed;">
-                                    <i class="feather-printer fs-1"></i><br>
-                                    Cetak Berita Acara
-                                    <span class="d-block small text-muted mt-1">(Download Template)</span>
-                                    <a href="#" class="stretched-link"></a>
-                                </label>
-                            </div>
-                            <div class="col-md-7 mb-3">
-                                <form action="{{ route('usulan.upload_ba') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" name="id_dusun" value="{{ $currentUser->id_dusun }}">
-                                    <input type="hidden" name="tahun" value="{{ $tahun_aktif }}">
-                                    
-                                    <label class="form-label">Unggah Berita Acara (Signed) <span class="text-danger">*</span></label>
-                                    <div class="input-group">
-                                        <input type="file" class="form-control" name="file_berita_acara" required accept=".pdf,.jpg,.png">
-                                        <button class="btn btn-success" type="submit">
-                                            <i class="feather-upload-cloud me-1"></i> Unggah
-                                        </button>
-                                    </div>
-                                    <div class="form-text text-muted">File ini akan diterapkan ke semua usulan di atas.</div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--! [End] Finalize Section !-->
+
+
 
             </div>
             <!--! [End] Main Form Column !-->
