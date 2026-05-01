@@ -81,13 +81,12 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Status</th>
                                         <th style="width: 100px;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr id="masterFilterNoResult" style="display:none;">
-                                        <td colspan="7" class="text-center py-4 text-muted">
+                                        <td colspan="6" class="text-center py-4 text-muted">
                                             <i class="feather-search me-1"></i>Tidak ada data yang cocok dengan pencarian.
                                         </td>
                                     </tr>
@@ -95,17 +94,17 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar-sm me-3">
-                                                        @if($user->profile_image)
-                                                            <img src="{{ asset('storage/'.$user->profile_image) }}" alt="" class="img-fluid rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
-                                                        @else
-                                                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 35px; height: 35px; border: 1px solid #e3e6f0;">
-                                                                <i class="feather-user"></i>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                    <div>{{ $user->nama }}</div>
+                                                <div class="d-flex align-items-center py-1">
+                                                    @if($user->profile_image)
+                                                        <div class="rounded-circle me-3 border shadow-sm" style="width: 42px; height: 42px; min-width: 42px; overflow: hidden;">
+                                                            <img src="{{ asset('storage/'.$user->profile_image) }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                                        </div>
+                                                    @else
+                                                        <div class="rounded-circle me-3 bg-light d-flex align-items-center justify-content-center text-primary border" style="width: 42px; height: 42px; min-width: 42px;">
+                                                            <i class="feather-user" style="font-size: 16px;"></i>
+                                                        </div>
+                                                    @endif
+                                                    <span class="fw-medium text-dark">{{ $user->nama }}</span>
                                                 </div>
                                             </td>
                                             <td>{{ $user->username ?? '-' }}</td>
@@ -116,9 +115,7 @@
                                                     {{ ucfirst($user->role) }}
                                                 </span>
                                             </td>
-                                            <td>
-                                                <span class="badge bg-success">Aktif</span>
-                                            </td>
+
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('user.show', $user->id_user) }}" 
