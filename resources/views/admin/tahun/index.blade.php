@@ -86,7 +86,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('tahun.destroy', $item->id_tahun) }}" method="POST"
-                                                        class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
+                                                        class="d-inline" data-name="Tahun {{ $item->tahun }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -125,7 +125,7 @@
                     <h5 class="modal-title">Tambah Tahun</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form method="POST">
+                <form method="POST" class="no-swal">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -173,13 +173,12 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            // Show success toast (optional)
-                            console.log(data.message);
+                            Swal.fire({ icon: 'success', title: 'Berhasil!', text: data.message, timer: 2000, showConfirmButton: false });
                         } else {
                             // Revert on failure
                             this.checked = !isChecked;
                             statusLabel.textContent = !isChecked ? 'Aktif' : 'Nonaktif';
-                            alert('Gagal memperbarui status');
+                            Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Gagal memperbarui status.' });
                         }
                     })
                     .catch(error => {
@@ -187,7 +186,7 @@
                         // Revert on error
                         this.checked = !isChecked;
                         statusLabel.textContent = !isChecked ? 'Aktif' : 'Nonaktif';
-                        alert('Terjadi kesalahan jaringan');
+                        Swal.fire({ icon: 'error', title: 'Error!', text: 'Terjadi kesalahan jaringan.' });
                     });
                 });
             });

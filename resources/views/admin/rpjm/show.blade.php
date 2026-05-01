@@ -333,7 +333,7 @@
                     <h5 class="modal-title">Edit Prioritas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('rpjm.update_prioritas', $rpjm->id_rpjm) }}" method="POST">
+                <form action="{{ route('rpjm.update_prioritas', $rpjm->id_rpjm) }}" method="POST" class="no-swal">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -351,4 +351,35 @@
         </div>
     </div>
     @endif
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const priorityForm = document.querySelector('form.no-swal[action*="update_prioritas"]');
+            if (priorityForm) {
+                priorityForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Update Prioritas?',
+                        text: 'Apakah Anda yakin ingin memperbarui prioritas data ini?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#4b3bdb',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Ya, Simpan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: 'Memproses...',
+                                allowOutsideClick: false,
+                                didOpen: () => Swal.showLoading()
+                            });
+                            priorityForm.submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+    @endpush
 @endsection

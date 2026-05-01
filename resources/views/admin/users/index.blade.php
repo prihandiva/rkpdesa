@@ -117,7 +117,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('user.destroy', $user->id_user) }}" method="POST" 
-                                                          class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
+                                                          class="d-inline" data-name="{{ $user->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -203,7 +203,7 @@
                                                         <i class="feather-edit"></i>
                                                     </button>
                                                     <form action="{{ route('user.role.destroy', $role->id_role) }}" method="POST" 
-                                                          class="d-inline" onsubmit="return confirm('Yakin hapus role ini?')">
+                                                          class="d-inline" data-name="Role: {{ $role->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -238,7 +238,7 @@
                     <h5 class="modal-title">Tambah Role Baru</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('user.role.store') }}" method="POST">
+                <form action="{{ route('user.role.store') }}" method="POST" class="no-swal">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -263,7 +263,7 @@
                     <h5 class="modal-title">Edit Role</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form id="editRoleForm" method="POST">
+                <form id="editRoleForm" method="POST" class="no-swal">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">

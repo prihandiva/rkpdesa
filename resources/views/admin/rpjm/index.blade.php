@@ -157,7 +157,7 @@
                                                                                 <i class="feather-edit"></i>
                                                                             </a>
                                                                             <form action="{{ route('rpjm.destroy', $rpjm->id_rpjm) }}" method="POST"
-                                                                                class="d-inline" onsubmit="return confirm('Yakin hapus RPJM ini?')">
+                                                                                class="d-inline" data-name="{{ $rpjm->jenis_kegiatan }}">
                                                                                 @csrf
                                                                                 @method('DELETE')
                                                                                 <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
@@ -227,26 +227,38 @@
             btnMasukRKP.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                if(confirm('Pindahkan item terpilih ke RKP Desa?')) {
-                    // Clear previous inputs
-                    bulkInputsContainer.innerHTML = '';
-                    
-                    let hasItems = false;
-                    checkboxes.forEach(chk => {
-                        if(chk.checked) {
-                            hasItems = true;
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = 'id_rpjm[]';
-                            input.value = chk.value;
-                            bulkInputsContainer.appendChild(input);
-                        }
-                    });
+                Swal.fire({
+                    title: 'Pindahkan ke RKP Desa?',
+                    text: 'Item terpilih akan dipindahkan ke RKP Desa.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4b3bdb',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Pindahkan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Clear previous inputs
+                        bulkInputsContainer.innerHTML = '';
+                        
+                        let hasItems = false;
+                        checkboxes.forEach(chk => {
+                            if(chk.checked) {
+                                hasItems = true;
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = 'id_rpjm[]';
+                                input.value = chk.value;
+                                bulkInputsContainer.appendChild(input);
+                            }
+                        });
 
-                    if(hasItems) {
-                        bulkForm.submit();
+                        if(hasItems) {
+                            Swal.fire({ title: 'Memproses...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                            bulkForm.submit();
+                        }
                     }
-                }
+                });
             });
         }
     });

@@ -146,6 +146,13 @@
                         <span class="nxl-mtext">Monitoring Sistem</span>
                     </a>
                 </li>
+                
+                <li class="nxl-item {{ request()->routeIs('pemulihan.*') ? 'active' : '' }}">
+                    <a href="{{ route('pemulihan.index') }}" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-trash-2"></i></span>
+                        <span class="nxl-mtext">Pemulihan</span>
+                    </a>
+                </li>
                 <!--! [End] Additional Data Management Menus !-->
                 @endif
 

@@ -196,12 +196,12 @@
                                                         class="btn btn-sm bg-light-warning text-warning border-0" title="Edit">
                                                         <i class="feather-edit"></i>
                                                     </a> -->
-                                                    @if(auth()->check() && (auth()->user()->role == 'admin' || auth()->user()->role == 'operator_desa'))
+                                                    @if(in_array(strtolower(session('user_role')), ['admin', 'operator_desa']) || (auth()->check() && in_array(auth()->user()->role, ['admin', 'operator_desa'])))
                                                     <form action="{{ route('rkpdesa.destroy', $item->id_kegiatan) }}" method="POST"
-                                                        class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
+                                                        class="d-inline" data-name="{{ $item->jenis_kegiatan }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
+                                                        <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus Sementara">
                                                             <i class="feather-trash-2"></i>
                                                         </button>
                                                     </form>
@@ -266,36 +266,56 @@
             });
 
             if (selected.length === 0) {
-                alert('Pilih setidaknya satu item yang statusnya Terverifikasi.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan',
+                    text: 'Pilih setidaknya satu item yang statusnya Terverifikasi.',
+                    confirmButtonColor: '#4b3bdb'
+                });
                 return;
             }
 
-            if (!confirm('Apakah Anda yakin ingin mengajukan data yang dipilih (' + selected.length + ' item) untuk persetujuan BPD?')) {
-                return;
-            }
+            Swal.fire({
+                title: 'Ajukan ke BPD?',
+                text: 'Apakah Anda yakin ingin mengajukan data yang dipilih (' + selected.length + ' item) untuk persetujuan BPD?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#ffc107',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Ajukan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('bulkSubmitForm');
+                    // Remove previous inputs if any (clean state)
+                    form.innerHTML = '';
+                    
+                    // Add CSRF
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken;
+                    form.appendChild(csrfInput);
 
-            const form = document.getElementById('bulkSubmitForm');
-            // Remove previous inputs if any (clean state)
-            form.innerHTML = '';
-            
-            // Add CSRF
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
+                    // Add selected IDs
+                    selected.forEach(id => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'ids[]';
+                        input.value = id;
+                        form.appendChild(input);
+                    });
 
-            // Add selected IDs
-            selected.forEach(id => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'ids[]';
-                input.value = id;
-                form.appendChild(input);
+                    Swal.fire({
+                        title: 'Memproses...',
+                        allowOutsideClick: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+
+                    form.submit();
+                }
             });
-
-            form.submit();
         }
     </script>
 

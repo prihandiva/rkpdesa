@@ -97,7 +97,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('rw.destroy', $item->id_rw) }}" method="POST"
-                                                        class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
+                                                        class="d-inline" data-name="RW {{ $rw->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">

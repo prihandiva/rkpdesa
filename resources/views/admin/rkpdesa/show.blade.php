@@ -93,7 +93,7 @@
                     <div class="card bg-light border mb-3">
                         <div class="card-body">
                             <h6 class="card-title text-info"><i class="feather-check-circle me-2"></i>Verifikasi Usulan</h6>
-                            <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST">
+                            <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST" class="no-swal">
                                 @csrf
                                 @method('PUT')
                                 <!-- Removed hidden fields to prevent validation errors with empty values -->
@@ -125,7 +125,7 @@
                         <div class="card bg-light border mb-3">
                             <div class="card-body">
                                 <h6 class="card-title text-warning"><i class="feather-shield me-2"></i>Persetujuan BPD</h6>
-                                <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST">
+                                <form action="{{ route('rkpdesa.update_status', $rkpDesa->id_kegiatan) }}" method="POST" class="no-swal">
                                     @csrf
                                     @method('PUT')
                                     <div class="mb-3">
@@ -403,6 +403,52 @@
         color: #fff !important;
     }
 </style>
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusForms = document.querySelectorAll('form.no-swal[action*="update_status"], form.no-swal[action*="update_prioritas"]');
+        
+        statusForms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let title = 'Konfirmasi?';
+                let text = 'Apakah Anda yakin ingin memperbarui data ini?';
+                let icon = 'question';
+                
+                if (form.action.includes('update_status')) {
+                    const statusVal = form.querySelector('select[name="status"]').value;
+                    title = 'Update Status?';
+                    text = 'Ubah status menjadi "' + statusVal + '"?';
+                } else if (form.action.includes('update_prioritas')) {
+                    title = 'Update Prioritas?';
+                    text = 'Simpan perubahan prioritas?';
+                }
+
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: icon,
+                    showCancelButton: true,
+                    confirmButtonColor: '#4b3bdb',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Simpan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Memproses...',
+                            allowOutsideClick: false,
+                            didOpen: () => Swal.showLoading()
+                        });
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
 
 <!-- Modal Edit Prioritas (Moved outside to fix z-index) -->
@@ -414,7 +460,7 @@
                 <h5 class="modal-title">Edit Prioritas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('rkpdesa.update_prioritas', $rkpDesa->id_kegiatan) }}" method="POST">
+            <form action="{{ route('rkpdesa.update_prioritas', $rkpDesa->id_kegiatan) }}" method="POST" class="no-swal">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">

@@ -140,7 +140,7 @@ class RPJMController extends Controller
         $userId = session('user_id');
         $currentUser = User::find($userId);
         
-        $rpjm = RPJM::with(['masterBidang', 'masterSumberBiaya', 'masterPola'])->findOrFail($id);
+        $rpjm = RPJM::with(['masterBidang', 'masterPola'])->findOrFail($id);
         $logs = Notifikasi::where('id_kegiatan', 'rpjm_' . $id)->orderBy('created_at', 'desc')->get();
         return view('admin.rpjm.show', compact('rpjm', 'logs', 'currentUser'));
     }
@@ -174,6 +174,7 @@ class RPJMController extends Controller
             'bidang' => 'required|exists:bidang,id_bidang',
             'subbidang' => 'nullable|string',
             'jenis_kegiatan' => 'required|string',
+            'jenis' => 'nullable|string',
             'periode_mulai' => 'required|numeric',
             'periode_selesai' => 'required|numeric',
             'lokasi' => 'nullable|string',

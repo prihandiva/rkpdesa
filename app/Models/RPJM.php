@@ -36,10 +36,6 @@ class RPJM extends Model
         return $this->belongsTo(Bidang::class, 'bidang', 'id_bidang');
     }
 
-    public function masterSumberBiaya()
-    {
-        return $this->belongsTo(SumberBiaya::class, 'sumber_biaya', 'id_biaya'); 
-    }
 
     public function masterPola()
     {

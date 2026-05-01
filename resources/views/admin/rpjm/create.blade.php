@@ -195,7 +195,7 @@
                                         <td>{{ $draft->jumlah ? 'Rp '.number_format($draft->jumlah,0,',','.') : '-' }}</td>
                                         <td><span class="badge bg-secondary">{{ $draft->status }}</span></td>
                                         <td>
-                                            <form action="{{ route('rpjm.destroy', $draft->id_rpjm) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus item ini?')">
+                                            <form action="{{ route('rpjm.destroy', $draft->id_rpjm) }}" method="POST" class="d-inline" >
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-xs btn-outline-danger"><i class="feather-trash"></i></button>

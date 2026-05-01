@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-template/assets/vendors/css/vendors.min.css') }}" />
     <link rel="stylesheet" type="text/css"
         href="{{ asset('admin-template/assets/vendors/css/daterangepicker.min.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <!--! Theme CSS !-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-template/assets/css/theme.min.css') }}" />
@@ -795,6 +796,102 @@
     });
     </script>
     <!--! [End] Global Master Table Filter & Export -->
+
+    <!--! [Start] SweetAlert2 Global Handler -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Global Session Alerts
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#4b3bdb'
+            });
+        @endif
+
+        // 2. Global Delete Interceptor
+        document.body.addEventListener('submit', function(e) {
+            let form = e.target;
+            let isDelete = form && form.tagName === 'FORM' && form.querySelector('input[name="_method"][value="DELETE"]');
+            
+            if (isDelete || (form && form.classList.contains('form-delete'))) {
+                e.preventDefault();
+                let dataName = form.getAttribute('data-name') || 'data ini';
+                
+                Swal.fire({
+                    title: 'Hapus Data?',
+                    text: 'anda akan menghapus "' + dataName + '" pemulihan hanya bisa dilakukan admin.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
+        });
+
+        // 3. Global Save Interceptor (Catch generic POST/PUT forms for Create/Edit)
+        document.body.addEventListener('submit', function(e) {
+            let form = e.target;
+            
+            if (form && form.tagName === 'FORM' && form.method.toUpperCase() === 'POST') {
+                // Skip DELETE forms (handled by delete interceptor)
+                if (form.querySelector('input[name="_method"][value="DELETE"]')) return;
+                
+                // Skip GET-method spoofing or search/filter forms
+                if (form.getAttribute('method') && form.getAttribute('method').toUpperCase() === 'GET') return;
+
+                // Skip forms that explicitly opt-out, or special system forms
+                if (form.classList.contains('no-swal') || 
+                    form.id === 'bulkActionForm' || 
+                    form.id === 'bulkSubmitForm' || 
+                    (form.action && form.action.includes('logout'))) return;
+
+                e.preventDefault();
+                
+                Swal.fire({
+                    title: 'Simpan Data?',
+                    text: 'Apakah Anda yakin ingin menyimpan data ini?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4b3bdb',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Simpan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Menyimpan...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        form.submit();
+                    }
+                });
+            }
+        });
+    });
+    </script>
+    <!--! [End] SweetAlert2 Global Handler -->
 
     @stack('scripts')
 </body>

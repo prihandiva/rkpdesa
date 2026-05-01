@@ -115,6 +115,12 @@ Route::prefix('admin')->group(function () {
         Route::resource('rw', RWController::class);
         Route::resource('sumber-biaya', SumberBiayaController::class);
         Route::resource('bidang', BidangController::class);
+        
+        // Pemulihan (Trash)
+        Route::get('pemulihan', [\App\Http\Controllers\PemulihanController::class, 'index'])->name('pemulihan.index');
+        Route::post('pemulihan/restore', [\App\Http\Controllers\PemulihanController::class, 'restore'])->name('pemulihan.restore');
+        Route::delete('pemulihan/force-delete', [\App\Http\Controllers\PemulihanController::class, 'forceDelete'])->name('pemulihan.force_delete');
+        
         // Monitoring
         Route::get('monitoring', [\App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring.index');
     });

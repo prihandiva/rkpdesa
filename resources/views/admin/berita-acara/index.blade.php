@@ -82,19 +82,7 @@
                     </li>
                 </ul>
 
-                {{-- Alert --}}
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="feather-check-circle me-2"></i>{{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="feather-alert-circle me-2"></i>{{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
+
 
                 {{-- Table --}}
                 <div class="table-responsive">
@@ -176,7 +164,7 @@
                                                     <i class="feather-edit-2"></i>
                                                 </a>
                                                 {{-- Hapus --}}
-                                                <form action="{{ route('berita-acara.destroy', $ba->id_berita) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                                                <form action="{{ route('berita-acara.destroy', $ba->id_berita) }}" method="POST" class="d-inline" data-name="{{ $ba->jenis }} - {{ \Carbon\Carbon::parse($ba->tanggal)->translatedFormat('d M Y') }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0 shadow-sm" title="Hapus">
@@ -214,7 +202,7 @@
                 <h5 class="modal-title fw-bold" id="uploadPdfModalLabel">Unggah Berita Acara (PDF)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="uploadPdfForm" action="" method="POST" enctype="multipart/form-data">
+            <form id="uploadPdfForm" action="" method="POST" enctype="multipart/form-data" class="no-swal">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
@@ -241,15 +229,12 @@
     });
 
     function showAlertNotUploaded() {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'info',
-                title: 'Informasi',
-                text: 'File PDF Berita Acara belum diunggah. Silakan unggah terlebih dahulu!'
-            });
-        } else {
-            alert('File PDF Berita Acara belum diunggah. Silakan unggah terlebih dahulu!');
-        }
+        Swal.fire({
+            icon: 'info',
+            title: 'Informasi',
+            text: 'File PDF Berita Acara belum diunggah. Silakan unggah terlebih dahulu!',
+            confirmButtonColor: '#4b3bdb'
+        });
     }
 
     function setUploadUrl(id) {

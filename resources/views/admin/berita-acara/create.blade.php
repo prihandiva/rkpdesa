@@ -365,7 +365,7 @@
             if(document.getElementById('pesertaTable').getElementsByTagName('tbody')[0].rows.length > 1) {
                 row.remove();
             } else {
-                alert("Minimal satu peserta (Wakil TTD) harus ada.");
+                Swal.fire({ icon: 'warning', title: 'Peringatan', text: 'Minimal satu peserta (Wakil TTD) harus ada.', confirmButtonColor: '#4b3bdb' });
             }
         }
     });

@@ -95,7 +95,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('bidang.destroy', $bidang->id_bidang) }}" method="POST"
-                                                        class="d-inline" onsubmit="return confirm('Yakin hapus data?')">
+                                                        class="d-inline" data-name="{{ $bidang->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">

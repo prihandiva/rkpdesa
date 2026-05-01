@@ -20,7 +20,7 @@ class RPJMExport implements FromView, ShouldAutoSize, WithStyles
 
     public function view(): View
     {
-        $query = RPJM::with(['masterBidang', 'masterSumberBiaya', 'masterPola'])
+        $query = RPJM::with(['masterBidang', 'masterPola'])
             ->orderBy('bidang', 'asc')
             ->orderBy('prioritas', 'asc');
 

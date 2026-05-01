@@ -62,13 +62,13 @@
                     <!--! [Start] Card Body !-->
                     <div class="card-body p-0">
                         {{-- Form pembungkus untuk 'Masuk ke RKP Desa' --}}
-                        <form action="{{ route('rkp.store_from_usulan') }}" method="POST" id="form-rkp">
+                        <form action="{{ route('rkp.store_from_usulan') }}" method="POST" id="form-rkp" class="no-swal">
                             @csrf
                             
                             {{-- Button Masuk RKP hanya untuk Operator Desa / Admin --}}
                             @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                             <div class="p-3 bg-light border-bottom d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary" id="btn-masuk-rkp" disabled onclick="return confirm('Pindahkan item terpilih ke RKP Desa?')">
+                                <button type="submit" class="btn btn-primary" id="btn-masuk-rkp" disabled>
                                     <i class="feather-check-square me-1"></i> Masuk ke RKP Desa
                                 </button>
                             </div>
@@ -182,14 +182,14 @@
                                                                                     class="btn btn-sm bg-light-warning text-warning border-0" title="Edit">
                                                                                     <i class="feather-edit"></i>
                                                                                 </a>
-                                                                                <form action="{{ route('usulan.destroy', $usulan->id_usulan) }}" method="POST"
-                                                                                    class="d-inline" onsubmit="return confirm('Yakin hapus usulan ini?')">
-                                                                                    @csrf
-                                                                                    @method('DELETE')
-                                                                                    <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus">
-                                                                                        <i class="feather-trash-2"></i>
-                                                                                    </button>
-                                                                                </form>
+                                                                                <button type="button" 
+                                                                                    class="btn btn-sm bg-light-danger text-danger border-0 btn-hapus-usulan" 
+                                                                                    title="Hapus"
+                                                                                    data-id="{{ $usulan->id_usulan }}"
+                                                                                    data-name="{{ $usulan->jenis_kegiatan }}"
+                                                                                    data-url="{{ route('usulan.destroy', $usulan->id_usulan) }}">
+                                                                                    <i class="feather-trash-2"></i>
+                                                                                </button>
                                                                             @endif
                                                                         </div>
                                                                     </td>
@@ -218,15 +218,13 @@
         <!--! [End] Main Content Card !-->
     </div>
 
-    <style>
-        .table-hover tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-        .bg-purple {
-            background-color: #6f42c1 !important;
-            color: white;
-        }
     </style>
+
+    {{-- Hidden form untuk hapus usulan (di luar form-rkp agar tidak nested) --}}
+    <form id="form-hapus-usulan" method="POST" action="" class="d-none no-swal">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 
@@ -255,6 +253,33 @@
                 chk.addEventListener('change', updateButtonState);
             });
         }
+
+        // Handler untuk tombol hapus usulan (nested form workaround)
+        document.body.addEventListener('click', function(e) {
+            const btn = e.target.closest('.btn-hapus-usulan');
+            if (!btn) return;
+
+            const dataName = btn.getAttribute('data-name') || 'usulan ini';
+            const url = btn.getAttribute('data-url');
+
+            Swal.fire({
+                title: 'Hapus Data?',
+                text: 'anda akan menghapus "' + dataName + '" pemulihan hanya bisa dilakukan admin.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('form-hapus-usulan');
+                    form.action = url;
+                    Swal.fire({ title: 'Menghapus...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                    form.submit();
+                }
+            });
+        });
     });
 </script>
 @endpush
