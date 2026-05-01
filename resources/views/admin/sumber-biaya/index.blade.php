@@ -97,7 +97,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('sumber-biaya.destroy', $item->id_biaya) }}" method="POST"
-                                                        class="d-inline" data-name="{{ $sumber->nama }}">
+                                                        class="d-inline" data-name="{{ $item->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -118,7 +118,7 @@
                         </div>
                         @if (isset($sumberBiayas) && $sumberBiayas->hasPages())
                             <div class="d-flex justify-content-center mt-4">
-                                {{ $$sumberBiayas->links() }}
+                                {{ $sumberBiayas->links() }}
                             </div>
                         @endif
                     </div>
