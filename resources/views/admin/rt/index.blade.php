@@ -99,7 +99,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('rt.destroy', $item->id_rt) }}" method="POST"
-                                                        class="d-inline" data-name="RT {{ $rt->nama }}">
+                                                        class="d-inline" data-name="RT {{ $item->nama_rt }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">

@@ -94,7 +94,20 @@
                                     @forelse($users as $user)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $user->nama }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar-sm me-3">
+                                                        @if($user->profile_image)
+                                                            <img src="{{ asset('storage/'.$user->profile_image) }}" alt="" class="img-fluid rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
+                                                        @else
+                                                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center text-primary fw-bold" style="width: 35px; height: 35px; border: 1px solid #e3e6f0;">
+                                                                <i class="feather-user"></i>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                    <div>{{ $user->nama }}</div>
+                                                </div>
+                                            </td>
                                             <td>{{ $user->username ?? '-' }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>

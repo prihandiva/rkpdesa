@@ -70,20 +70,30 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>ID</th>
+                                        <th>NIP</th>
                                         <th>Nama Pegawai</th>
+                                        <th>Posisi</th>
+                                        <th>No. Telp</th>
+                                        <th>Alamat</th>
+                                        <th>Email</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr id="masterFilterNoResult" style="display:none;">
-                                        <td colspan="3" class="text-center py-4 text-muted">
+                                        <td colspan="8" class="text-center py-4 text-muted">
                                             <i class="feather-search me-1"></i>Tidak ada data yang cocok dengan pencarian.
                                         </td>
                                     </tr>
                                     @forelse($pegawais as $item)
                                         <tr>
-                                            <td>{{ $item->id ?? '-' }}</td>
+                                            <td>{{ $item->id_pegawai ?? '-' }}</td>
+                                            <td>{{ $item->NIP ?? '-' }}</td>
                                             <td>{{ $item->nama ?? '-' }}</td>
+                                            <td>{{ $item->posisi ?? '-' }}</td>
+                                            <td>{{ $item->telp ?? '-' }}</td>
+                                            <td>{{ $item->alamat ?? '-' }}</td>
+                                            <td>{{ $item->email ?? '-' }}</td>
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('pegawai.show', $item->id_pegawai) }}"
@@ -95,7 +105,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('pegawai.destroy', $item->id_pegawai) }}" method="POST"
-                                                        class="d-inline" data-name="{{ $pegawai->nama }}">
+                                                        class="d-inline" data-name="{{ $item->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -107,7 +117,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">Tidak ada data pegawai
+                                            <td colspan="8" class="text-center text-muted py-4">Tidak ada data pegawai
                                             </td>
                                         </tr>
                                     @endforelse

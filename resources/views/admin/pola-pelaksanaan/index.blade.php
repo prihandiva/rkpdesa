@@ -95,7 +95,7 @@
                                                         <i class="feather-edit"></i>
                                                     </a>
                                                     <form action="{{ route('pola-pelaksanaan.destroy', $item->id_pelaksanaan) }}"
-                                                        method="POST" class="d-inline" data-name="{{ $pola->nama }}">
+                                                        method="POST" class="d-inline" data-name="{{ $item->nama }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger">
