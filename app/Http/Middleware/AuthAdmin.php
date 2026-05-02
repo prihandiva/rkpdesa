@@ -15,11 +15,14 @@ class AuthAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // MAINTENANCE MODE: Bypass authentication temporarily
         // Cek apakah admin sudah authenticated
-        // if (!session()->get('admin_authenticated')) {
-        //     return redirect('/admin/login')->with('error', 'Silakan login terlebih dahulu');
-        // }
+        if (!session()->get('admin_authenticated')) {
+            // Jika request dari AJAX, return JSON 401 agar bisa ditangani JS
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json(['session_expired' => true, 'redirect' => route('admin.login')], 401);
+            }
+            return redirect()->route('admin.login')->with('session_expired', true);
+        }
 
         return $next($request);
     }

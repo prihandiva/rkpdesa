@@ -207,13 +207,13 @@
                             <span>Settings</span>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <form method="POST" action="{{ route('admin.logout') }}" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="dropdown-item"
+                        <button type="button" id="btn-logout" class="dropdown-item"
                                 style="cursor: pointer; border: none; background: none; width: 100%; text-align: left;">
-                                <i class="feather-log-out me-2"></i>
-                                <span>Sign Out</span>
-                            </button>
+                            <i class="feather-log-out me-2"></i>
+                            <span>Sign Out</span>
+                        </button>
+                        <form id="form-logout" method="POST" action="{{ route('admin.logout') }}" style="display: none;">
+                            @csrf
                         </form>
                     </div>
                 </div>
@@ -226,3 +226,59 @@
 <!--! ================================================================ !-->
 <!--! [End] Header !-->
 <!--! ================================================================ !-->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // === Logout Confirmation ===
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Sign Out?',
+                text: 'Apakah Anda yakin ingin keluar dari sistem?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="feather-log-out me-1"></i> Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Logging out...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => Swal.showLoading()
+                    });
+                    document.getElementById('form-logout').submit();
+                }
+            });
+        });
+    }
+
+    // === AJAX Session Expiry Handler ===
+    // Intercept all fetch/XHR 401 responses and redirect to login
+    const originalFetch = window.fetch;
+    window.fetch = function (...args) {
+        return originalFetch.apply(this, args).then(response => {
+            if (response.status === 401) {
+                response.clone().json().then(data => {
+                    if (data.session_expired) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Session Habis',
+                            text: 'Session Anda telah habis, silahkan login kembali.',
+                            confirmButtonColor: '#4b3bdb',
+                            confirmButtonText: 'Login'
+                        }).then(() => {
+                            window.location.href = data.redirect || '/admin/login';
+                        });
+                    }
+                }).catch(() => {});
+            }
+            return response;
+        });
+    };
+});
+</script>

@@ -18,6 +18,9 @@
     <!--! Bootstrap CSS !-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-template/assets/css/bootstrap.min.css') }}" />
 
+    <!--! SweetAlert2 !-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     <!--! Feather Icons !-->
     <link rel="stylesheet" type="text/css" href="{{ asset('admin-template/assets/vendors/css/vendors.min.css') }}" />
 
@@ -313,6 +316,7 @@
 
     <!--! Script: Vendors !-->
     <script src="{{ asset('admin-template/assets/vendors/js/vendors.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -332,6 +336,28 @@
                     toggleIcon.classList.add('feather-eye');
                 }
             });
+
+            // Session Expired Alert
+            @if(session('session_expired'))
+            Swal.fire({
+                icon: 'warning',
+                title: 'Session Habis',
+                text: 'Session Anda telah habis, silahkan login kembali.',
+                confirmButtonColor: '#4b3bdb',
+                confirmButtonText: 'OK'
+            });
+            @endif
+
+            // Logout Success Alert
+            @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil Logout',
+                text: '{{ session("success") }}',
+                timer: 2500,
+                showConfirmButton: false
+            });
+            @endif
         });
     </script>
 </body>
