@@ -261,7 +261,7 @@
     backdrop-filter: blur(4px);
 }
 .db-hero-sub { margin: 0; font-size: 12px; opacity: 0.8; }
-.db-hero-title { margin: 2px 0 0; font-size: 18px; font-weight: 700; }
+.db-hero-title { margin: 2px 0 0; font-size: 18px; font-weight: 700; color: #fff;}
 
 .db-filter-form {
     display: flex;
@@ -307,9 +307,9 @@
 .db-stat-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
 .db-stat-cyan    { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); }
 
-.db-stat-label { margin: 0 0 2px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.8; }
-.db-stat-num { font-size: 36px; font-weight: 800; margin: 0 0 2px; line-height: 1.1; }
-.db-stat-desc { margin: 0; font-size: 11px; opacity: 0.7; }
+.db-stat-label { margin: 0 0 2px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85; color: #fff !important; }
+.db-stat-num   { font-size: 36px; font-weight: 800; margin: 0 0 2px; line-height: 1.1; color: #fff !important; }
+.db-stat-desc  { margin: 0; font-size: 11px; opacity: 0.75; color: #fff !important; }
 
 .db-stat-icon-wrap {
     width: 56px; height: 56px;
@@ -468,8 +468,10 @@ document.addEventListener("DOMContentLoaded", function() {
     var usulanStatusData = {!! json_encode($usulanPerStatusData ?? []) !!};
     if (usulanStatusData && usulanStatusData.length > 0) {
         var statusLabels = usulanStatusData.map(d => d.status);
+        var statusValues = usulanStatusData.map(d => parseInt(d.total));
+        var statusMax    = Math.max(...statusValues, 1); // minimal 1 agar tidak error
         var chart2 = new ApexCharts(document.querySelector("#usulanPerStatusChart"), {
-            series: [{ name: 'Jumlah', data: usulanStatusData.map(d => parseInt(d.total)) }],
+            series: [{ name: 'Jumlah', data: statusValues }],
             chart: { ...chartDefaults, type: 'bar', height: 340 },
             colors: statusLabels.map(getStatusColor),
             plotOptions: {
@@ -496,8 +498,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 axisTicks: { show: false }
             },
             yaxis: {
+                min: 0,
+                max: statusMax,
+                tickAmount: statusMax, // 1 tick per bilangan bulat
                 labels: {
-                    formatter: (v) => Math.round(v),
+                    formatter: (v) => (Number.isInteger(v) ? v : ''),
                     style: { colors: '#94a3b8' }
                 }
             },
