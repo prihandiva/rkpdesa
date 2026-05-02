@@ -99,7 +99,7 @@
                                             </div>
                                         </h2>
                                         <div id="collapse{{ $dusun->id_dusun }}" class="accordion-collapse collapse" 
-                                            aria-labelledby="heading{{ $dusun->id_dusun }}" data-bs-parent="#accordionDusun">
+                                            aria-labelledby="heading{{ $dusun->id_dusun }}">
                                             <div class="accordion-body p-0">
                                                 <div class="table-responsive">
                                                     <table class="table table-hover mb-0">
@@ -109,7 +109,7 @@
                                                                 @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                                                                     <th width="50" class="text-center">#</th>
                                                                 @endif
-                                                                <th>ID</th>
+                                                                <th>No</th>
                                                                 <th>Jenis Kegiatan</th>
                                                                 <th>RW/RT</th>
                                                                 <th>Tahun</th>
@@ -133,7 +133,7 @@
                                                                         </td>
                                                                     @endif
                                                                     
-                                                                    <td>{{ $usulan->id_usulan }}</td>
+                                                                    <td>{{ $loop->iteration }}</td>
                                                                     <td>{{ $usulan->jenis_kegiatan }}</td>
                                                                     <td>RW: {{ $usulan->id_rw }} / RT: {{ $usulan->id_rt }}</td>
                                                                     <td>{{ $usulan->tahun }}</td>

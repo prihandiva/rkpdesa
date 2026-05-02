@@ -92,7 +92,7 @@
                                         </div>
                                     </h2>
                                     <div id="collapse{{ $bidang->id_bidang }}" class="accordion-collapse collapse" 
-                                        aria-labelledby="heading{{ $bidang->id_bidang }}" data-bs-parent="#accordionBidang">
+                                        aria-labelledby="heading{{ $bidang->id_bidang }}">
                                         <div class="accordion-body p-0">
                                             <div class="table-responsive">
                                                 <table class="table table-hover mb-0">
