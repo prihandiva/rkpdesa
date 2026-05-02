@@ -54,7 +54,7 @@
                                         <th style="width: 50px;">No</th>
                                         <th>Tahun</th>
                                         <th>Status</th>
-                                        <th>Keterangan</th>
+                                        <!-- <th>Keterangan</th> -->
                                         <th style="width: 100px;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -74,7 +74,7 @@
                                                     </label>
                                                 </div>
                                             </td>
-                                            <td>{{ $item->keterangan ?? '-' }}</td>
+                                            <!-- <td>{{ $item->keterangan ?? '-' }}</td> -->
                                             <td>
                                                 <div class="d-flex gap-2">
                                                     <a href="{{ route('tahun.show', $item->id_tahun) }}"
