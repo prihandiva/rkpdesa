@@ -126,4 +126,8 @@ Route::prefix('admin')->group(function () {
     });
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
+    // Settings (Theme & Notifications)
+    Route::get('/pengaturan', [App\Http\Controllers\SettingsController::class, 'index'])->name('pengaturan.index');
+    Route::post('/pengaturan/notifikasi', [App\Http\Controllers\SettingsController::class, 'updateNotifikasi'])->name('pengaturan.notifikasi.update');
 });

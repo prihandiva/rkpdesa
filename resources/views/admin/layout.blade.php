@@ -13,6 +13,14 @@
     <!--! Title !-->
     <title>@yield('title', 'Dashboard') - RKP Desa</title>
 
+    <script>
+        // Early theme initialization to prevent flash
+        (function() {
+            const savedTheme = localStorage.getItem('admin-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+
     <!--! Favicon !-->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-template/assets/images/Logo Sipdes 2 Persegi.png') }}" />
 
@@ -43,6 +51,48 @@
             font-family: 'Inter', sans-serif;
             background-color: #f7f9fc;
         }
+
+        /* ─── DARK MODE SYSTEM ─── */
+        [data-theme="dark"] {
+            --bs-body-bg: #0f172a;
+            --bs-body-color: #f1f5f9;
+            --bs-card-bg: #1e293b;
+            --bs-card-border-color: #334155;
+            --bs-border-color: #334155;
+            --bs-tertiary-bg: #1e293b;
+            background-color: #0f172a !important;
+        }
+        [data-theme="dark"] body { background-color: #0f172a !important; color: #f1f5f9; }
+        [data-theme="dark"] .nxl-container { background-color: #0f172a !important; }
+        [data-theme="dark"] .page-header { background-color: #0f172a !important; color: #f1f5f9; border-bottom: 1px solid #1e293b; }
+        [data-theme="dark"] .card { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .card-header { background-color: #1e293b !important; border-bottom-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .card-body { background-color: #1e293b !important; }
+        [data-theme="dark"] .table { color: #f1f5f9 !important; --bs-table-hover-color: #f1f5f9; --bs-table-hover-bg: #334155; --bs-table-bg: transparent; }
+        [data-theme="dark"] .table td, [data-theme="dark"] .table th { background-color: transparent !important; color: #f1f5f9 !important; border-color: #334155 !important; }
+        [data-theme="dark"] .table-light { --bs-table-bg: #334155; --bs-table-color: #f1f5f9; }
+        [data-theme="dark"] .nxl-header { background-color: #1e293b !important; border-bottom: 1px solid #334155; color: #f1f5f9; }
+        [data-theme="dark"] .breadcrumb-item, [data-theme="dark"] .text-muted { color: #94a3b8 !important; }
+        [data-theme="dark"] .breadcrumb-item.active { color: #f1f5f9 !important; }
+        [data-theme="dark"] .form-control, [data-theme="dark"] .form-select { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .list-group-item { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .dropdown-menu { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .dropdown-item { color: #f1f5f9; }
+        [data-theme="dark"] .dropdown-item:hover { background-color: #334155; }
+        [data-theme="dark"] .nxl-navigation { background-color: #1e293b !important; border-right: 1px solid #334155; }
+        [data-theme="dark"] .nxl-navigation .nxl-header { background-color: #1e293b !important; border-bottom: 1px solid #334155; }
+        [data-theme="dark"] .nxl-micon i, [data-theme="dark"] .nxl-mtext { color: #f1f5f9 !important; }
+        [data-theme="dark"] .nxl-link:hover { background-color: #334155 !important; }
+        [data-theme="dark"] .bg-white { background-color: #1e293b !important; }
+        [data-theme="dark"] .bg-light { background-color: #0f172a !important; }
+        [data-theme="dark"] .text-dark { color: #f1f5f9 !important; }
+        [data-theme="dark"] .modal-content { background-color: #1e293b !important; color: #f1f5f9; }
+        [data-theme="dark"] .pagination .page-link { background-color: #1e293b; border-color: #334155; color: #f1f5f9; }
+        [data-theme="dark"] .nxl-h-item .avatar-text.bg-light-primary { background: #334155 !important; }
+        [data-theme="dark"] .accordion-item { background-color: #1e293b !important; border-color: #334155 !important; color: #f1f5f9; }
+        [data-theme="dark"] .accordion-button { background-color: #1e293b !important; color: #f1f5f9 !important; }
+        [data-theme="dark"] .accordion-button:not(.collapsed) { background-color: #334155 !important; box-shadow: none; }
+        [data-theme="dark"] .accordion-body { background-color: #1e293b !important; }
 
         .page-header {
             margin-bottom: 1.5rem;

@@ -83,7 +83,25 @@
                         </div>
                         <div class="dropdown-body nxl-h-dropdown-scroll" style="max-height: 500px; overflow-y: auto;">
                             @if($currentUser)
-                                @forelse($userNotifs as $notification)
+                                @php
+                                    $prefs = session('notif_preferences', [
+                                        'rpjm' => true,
+                                        'usulan' => true,
+                                        'rkpdesa' => true,
+                                        'berita_acara' => true
+                                    ]);
+                                    
+                                    // Use $userNotifs as the source
+                                    $filteredNotifs = $userNotifs->filter(function($notif) use ($prefs) {
+                                        $type = strtolower($notif->jenis ?? '');
+                                        if ($type == 'rpjm') return $prefs['rpjm'];
+                                        if ($type == 'usulan') return $prefs['usulan'];
+                                        if ($type == 'rkp' || $type == 'rkpdesa') return $prefs['rkpdesa'];
+                                        if ($type == 'berita_acara' || $type == 'ba') return $prefs['berita_acara'];
+                                        return true; // default show
+                                    });
+                                @endphp
+                                @forelse($filteredNotifs as $notification)
                                     @php
                                         $isUnread = false;
                                         if ($notification->id_penerima) {
@@ -202,7 +220,7 @@
                             <i class="feather-user me-2"></i>
                             <span>Profile</span>
                         </a>
-                        <a href="javascript:void(0);" class="dropdown-item">
+                        <a href="{{ route('pengaturan.index') }}" class="dropdown-item">
                             <i class="feather-settings me-2"></i>
                             <span>Settings</span>
                         </a>

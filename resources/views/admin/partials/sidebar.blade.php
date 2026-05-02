@@ -163,8 +163,8 @@
                 <!--! [End] Menu Caption !-->
 
                 <!--! [Start] Profile Menu !-->
-                <li class="nxl-item {{ request()->routeIs('profil.*') ? 'active' : '' }}">
-                    <a href="javascript:void(0);" class="nxl-link">
+                <li class="nxl-item {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
+                    <a href="{{ route('pengaturan.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-settings"></i></span>
                         <span class="nxl-mtext">Pengaturan</span>
                     </a>
