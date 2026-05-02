@@ -24,6 +24,16 @@ class RKPController extends Controller
     {
         $query = RKPDesa::query();
 
+        // Get Year Filter
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        $tahunAktif = \App\Models\Tahun::where('status', 'Aktif')->first();
+        $selectedTahunId = $request->get('tahun', $tahunAktif ? $tahunAktif->id_tahun : ($tahuns->first() ? $tahuns->first()->id_tahun : null));
+        $selectedTahunModel = \App\Models\Tahun::find($selectedTahunId);
+        $selectedTahun = $selectedTahunModel ? $selectedTahunModel->tahun : date('Y');
+
+        // Apply Year Filter
+        $query->where('tahun', $selectedTahun);
+
         // Filter by Status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -36,10 +46,6 @@ class RKPController extends Controller
 
         // Filter for BPD Role
         if (session('user_role') == 'bpd') {
-            $tahunAktif = \App\Models\Tahun::where('status', 'Aktif')->value('tahun');
-            if ($tahunAktif) {
-                $query->where('tahun', $tahunAktif);
-            }
             $query->whereIn('status', ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD']);
         }
 
@@ -63,7 +69,7 @@ class RKPController extends Controller
 
         $rkp_desa = $query->paginate(10)->appends($request->all());
         
-        return view('admin.rkpdesa.index', compact('rkp_desa'));
+        return view('admin.rkpdesa.index', compact('rkp_desa', 'tahuns', 'selectedTahunId', 'selectedTahun'));
     }
 
     /**

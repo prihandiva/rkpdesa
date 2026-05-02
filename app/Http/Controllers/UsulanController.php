@@ -15,7 +15,7 @@ class UsulanController extends Controller
      * Display a listing of the resource (Index)
      * Menampilkan daftar semua usulan sesuai role
      */
-    public function index()
+    public function index(Request $request)
     {
         $userId = session('user_id');
         $currentUser = User::find($userId);
@@ -24,18 +24,29 @@ class UsulanController extends Controller
             return redirect()->route('admin.login')->with('error', 'Sesi anda berakhir.');
         }
 
+        // Get Year Filter
+        $tahuns = \App\Models\Tahun::orderBy('tahun', 'desc')->get();
+        $tahunAktif = \App\Models\Tahun::where('status', 'Aktif')->first();
+        $selectedTahunId = $request->get('tahun', $tahunAktif ? $tahunAktif->id_tahun : ($tahuns->first() ? $tahuns->first()->id_tahun : null));
+        $selectedTahun = \App\Models\Tahun::find($selectedTahunId);
+        $tahunValue = $selectedTahun ? $selectedTahun->tahun : date('Y');
+
         // Ambil Data Dusun
         // Jika Operator Dusun, hanya ambil dusun dia
         if ($currentUser->role == 'operator_dusun') {
-            $dusuns = \App\Models\Dusun::with('usulan')
+            $dusuns = \App\Models\Dusun::with(['usulan' => function($query) use ($tahunValue) {
+                    $query->where('tahun', $tahunValue)->orderBy('prioritas', 'asc');
+                }])
                 ->where('id_dusun', $currentUser->id_dusun)
                 ->get();
         } else {
             // Operator Desa / Admin bisa lihat semua
-            $dusuns = \App\Models\Dusun::with('usulan')->get();
+            $dusuns = \App\Models\Dusun::with(['usulan' => function($query) use ($tahunValue) {
+                    $query->where('tahun', $tahunValue)->orderBy('prioritas', 'asc');
+                }])->get();
         }
 
-        return view('admin.usulan.index', compact('dusuns', 'currentUser'));
+        return view('admin.usulan.index', compact('dusuns', 'currentUser', 'tahuns', 'selectedTahunId', 'selectedTahun'));
     }
 
     /**

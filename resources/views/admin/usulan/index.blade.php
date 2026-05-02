@@ -29,6 +29,16 @@
                             </a>
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                            <form method="GET" action="{{ route('usulan.index') }}" class="d-flex align-items-center gap-2 me-2">
+                                <label for="tahun" class="small fw-bold text-muted mb-0">Tahun:</label>
+                                <select name="tahun" id="tahun" class="form-select form-select-sm" style="min-width: 120px;" onchange="this.form.submit()">
+                                    @foreach($tahuns as $th)
+                                        <option value="{{ $th->id_tahun }}" {{ $selectedTahunId == $th->id_tahun ? 'selected' : '' }}>
+                                            {{ $th->tahun }} {{ $th->status == 'Aktif' ? '★' : '' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
                             @if(isset($currentUser) && ($currentUser->role == 'operator_dusun' || $currentUser->role == 'admin'))
                                 <a href="{{ route('usulan.create') }}" class="btn btn-md btn-primary shadow-sm">
                                     <i class="feather-plus me-2"></i>

@@ -24,6 +24,16 @@
                             </a>
                         </div>
                         <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                            <form method="GET" action="{{ route('rkpdesa.index') }}" class="d-flex align-items-center gap-2 me-2">
+                                <label for="tahun" class="small fw-bold text-muted mb-0">Tahun:</label>
+                                <select name="tahun" id="tahun" class="form-select form-select-sm" style="min-width: 120px;" onchange="this.form.submit()">
+                                    @foreach($tahuns as $th)
+                                        <option value="{{ $th->id_tahun }}" {{ $selectedTahunId == $th->id_tahun ? 'selected' : '' }}>
+                                            {{ $th->tahun }} {{ $th->status == 'Aktif' ? '★' : '' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
                             @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp', 'admin']))
                                 <button type="button" class="btn btn-md btn-warning shadow-sm text-dark" onclick="submitToBPD()">
                                     <i class="feather-send me-2"></i>
