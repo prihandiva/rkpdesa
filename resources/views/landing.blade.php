@@ -3,7 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>RKPDesa - Sistem Informasi Manajemen Desa</title>
+    <title>SIPDES - Sistem Informasi Manajemen Desa</title>
+    
+    <!--! Favicon !-->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin-template/assets/images/Logo Sipdes 2 Persegi.png') }}" />
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
