@@ -118,7 +118,7 @@
                                     $level = 1;
                                     if ($status == 'Pending') $level = 2;
                                     elseif (in_array($status, ['Terverifikasi', 'Gagal Terverifikasi'])) $level = 3;
-                                    elseif (in_array($status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD'])) $level = 4;
+                                    elseif (in_array($status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak'])) $level = 4;
                                     
                                     // Override if jumping levels (e.g. direct approval)
                                     // Assuming linear flow for now based on request.
@@ -188,7 +188,7 @@
                                         if ($status == 'Disetujui') {
                                             $step4Color = $c_success;
                                             $step4Icon = 'feather-check-square';
-                                        } elseif ($status == 'Ditolak BPD') {
+                                        } elseif ($status == 'Ditolak') {
                                             $step4Color = $c_danger;
                                             $step4Icon = 'feather-x-square';
                                         } else {
@@ -206,7 +206,7 @@
                                         <small class="text-muted">Keputusan Akhir</small>
                                         @if($status == 'Disetujui') 
                                             <span class="badge badge-status-disetujui ms-2">DISETUJUI</span>
-                                        @elseif($status == 'Ditolak BPD') 
+                                        @elseif($status == 'Ditolak') 
                                             <span class="badge badge-status-ditolak-bpd ms-2">DITOLAK</span>
                                         @elseif($status == 'Menunggu persetujuan BPD')
                                             <span class="badge badge-status-menunggu-bpd ms-2">Menunggu</span>
@@ -242,7 +242,7 @@
                                         $colorClass = 'badge-status-menunggu-bpd';
                                     } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
                                         $colorClass = 'badge-status-disetujui';
-                                    } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
+                                    } elseif (str_contains($statusStr, 'Ditolak') || str_contains($judulStr, 'Ditolak') || str_contains($deskripsiStr, 'Ditolak')) {
                                         $colorClass = 'badge-status-ditolak-bpd';
                                     } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
                                         $colorClass = 'badge-status-proses';

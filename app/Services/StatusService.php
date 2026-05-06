@@ -154,7 +154,7 @@ class StatusService
             'Gagal Terverifikasi'        => 'danger',    // Red     → badge-status-gagal
             'Disetujui'                  => 'success',   // Green   → badge-status-disetujui
             'Menunggu persetujuan BPD'   => 'purple',   // Violet  → badge-status-menunggu-bpd
-            'Ditolak BPD'               => 'pink',      // Rose    → badge-status-ditolak-bpd
+            'Ditolak'               => 'pink',      // Rose    → badge-status-ditolak-bpd
             default                      => 'secondary',
         };
     }

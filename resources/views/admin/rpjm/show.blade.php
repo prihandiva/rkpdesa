@@ -103,11 +103,11 @@
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-header bg-light border-bottom p-4">
-                        <h6 class="m-0 fw-bold text-primary">Status & Prioritas</h6>
+                        <h6 class="m-0 fw-bold text-primary">Prioritas</h6>
                     </div>
                     <div class="card-body">
                         <!-- Priority Section -->
-                        <div class="mb-4 text-center border-bottom pb-4">
+                        <div class="text-center">
                             <label class="d-block text-muted small mb-2">Prioritas</label>
                             @php
                                 $prioVal = $rpjm->prioritas;
@@ -133,106 +133,7 @@
 
 
 
-                         <!-- Vertical Timeline (Stepper) -->
-                         <div class="position-relative ps-3 mt-4">
-                            @php
-                                $status = $rpjm->status;
-                                $level = 1;
-                                if ($status == 'Pending') $level = 2;
-                                elseif (in_array($status, ['Terverifikasi', 'Gagal Terverifikasi'])) $level = 3;
-                                elseif (in_array($status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD'])) $level = 4;
-                                
-                                $c_muted = 'muted';
-                                $c_primary = 'primary';
-                                $c_success = 'success';
-                                $c_danger = 'danger';
-                            @endphp
 
-                            <!-- Step 1: Input RPJM (Proses) -->
-                            <div class="d-flex align-items-center mb-4 position-relative">
-                                <div class="position-absolute start-0 top-0 translate-middle-x bg-white" style="z-index: 2;">
-                                    <i class="feather-file-text fs-4 text-{{ $level >= 1 ? $c_primary : $c_muted }}"></i>
-                                </div>
-                                <div class="border-start border-3 border-{{ $level > 1 ? $c_primary : $c_muted }} position-absolute start-0 h-100" style="left: -1px; top: 10px; z-index: 1;"></div>
-                                <div class="ms-4">
-                                    <h6 class="mb-0 {{ $level >= 1 ? 'fw-bold text-dark' : 'text-muted' }}">Input RPJM</h6>
-                                    <small class="text-muted">Data Masuk</small>
-                                    @if($status == 'Proses') <span class="badge badge-status-proses ms-2">Saat Ini</span> @endif
-                                </div>
-                            </div>
-
-                            <!-- Step 2: Masuk RKP (Pending) -->
-                            <div class="d-flex align-items-center mb-4 position-relative">
-                                <div class="position-absolute start-0 top-0 translate-middle-x bg-white" style="z-index: 2;">
-                                    <i class="feather-inbox fs-4 text-{{ $level >= 2 ? $c_primary : $c_muted }}"></i>
-                                </div>
-                                <div class="border-start border-3 border-{{ $level > 2 ? $c_primary : $c_muted }} position-absolute start-0 h-100" style="left: -1px; top: 10px; z-index: 1;"></div>
-                                <div class="ms-4">
-                                    <h6 class="mb-0 {{ $level >= 2 ? 'fw-bold text-dark' : 'text-muted' }}">Masuk RKP Desa</h6>
-                                    <small class="text-muted">Menunggu Verifikasi</small>
-                                    @if($status == 'Pending') <span class="badge badge-status-pending ms-2">Saat Ini</span> @endif
-                                </div>
-                            </div>
-                            
-                            <!-- Step 3: Verifikasi Teknis -->
-                             @php
-                                $step3Color = $c_muted;
-                                $step3Icon = 'feather-check-circle';
-                                if ($level > 3) {
-                                    $step3Color = $c_primary;
-                                } elseif ($level == 3) {
-                                    $step3Color = $status == 'Gagal Terverifikasi' ? $c_danger : $c_primary;
-                                    $step3Icon = $status == 'Gagal Terverifikasi' ? 'feather-x-circle' : 'feather-check-circle';
-                                }
-                            @endphp
-                            <div class="d-flex align-items-center mb-4 position-relative">
-                                <div class="position-absolute start-0 top-0 translate-middle-x bg-white" style="z-index: 2;">
-                                    <i class="{{ $step3Icon }} fs-4 text-{{ $step3Color }}"></i>
-                                </div>
-                                <div class="border-start border-3 border-{{ $level > 3 ? $c_primary : $c_muted }} position-absolute start-0 h-100" style="left: -1px; top: 10px; z-index: 1;"></div>
-                                <div class="ms-4">
-                                    <h6 class="mb-0 {{ $level >= 3 ? 'fw-bold text-dark' : 'text-muted' }}">Verifikasi Teknis</h6>
-                                    <small class="text-muted">Tim Verifikasi</small>
-                                    @if($status == 'Terverifikasi') <span class="badge badge-status-terverifikasi ms-2">OK</span>
-                                    @elseif($status == 'Gagal Terverifikasi') <span class="badge badge-status-gagal ms-2">Gagal</span> @endif
-                                </div>
-                            </div>
-
-                             <!-- Step 4: Approval BPD -->
-                            @php
-                                $step4Color = $c_muted;
-                                $step4Icon = 'feather-thumbs-up';
-                                if ($level == 4) {
-                                    if ($status == 'Disetujui') {
-                                        $step4Color = $c_success;
-                                        $step4Icon = 'feather-check-square';
-                                    } elseif ($status == 'Ditolak BPD') {
-                                        $step4Color = $c_danger;
-                                        $step4Icon = 'feather-x-square';
-                                    } else {
-                                        $step4Color = $c_primary; 
-                                        $step4Icon = 'feather-clock';
-                                    }
-                                }
-                            @endphp
-                            <div class="d-flex align-items-center position-relative">
-                                <div class="position-absolute start-0 top-0 translate-middle-x bg-white" style="z-index: 2;">
-                                    <i class="{{ $step4Icon }} fs-4 text-{{ $step4Color }}"></i>
-                                </div>
-                                <div class="ms-4">
-                                    <h6 class="mb-0 {{ $level == 4 ? 'fw-bold text-dark' : 'text-muted' }}">Approval BPD</h6>
-                                    <small class="text-muted">Keputusan Akhir</small>
-                                    @if($status == 'Disetujui') 
-                                        <span class="badge badge-status-disetujui ms-2">DISETUJUI</span>
-                                    @elseif($status == 'Ditolak BPD') 
-                                        <span class="badge badge-status-ditolak-bpd ms-2">DITOLAK</span>
-                                    @elseif($status == 'Menunggu persetujuan BPD')
-                                        <span class="badge badge-status-menunggu-bpd ms-2">Menunggu</span>
-                                    @endif
-                                </div>
-                            </div>
-
-                         </div>
                     </div>
                 </div>
 
@@ -260,7 +161,7 @@
                                         $colorClass = 'badge-status-menunggu-bpd';
                                     } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
                                         $colorClass = 'badge-status-disetujui';
-                                    } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
+                                    } elseif (str_contains($statusStr, 'Ditolak') || str_contains($judulStr, 'Ditolak') || str_contains($deskripsiStr, 'Ditolak')) {
                                         $colorClass = 'badge-status-ditolak-bpd';
                                     } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
                                         $colorClass = 'badge-status-proses';

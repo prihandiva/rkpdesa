@@ -312,7 +312,7 @@
         .badge-status-disetujui { background:#dcfce7 !important; color:#166534 !important; box-shadow: 0 1px 4px rgba(22,101,52,0.15); }
         /* Menunggu BPD — Violet */
         .badge-status-menunggu-bpd { background:#ede9fe !important; color:#5b21b6 !important; box-shadow: 0 1px 4px rgba(91,33,182,0.15); }
-        /* Ditolak BPD — Rose/Pink */
+        /* Ditolak — Rose/Pink */
         .badge-status-ditolak-bpd  { background:#fce7f3 !important; color:#9d174d !important; box-shadow: 0 1px 4px rgba(157,23,77,0.15); }
 
         /* Existing utility backgrounds if needed by old parts */

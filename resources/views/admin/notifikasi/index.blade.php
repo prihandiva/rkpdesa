@@ -57,7 +57,7 @@
                                     $notifBg = '#fee2e2'; $notifColor = '#991b1b';
                                 } elseif (str_contains($statusStr, 'terverifikasi') || str_contains($judulStr, 'terverifikasi') || str_contains($deskripsiStr, 'terverifikasi')) {
                                     $notifBg = '#d1fae5'; $notifColor = '#065f46';
-                                } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak') || str_contains($deskripsiStr, 'ditolak')) {
+                                } elseif (str_contains($statusStr, 'Ditolak') || str_contains($judulStr, 'ditolak') || str_contains($deskripsiStr, 'ditolak')) {
                                     $notifBg = '#fce7f3'; $notifColor = '#9d174d';
                                 } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
                                     $notifBg = '#dcfce7'; $notifColor = '#166534';

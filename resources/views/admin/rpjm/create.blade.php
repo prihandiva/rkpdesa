@@ -31,7 +31,7 @@
 
         <div class="row">
             <!--! [Start] Main Form Column !-->
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <!--! [Start] Form Card !-->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom">
@@ -215,7 +215,7 @@
             <!--! [End] Main Form Column !-->
 
             <!--! [Start] Right Sidebar !-->
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <div class="card border-0 shadow-sm mb-3">
                     <div class="card-header bg-white border-bottom">
                        <h6 class="mb-0">Alur Data RPJM</h6>
@@ -247,7 +247,7 @@
                          </div>
                      </div>
                 </div>
-            </div>
+            </div> -->
             <!--! [End] Right Sidebar !-->
         </div>
     </div>

@@ -94,7 +94,6 @@ class BeritaAcaraController extends Controller
             'id_tahun' => 'required|exists:tahun,id_tahun',
             'id_dusun' => 'nullable|exists:dusun,id_dusun', 
             'jenis' => 'required|in:Musdus,Musrenbang,BPD',
-            'hari' => 'required|string',
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -116,6 +115,9 @@ class BeritaAcaraController extends Controller
             'absensi_unsur.*' => 'nullable|string',
         ]);
 
+        // Generate 'hari' automatically from 'tanggal'
+        $validated['hari'] = \Carbon\Carbon::parse($validated['tanggal'])->translatedFormat('l');
+
         DB::beginTransaction();
         try {
             // Create Berita Acara
@@ -123,7 +125,6 @@ class BeritaAcaraController extends Controller
                 'id_tahun' => $validated['id_tahun'],
                 'id_dusun' => $validated['id_dusun'],
                 'jenis' => $validated['jenis'],
-                'hari' => $validated['hari'],
                 'hari' => $validated['hari'],
                 'tanggal' => $validated['tanggal'],
                 'jam_mulai' => $validated['jam_mulai'],
@@ -239,7 +240,6 @@ class BeritaAcaraController extends Controller
             'id_tahun' => 'required|exists:tahun,id_tahun',
             'id_dusun' => 'nullable|exists:dusun,id_dusun',
             'jenis' => 'required|in:Musdus,Musrenbang,BPD',
-            'hari' => 'required|string',
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
@@ -261,6 +261,9 @@ class BeritaAcaraController extends Controller
             'absensi_alamat.*' => 'nullable|string',
             'absensi_unsur.*' => 'nullable|string',
         ]);
+
+        // Generate 'hari' automatically from 'tanggal'
+        $validated['hari'] = \Carbon\Carbon::parse($validated['tanggal'])->translatedFormat('l');
         
         // Prevent changing jenis if unauthorized for target jenis? 
         // For simplicity, we assume jenis doesn't change or we strictly use existing one check.

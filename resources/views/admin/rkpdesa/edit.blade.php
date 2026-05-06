@@ -90,8 +90,8 @@
                     </div>
                     <div class="card-body">
                         
-                        <!-- Alert for Penyusun -->
-                        @if(session('user_role') == 'tim_penyusun')
+                        <!-- Alert for Penyusun / Admin -->
+                        @if(session('user_role') == 'tim_penyusun' || session('user_role') == 'admin')
                             @if($rkpDesa->status != 'Terverifikasi' && $rkpDesa->status != 'Disetujui')
                                 <div class="alert alert-warning">
                                     <i class="feather-alert-triangle me-2"></i>

@@ -162,7 +162,7 @@
                                                                                 case 'Menunggu persetujuan BPD': 
                                                                                     $badgeClass = 'badge-status-menunggu-bpd';
                                                                                     break;
-                                                                                case 'Ditolak BPD': 
+                                                                                case 'Ditolak': 
                                                                                     $badgeClass = 'badge-status-ditolak-bpd';
                                                                                     break;
                                                                                 default:

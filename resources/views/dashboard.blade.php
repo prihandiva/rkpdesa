@@ -135,7 +135,7 @@
                         ['label'=>'Gagal Terverifikasi','desc'=>'Gagal proses verifikasi','bg'=>'#fee2e2','color'=>'#991b1b'],
                         ['label'=>'Menunggu persetujuan BPD','desc'=>'Menunggu approval BPD','bg'=>'#ede9fe','color'=>'#5b21b6'],
                         ['label'=>'Disetujui','desc'=>'Telah disetujui oleh BPD','bg'=>'#dcfce7','color'=>'#166534'],
-                        ['label'=>'Ditolak BPD','desc'=>'BPD menolak usulan terkait','bg'=>'#fce7f3','color'=>'#9d174d'],
+                        ['label'=>'Ditolak','desc'=>'BPD menolak usulan terkait','bg'=>'#fce7f3','color'=>'#9d174d'],
                     ];
                     @endphp
                     <div class="d-flex flex-column gap-2">
@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", function() {
         'Gagal Terverifikasi':         '#ef4444',
         'Disetujui':                   '#059669',
         'Menunggu persetujuan BPD':    '#8b5cf6',
-        'Ditolak BPD':                 '#ec4899'
+        'Ditolak':                 '#ec4899'
     };
     const getStatusColor = (s) => statusColorsMap[s] || '#64748b';
 

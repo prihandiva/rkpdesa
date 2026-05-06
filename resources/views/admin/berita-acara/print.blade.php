@@ -67,7 +67,7 @@
         <tr>
             <td style="width: 150px;">Hari dan Tanggal</td>
             <td style="width: 20px;">:</td>
-            <td>{{ $beritaAcara->hari }}, {{ \Carbon\Carbon::parse($beritaAcara->tanggal)->translatedFormat('d F Y') }}</td>
+            <td>{{ \Carbon\Carbon::parse($beritaAcara->tanggal)->translatedFormat('l, d F Y') }}</td>
         </tr>
         <tr>
             <td>Jam</td>

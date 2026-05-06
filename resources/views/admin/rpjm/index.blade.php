@@ -140,7 +140,7 @@
                                                                             case 'Gagal Terverifikasi': $statusColor = 'danger'; break; // Merah
                                                                             case 'Disetujui': $statusColor = 'success'; break; // Hijau
                                                                             case 'Menunggu persetujuan BPD': $statusColor = 'light text-dark border'; break; // Putih
-                                                                            case 'Ditolak BPD': $statusColor = 'dark'; break; // Hitam
+                                                                            case 'Ditolak': $statusColor = 'dark'; break; // Hitam
                                                                             default: $statusColor = 'secondary';
                                                                         }
                                                                     @endphp

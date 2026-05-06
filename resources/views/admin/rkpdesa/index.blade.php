@@ -85,7 +85,7 @@
                                             <option value="Gagal Terverifikasi" {{ request('status') == 'Gagal Terverifikasi' ? 'selected' : '' }}>Gagal Terverifikasi</option>
                                             <option value="Menunggu persetujuan BPD" {{ request('status') == 'Menunggu persetujuan BPD' ? 'selected' : '' }}>Menunggu persetujuan BPD</option>
                                             <option value="Disetujui" {{ request('status') == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
-                                            <option value="Ditolak BPD" {{ request('status') == 'Ditolak BPD' ? 'selected' : '' }}>Ditolak BPD</option>
+                                            <option value="Ditolak" {{ request('status') == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                             
                                         </select>
                                     </div>
@@ -190,7 +190,7 @@
                                                         case 'Gagal Terverifikasi': $badgeClass = 'badge-status-gagal'; break;
                                                         case 'Disetujui': $badgeClass = 'badge-status-disetujui'; break;
                                                         case 'Menunggu persetujuan BPD': $badgeClass = 'badge-status-menunggu-bpd'; break;
-                                                        case 'Ditolak BPD': $badgeClass = 'badge-status-ditolak-bpd'; break;
+                                                        case 'Ditolak': $badgeClass = 'badge-status-ditolak-bpd'; break;
                                                         default: $badgeClass = 'bg-secondary text-white';
                                                     }
                                                 @endphp

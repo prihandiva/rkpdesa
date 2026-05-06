@@ -46,7 +46,7 @@ class RKPController extends Controller
 
         // Filter for BPD Role
         if (session('user_role') == 'bpd') {
-            $query->whereIn('status', ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD']);
+            $query->whereIn('status', ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak']);
         }
 
         // Sorting
@@ -435,7 +435,7 @@ class RKPController extends Controller
         $action = 'Diperbarui';
         if (str_contains($newStatus, 'Verifikasi') || $newStatus == 'Terverifikasi' || $newStatus == 'Gagal Terverifikasi') {
             $action = 'Diverifikasi';
-        } elseif ($newStatus == 'Disetujui' || $newStatus == 'Ditolak BPD') {
+        } elseif ($newStatus == 'Disetujui' || $newStatus == 'Ditolak') {
             $action = 'Keputusan BPD';
         }
 

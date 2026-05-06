@@ -88,8 +88,8 @@
 
                     <hr>
 
-                    <!-- ROLE: Tim Verifikasi -->
-                    @if(session('user_role') == 'tim_verifikasi')
+                    <!-- ROLE: Tim Verifikasi / Admin -->
+                    @if(session('user_role') == 'tim_verifikasi' || session('user_role') == 'admin')
                     <div class="card bg-light border mb-3">
                         <div class="card-body">
                             <h6 class="card-title text-info"><i class="feather-check-circle me-2"></i>Verifikasi Usulan</h6>
@@ -119,9 +119,9 @@
                     </div>
                     @endif
 
-                    <!-- ROLE: BPD -->
-                    @if(session('user_role') == 'bpd')
-                        @if(in_array($rkpDesa->status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD']))
+                    <!-- ROLE: BPD / Admin -->
+                    @if(session('user_role') == 'bpd' || session('user_role') == 'admin')
+                        @if(in_array($rkpDesa->status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak']))
                         <div class="card bg-light border mb-3">
                             <div class="card-body">
                                 <h6 class="card-title text-warning"><i class="feather-shield me-2"></i>Persetujuan BPD</h6>
@@ -133,7 +133,7 @@
                                         <select name="status" class="form-select">
                                             <option value="Menunggu persetujuan BPD" {{ $rkpDesa->status == 'Menunggu persetujuan BPD' ? 'selected' : '' }}>Menunggu persetujuan BPD</option>
                                             <option value="Disetujui" {{ $rkpDesa->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
-                                            <option value="Ditolak BPD" {{ $rkpDesa->status == 'Ditolak BPD' ? 'selected' : '' }}>Ditolak BPD</option>
+                                            <option value="Ditolak" {{ $rkpDesa->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                         </select>
                                     </div>
                                     <div class="text-end">
@@ -151,8 +151,8 @@
                         @endif
                     @endif
 
-                    <!-- ROLE: Penyusun RKP -->
-                    @if(session('user_role') == 'tim_penyusun')
+                    <!-- ROLE: Penyusun RKP / Admin -->
+                    @if(session('user_role') == 'tim_penyusun' || session('user_role') == 'admin')
                         @if($rkpDesa->status == 'Terverifikasi' || $rkpDesa->status == 'Disetujui')
                         <div class="card bg-light border mb-3">
                             <div class="card-body">
@@ -223,7 +223,7 @@
                             if ($status == 'Proses') $level = 1;
                             elseif ($status == 'Pending') $level = 2; // Diterima RKP
                             elseif (in_array($status, ['Terverifikasi', 'Gagal Terverifikasi'])) $level = 3;
-                            elseif (in_array($status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak BPD'])) $level = 4;
+                            elseif (in_array($status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak'])) $level = 4;
                             
                             $c_muted = 'muted';
                             $c_primary = 'primary';
@@ -289,7 +289,7 @@
                                 if ($status == 'Disetujui') {
                                     $step4Color = $c_success;
                                     $step4Icon = 'feather-check-square';
-                                } elseif ($status == 'Ditolak BPD') {
+                                } elseif ($status == 'Ditolak') {
                                     $step4Color = $c_danger;
                                     $step4Icon = 'feather-x-square';
                                 } else {
@@ -307,7 +307,7 @@
                                 <small class="text-muted">Musyawarah BPD</small>
                                 @if($status == 'Disetujui') 
                                     <span class="badge badge-status-disetujui ms-2">DISETUJUI</span>
-                                @elseif($status == 'Ditolak BPD') 
+                                @elseif($status == 'Ditolak') 
                                     <span class="badge badge-status-ditolak-bpd ms-2">DITOLAK</span>
                                 @elseif($status == 'Menunggu persetujuan BPD')
                                     <span class="badge badge-status-menunggu-bpd ms-2">Menunggu</span>
@@ -344,7 +344,7 @@
                                     $colorClass = 'badge-status-menunggu-bpd';
                                 } elseif (str_contains($statusStr, 'disetujui') || str_contains($judulStr, 'disetujui') || str_contains($deskripsiStr, 'disetujui')) {
                                     $colorClass = 'badge-status-disetujui';
-                                } elseif (str_contains($statusStr, 'ditolak bpd') || str_contains($judulStr, 'ditolak bpd') || str_contains($deskripsiStr, 'ditolak bpd')) {
+                                } elseif (str_contains($statusStr, 'Ditolak') || str_contains($judulStr, 'Ditolak') || str_contains($deskripsiStr, 'Ditolak')) {
                                     $colorClass = 'badge-status-ditolak-bpd';
                                 } elseif (str_contains($statusStr, 'proses') || str_contains($judulStr, 'proses') || str_contains($deskripsiStr, 'proses') || str_contains($judulStr, 'baru') || $statusStr == 'info') {
                                     $colorClass = 'badge-status-proses';

@@ -109,28 +109,24 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label for="hari" class="form-label">Hari</label>
-                                <input type="text" name="hari" id="hari" class="form-control" placeholder="Contoh: Senin" value="{{ old('hari', $beritaAcara->hari) }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label for="tanggal" class="form-label">Tanggal</label>
                                 <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ old('tanggal', $beritaAcara->tanggal ? $beritaAcara->tanggal->format('Y-m-d') : '') }}" required>
                             </div>
                         </div>
-                         <div class="col-md-2">
+                         <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                                <input type="time" name="jam_mulai" id="jam_mulai" class="form-control" value="{{ old('jam_mulai', $beritaAcara->jam_mulai) }}" required>
+                                <input type="text" name="jam_mulai" id="jam_mulai" class="form-control time-input" placeholder="08:00" value="{{ old('jam_mulai', $beritaAcara->jam_mulai) }}" maxlength="5" pattern="^([01][0-9]|2[0-3]):[0-5][0-9]$" title="Format 24 Jam (HH:mm)" required>
+                                <small class="text-muted">Format 24 Jam (HH:mm)</small>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group mb-3">
                                 <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                                <input type="time" name="jam_selesai" id="jam_selesai" class="form-control" value="{{ old('jam_selesai', $beritaAcara->jam_selesai) }}" required>
+                                <input type="text" name="jam_selesai" id="jam_selesai" class="form-control time-input" placeholder="10:00" value="{{ old('jam_selesai', $beritaAcara->jam_selesai) }}" maxlength="5" pattern="^([01][0-9]|2[0-3]):[0-5][0-9]$" title="Format 24 Jam (HH:mm)" required>
+                                <small class="text-muted">Format 24 Jam (HH:mm)</small>
                             </div>
                         </div>
                     </div>
@@ -430,6 +426,35 @@
                 inputs.forEach(input => input.value = '');
             }
         }
+    });
+
+    // Time Input Auto-Colon and Validation
+    document.querySelectorAll('.time-input').forEach(input => {
+        input.addEventListener('input', function(e) {
+            let val = this.value.replace(/[^0-9:]/g, '');
+            if (val.length === 2 && !val.includes(':') && e.inputType !== 'deleteContentBackward') {
+                val += ':';
+            }
+            if (val.length > 5) val = val.substring(0, 5);
+            this.value = val;
+        });
+
+        input.addEventListener('blur', function() {
+            const regex = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
+            if (this.value && !regex.test(this.value)) {
+                this.classList.add('is-invalid');
+                if (!this.nextElementSibling || !this.nextElementSibling.classList.contains('invalid-feedback')) {
+                    const feedback = document.createElement('div');
+                    feedback.className = 'invalid-feedback';
+                    feedback.textContent = 'Format waktu tidak valid (HH:mm).';
+                    this.parentNode.appendChild(feedback);
+                }
+            } else {
+                this.classList.remove('is-invalid');
+                const feedback = this.parentNode.querySelector('.invalid-feedback');
+                if (feedback) feedback.remove();
+            }
+        });
     });
 </script>
 @endpush
