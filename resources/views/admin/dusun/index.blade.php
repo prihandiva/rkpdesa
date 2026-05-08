@@ -113,9 +113,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if (isset($dusuns) && $dusuns->hasPages())
-                            <div class="d-flex justify-content-center mt-4">
-                                {{ $dusuns->links() }}
+                        @if ($dusuns->hasPages())
+                            <div class="card-footer bg-white border-top">
+                                {{ $dusuns->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>

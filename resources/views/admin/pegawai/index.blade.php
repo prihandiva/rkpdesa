@@ -124,9 +124,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if (isset($pegawais) && $pegawais->hasPages())
-                            <div class="d-flex justify-content-center mt-4">
-                                {{ $pegawais->links() }}
+                        @if ($pegawais->hasPages())
+                            <div class="card-footer bg-white border-top">
+                                {{ $pegawais->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>

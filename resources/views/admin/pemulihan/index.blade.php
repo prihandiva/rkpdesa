@@ -22,8 +22,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom p-0">
-                    <ul class="nav nav-tabs pemulihan-tabs border-bottom-0 mb-0 d-flex flex-nowrap overflow-auto" id="pemulihanTabs" role="tablist" style="padding: 0 1rem;">
+                <div class="card-header bg-white border-bottom p-2">
+                    <ul class="nav nav-pills pemulihan-tabs gap-2 d-flex flex-nowrap overflow-auto hide-scrollbar" id="pemulihanTabs" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="rpjm-tab" data-bs-toggle="tab" data-bs-target="#rpjm" type="button" role="tab" aria-controls="rpjm" aria-selected="true">
                                 <i class="feather-file-text me-2"></i>RPJM Desa 
@@ -208,26 +208,43 @@
 </script>
 
 <style>
+    .pemulihan-tabs {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE 10+ */
+    }
+    .pemulihan-tabs::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
     .pemulihan-tabs .nav-link {
-        color: #6c757d;
+        color: #64748b;
         border: none;
-        border-bottom: 3px solid transparent;
-        border-radius: 0;
-        padding: 1rem 1.2rem;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
         background: transparent;
         font-weight: 600;
         font-size: 14px;
-        transition: all 0.2s ease;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
+        white-space: nowrap;
     }
     .pemulihan-tabs .nav-link:hover {
-        color: var(--primary-color);
+        color: #4b3bdb;
+        background: rgba(75, 59, 219, 0.05);
     }
     .pemulihan-tabs .nav-link.active {
-        color: var(--primary-color);
-        border-bottom: 3px solid var(--primary-color);
-        background: transparent;
+        color: #4b3bdb !important;
+        background: rgba(75, 59, 219, 0.1) !important;
+        box-shadow: inset 0 0 0 1px rgba(75, 59, 219, 0.1);
+    }
+    .pemulihan-tabs .badge {
+        font-size: 11px;
+        padding: 0.35em 0.65em;
+        transition: all 0.2s ease;
+    }
+    .pemulihan-tabs .nav-link.active .badge {
+        background-color: #4b3bdb !important;
+        color: #fff !important;
     }
 </style>
 @endpush

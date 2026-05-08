@@ -117,9 +117,9 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if (isset($rts) && $rts->hasPages())
-                            <div class="d-flex justify-content-center mt-4">
-                                {{ $rts->links() }}
+                        @if ($rts->hasPages())
+                            <div class="card-footer bg-white border-top">
+                                {{ $rts->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>

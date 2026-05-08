@@ -236,21 +236,11 @@
                     <!--! [End] Card Body !-->
 
                     <!--! [Start] Card Footer - Pagination !-->
-                    <div class="card-footer bg-light border-top">
-                        <nav aria-label="Page navigation" class="mb-0">
-                            <ul class="pagination justify-content-center mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="javascript:void(0);">Previous</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="javascript:void(0);">1</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="javascript:void(0);">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+                    @if ($rkp_desa->hasPages())
+                        <div class="card-footer bg-light border-top">
+                            {{ $rkp_desa->links('pagination::bootstrap-5') }}
+                        </div>
+                    @endif
                     <!--! [End] Card Footer - Pagination !-->
                 </div>
             </div>
