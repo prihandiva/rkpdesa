@@ -17,12 +17,33 @@ class Rt extends Seeder
         $now = Carbon::now();
 
         $rows = [
-            // RTs for RW 1 (dusun-krajan)
-            ['id_rt' => '1', 'id_dusun' => '1', 'id_rw' => '1', 'nama_rt' => 'RT01', 'created_at' => $now, 'updated_at' => $now],
-            ['id_rt' => '2', 'id_dusun' => '1', 'id_rw' => '1', 'nama_rt' => 'RT02', 'created_at' => $now, 'updated_at' => $now],
-            // RTs for RW 2 (dusun-santren)
-            ['id_rt' => '3', 'id_dusun' => '2', 'id_rw' => '2', 'nama_rt' => 'RT01', 'created_at' => $now, 'updated_at' => $now],
-            ['id_rt' => '4', 'id_dusun' => '2', 'id_rw' => '2', 'nama_rt' => 'RT02', 'created_at' => $now, 'updated_at' => $now],
+            // Dusun 1 - RW 01
+            ['id_rt' => '1', 'id_dusun' => '1', 'id_rw' => '1', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '2', 'id_dusun' => '1', 'id_rw' => '1', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+            // Dusun 1 - RW 02
+            ['id_rt' => '3', 'id_dusun' => '1', 'id_rw' => '2', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '4', 'id_dusun' => '1', 'id_rw' => '2', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+            
+            // Dusun 2 - RW 03
+            ['id_rt' => '5', 'id_dusun' => '2', 'id_rw' => '3', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '6', 'id_dusun' => '2', 'id_rw' => '3', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+            // Dusun 2 - RW 04
+            ['id_rt' => '7', 'id_dusun' => '2', 'id_rw' => '4', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '8', 'id_dusun' => '2', 'id_rw' => '4', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+
+            // Dusun 3 - RW 05
+            ['id_rt' => '9', 'id_dusun' => '3', 'id_rw' => '5', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '10', 'id_dusun' => '3', 'id_rw' => '5', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+            // Dusun 3 - RW 06
+            ['id_rt' => '11', 'id_dusun' => '3', 'id_rw' => '6', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '12', 'id_dusun' => '3', 'id_rw' => '6', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+
+            // Dusun 4 - RW 07
+            ['id_rt' => '13', 'id_dusun' => '4', 'id_rw' => '7', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '14', 'id_dusun' => '4', 'id_rw' => '7', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
+            // Dusun 4 - RW 08
+            ['id_rt' => '15', 'id_dusun' => '4', 'id_rw' => '8', 'nama_rt' => 'RT 01', 'created_at' => $now, 'updated_at' => $now],
+            ['id_rt' => '16', 'id_dusun' => '4', 'id_rw' => '8', 'nama_rt' => 'RT 02', 'created_at' => $now, 'updated_at' => $now],
         ];
 
         foreach ($rows as $r) {

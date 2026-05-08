@@ -22,7 +22,6 @@ class Roles extends Seeder
             ['id_role' => '4', 'nama' => 'tim_verifikasi', 'created_at' => $now, 'updated_at' => $now],
             ['id_role' => '5', 'nama' => 'tim_penyusun', 'created_at' => $now, 'updated_at' => $now],
             ['id_role' => '6', 'nama' => 'bpd', 'created_at' => $now, 'updated_at' => $now],
-            ['id_role' => '7', 'nama' => 'bendahara', 'created_at' => $now, 'updated_at' => $now],
         ];
 
         // Use upsert to avoid duplicate inserts when seeding multiple times
