@@ -324,4 +324,15 @@ class UsulanController extends Controller
         return redirect()->route('usulan.index')
             ->with('success', 'Usulan berhasil dihapus');
     }
+
+    /**
+     * Export Excel data usulan
+     */
+    public function exportExcel(Request $request)
+    {
+        $tahun = $request->input('tahun');
+        $status = $request->input('status');
+
+        return \Excel::download(new \App\Exports\UsulanExport($tahun, $status), 'Daftar_Usulan.xlsx');
+    }
 }

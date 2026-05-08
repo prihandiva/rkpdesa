@@ -943,6 +943,7 @@
     </script>
     <!--! [End] SweetAlert2 Global Handler -->
 
+    @stack('modals')
     @stack('scripts')
 </body>
 

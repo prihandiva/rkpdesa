@@ -79,6 +79,7 @@ Route::prefix('admin')->group(function () {
     Route::put('rpjm/{id}/prioritas', [RPJMController::class, 'updatePrioritas'])->name('rpjm.update_prioritas');
 
     Route::post('usulan/upload-berita-acara', [UsulanController::class, 'uploadBeritaAcara'])->name('usulan.upload_ba');
+    Route::get('usulan/export-excel', [UsulanController::class, 'exportExcel'])->name('usulan.export_excel');
     Route::resource('usulan', UsulanController::class);
     Route::put('rkpdesa/{id}/status', [RKPController::class, 'updateStatus'])->name('rkpdesa.update_status');
     Route::post('rkpdesa/submit-bpd', [RKPController::class, 'submitToBPD'])->name('rkpdesa.submit_bpd');
