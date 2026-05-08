@@ -393,10 +393,10 @@ class BeritaAcaraController extends Controller
         $beritaAcara = BeritaAcara::with(['dusun', 'tahun', 'peserta', 'absensi'])->findOrFail($id);
         
         $judul = match($beritaAcara->jenis) {
-            'Musdus'     => 'MUSYAWARAH DUSUN',
-            'Musrenbang' => 'MUSRENBANG DESA',
-            'BPD'        => 'MUSYAWARAH DESA',
-            default      => 'MUSYAWARAH',
+            'Musdus'     => 'Musyawarah ' . ($beritaAcara->dusun->nama ?? ''),
+            'Musrenbang' => 'Musyawarah Perencanaan Pembangunan Desa',
+            'BPD'        => 'Musyawarah Desa',
+            default      => 'Musyawarah',
         };
 
         $kades = \App\Models\Pegawai::where('posisi', 'Kepala Desa')->first();

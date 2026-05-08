@@ -157,26 +157,30 @@
                     Mengetahui/Menyetujui:
                 </td>
             </tr>
+            @if($beritaAcara->jenis == 'BPD')
             <tr>
-                <td style="width: 50%;">Kepala Desa</td>
-                @if($beritaAcara->jenis == 'BPD')
                 <td style="width: 50%;">Ketua BPD</td>
-                @else
-                <td></td>
-                @endif
+                <td style="width: 50%;">Kepala Desa</td>
             </tr>
             <tr>
                 <td style="height: 50px;"></td>
                 <td style="height: 50px;"></td>
             </tr>
             <tr>
-                <td><u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u></td>
-                @if($beritaAcara->jenis == 'BPD')
                 <td><u><b>{{ $userBpd ? strtoupper($userBpd->nama) : ($beritaAcara->nama_bpd ?? '.........................') }}</b></u></td>
-                @else
-                <td></td>
-                @endif
+                <td><u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u></td>
             </tr>
+            @else
+            <tr>
+                <td colspan="2" style="text-align: center;">Kepala Desa</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="height: 50px;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;"><u><b>{{ $kades ? strtoupper($kades->nama) : '.........................' }}</b></u></td>
+            </tr>
+            @endif
         </table>
     </div>
 
@@ -213,6 +217,25 @@
     <div class="text-center fw-bold mt-4 mb-4">
         DAFTAR HADIR PESERTA MUSYAWARAH
     </div>
+
+    <!-- META DATA (Attendance Page) -->
+    <table class="table-borderless mb-4" style="width: 100%;">
+        <tr>
+            <td style="width: 150px;">Hari dan Tanggal</td>
+            <td style="width: 20px;">:</td>
+            <td>{{ \Carbon\Carbon::parse($beritaAcara->tanggal)->translatedFormat('l, d F Y') }}</td>
+        </tr>
+        <tr>
+            <td>Jam</td>
+            <td>:</td>
+            <td>{{ \Carbon\Carbon::parse($beritaAcara->jam_mulai)->format('H.i') }} WIB - {{ $beritaAcara->jam_selesai ? \Carbon\Carbon::parse($beritaAcara->jam_selesai)->format('H.i') . ' WIB' : 'Selesai' }}</td> 
+        </tr>
+        <tr>
+            <td>Tempat</td>
+            <td>:</td>
+            <td>{{ $beritaAcara->tempat }}</td>
+        </tr>
+    </table>
     
     <table class="peserta-table">
         <thead>
