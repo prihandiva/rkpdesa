@@ -56,7 +56,7 @@
         <tr><td colspan="7"></td></tr>
         <tr>
             <td colspan="4"></td>
-            <td colspan="3" style="text-align: center;">Malang, {{ \Carbon\Carbon::now()->isoFormat('D MMMM Y') }}</td>
+            <td colspan="3" style="text-align: center;">Pandanlandung, {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y') }}</td>
         </tr>
         <tr>
             <td colspan="3" style="text-align: center;">Sekretaris Desa</td>

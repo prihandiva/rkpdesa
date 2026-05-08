@@ -1,7 +1,13 @@
 <table>
     <thead>
         <tr>
-            <th colspan="12" style="text-align: center; font-weight: bold; font-size: 14px;">RANCANGAN RENCANA KERJA PEMERINTAH DESA (RKPDESA)</th>
+            <th colspan="12" style="text-align: center; font-weight: bold; font-size: 14px;">
+                @if($status == 'Menunggu persetujuan BPD')
+                    RANCANGAN RENCANA KERJA PEMERINTAH DESA (RKPDESA)
+                @else
+                    RENCANA KERJA PEMERINTAH DESA (RKPDESA)
+                @endif
+            </th>
         </tr>
         <tr>
             <th colspan="12" style="text-align: center; font-weight: bold; font-size: 14px;">TAHUN ANGGARAN {{ $tahunAktif }}</th>
@@ -108,15 +114,15 @@
         <!-- Signatures -->
         <tr>
             <td colspan="8" style="text-align: center;"></td>
-            <td colspan="4" style="text-align: center;">Pandanlandung, ...... Desember {{ $tahunAktif - 1 }}</td>
+            <td colspan="4" style="text-align: center;">Pandanlandung, {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y') }}</td>
         </tr>
         <tr>
             <td colspan="8" style="text-align: center;">Mengetahui,</td>
             <td colspan="4" style="text-align: center;">Disetujui Oleh:</td>
         </tr>
         <tr>
-            <td colspan="8" style="text-align: center;">Kepala Desa Pandanlandung</td>
-            <td colspan="4" style="text-align: center;">Sekretaris Desa</td>
+            <td colspan="8" style="text-align: center;">Pj. Kepala Desa Pandanlandung</td>
+            <td colspan="4" style="text-align: center;">Ketua Timsun RKPDesa</td>
         </tr>
         <tr>
             <td colspan="12"></td>

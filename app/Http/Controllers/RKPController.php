@@ -512,8 +512,11 @@ class RKPController extends Controller
     /**
      * Export RKP Desa to Excel
      */
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new RKPDesaExport, 'RKPDesa_'.date('Y').'.xlsx');
+        $tahun = $request->input('tahun');
+        $status = $request->input('status');
+
+        return Excel::download(new RKPDesaExport($tahun, $status), 'RKPDesa_'.date('Y').'.xlsx');
     }
 }

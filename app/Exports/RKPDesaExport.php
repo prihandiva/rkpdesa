@@ -12,13 +12,23 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class RKPDesaExport implements FromView, ShouldAutoSize, WithStyles
 {
+    protected $tahun;
+    protected $status;
+
+    public function __construct($tahun = null, $status = null)
+    {
+        $this->tahun = $tahun;
+        $this->status = $status;
+    }
+
     public function view(): View
     {
-        $tahunAktif = Tahun::where('status', 'aktif')->value('tahun') ?? date('Y');
+        $tahunAktif = $this->tahun ?: (Tahun::where('status', 'aktif')->value('tahun') ?? date('Y'));
+        $statusToQuery = $this->status ?: 'Disetujui';
         
-        // Mengambil data RKPDesa yang disetujui, tahun aktif, dan join dengan relasinya
+        // Mengambil data RKPDesa sesuai status, tahun aktif, dan join dengan relasinya
         $rkpdesa = RKPDesa::with(['masterBidang'])
-            ->where('status', 'Disetujui')
+            ->where('status', $statusToQuery)
             ->where('tahun', $tahunAktif)
             ->orderBy('prioritas', 'asc')
             ->get();
@@ -34,7 +44,8 @@ class RKPDesaExport implements FromView, ShouldAutoSize, WithStyles
             'groupedRkpdesa' => $groupedData,
             'tahunAktif' => $tahunAktif,
             'kades' => $kades,
-            'sekdes' => $sekdes
+            'sekdes' => $sekdes,
+            'status' => $statusToQuery
         ]);
     }
 

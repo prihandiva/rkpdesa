@@ -140,11 +140,7 @@
         <tr>
             <td colspan="12" style="text-align: center;"></td>
             <td colspan="4" style="text-align: center;">
-                @php
-                    $months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                    $currentDate = date('d') . ' ' . $months[date('n') - 1] . ' ' . date('Y');
-                @endphp
-                Pandanlandung, {{ $currentDate }}
+                Pandanlandung, {{ \Carbon\Carbon::now()->locale('id')->isoFormat('D MMMM Y') }}
             </td>
         </tr>
         <tr>

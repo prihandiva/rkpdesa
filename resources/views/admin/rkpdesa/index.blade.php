@@ -66,9 +66,9 @@
                     <div class="card-header bg-white border-bottom d-flex align-items-center justify-content-between p-4">
                         <h6 class="m-0 fw-bold text-primary">Rencana Kerja Pembangunan Desa</h6>
                         <div class="btn-group" role="group">
-                            <a href="{{ route('rkpdesa.export_excel') }}" class="btn btn-sm btn-success shadow-sm">
+                            <button type="button" class="btn btn-sm btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#exportRkpdesaModal">
                                 <i class="feather-download me-1"></i>Cetak RKP Desa
-                            </a>
+                            </button>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -338,4 +338,42 @@
             color: #fff !important;
         }
     </style>
+
+    @push('modals')
+    <!-- Modal Export Excel -->
+    <div class="modal fade" id="exportRkpdesaModal" tabindex="-1" aria-labelledby="exportRkpdesaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('rkpdesa.export_excel') }}" method="GET" target="_blank">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exportRkpdesaModalLabel">Cetak RKP Desa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="export_tahun" class="form-label">Tahun</label>
+                            <select name="tahun" id="export_tahun" class="form-select">
+                                <option value="">Semua Tahun</option>
+                                @foreach($tahuns as $th)
+                                    <option value="{{ $th->tahun }}">{{ $th->tahun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="export_status" class="form-label">Status (Jenis Cetakan)</label>
+                            <select name="status" id="export_status" class="form-select">
+                                <option value="Disetujui">Fix (Disetujui)</option>
+                                <option value="Menunggu persetujuan BPD">Rancangan (Menunggu Persetujuan BPD)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-success"><i class="feather-printer me-2"></i>Cetak Excel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @endpush
 @endsection
