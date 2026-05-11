@@ -115,74 +115,79 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Bidang <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="bidang" required>
+                                    <select class="form-select @error('bidang') is-invalid @enderror" name="bidang" required>
                                         <option value="">-- Pilih Bidang --</option>
                                         @foreach($bidangs as $bidang)
                                             <option value="{{ $bidang->id_bidang }}" {{ (old('bidang') ?? $rpjm->bidang) == $bidang->id_bidang ? 'selected' : '' }}>{{ $bidang->nama }}</option>
                                         @endforeach
                                     </select>
+                                    @error('bidang') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Sub Bidang</label>
-                                    <input type="text" class="form-control" name="subbidang" value="{{ old('subbidang') ?? $rpjm->subbidang }}" placeholder="Contoh: Pembangunan Jalan">
+                                    <label class="form-label">Sub Bidang <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('subbidang') is-invalid @enderror" name="subbidang" value="{{ old('subbidang') ?? $rpjm->subbidang }}" placeholder="Contoh: Pembangunan Jalan" required>
+                                    @error('subbidang') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Jenis <span class="text-danger">*</span></label>
-                                    <select class="form-select" name="jenis" required>
+                                    <select class="form-select @error('jenis') is-invalid @enderror" name="jenis" required>
                                         <option value="">-- Pilih Jenis --</option>
                                         <option value="Fisik" {{ (old('jenis') ?? $rpjm->jenis) == 'Fisik' ? 'selected' : '' }}>Fisik</option>
                                         <option value="Non Fisik" {{ (old('jenis') ?? $rpjm->jenis) == 'Non Fisik' ? 'selected' : '' }}>Non Fisik</option>
                                     </select>
+                                    @error('jenis') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-8 mb-3">
                                     <label class="form-label">Jenis Kegiatan / Nama Kegiatan <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="jenis_kegiatan" required placeholder="Nama kegiatan..." value="{{ old('jenis_kegiatan') ?? $rpjm->jenis_kegiatan }}">
+                                    <input type="text" class="form-control @error('jenis_kegiatan') is-invalid @enderror" name="jenis_kegiatan" required placeholder="Nama kegiatan..." value="{{ old('jenis_kegiatan') ?? $rpjm->jenis_kegiatan }}">
+                                    @error('jenis_kegiatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Lokasi</label>
-                                    <input type="text" class="form-control" name="lokasi" value="{{ old('lokasi') ?? $rpjm->lokasi }}" placeholder="Lokasi kegiatan...">
+                                    <label class="form-label">Lokasi <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('lokasi') is-invalid @enderror" name="lokasi" value="{{ old('lokasi') ?? $rpjm->lokasi }}" placeholder="Lokasi kegiatan..." required>
+                                    @error('lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Volume</label>
-                                    <input type="text" class="form-control" name="volume" value="{{ old('volume') ?? $rpjm->volume }}" placeholder="Contoh: 100 m">
+                                    <label class="form-label">Volume <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('volume') is-invalid @enderror" name="volume" value="{{ old('volume') ?? $rpjm->volume }}" placeholder="Contoh: 100 m" required>
+                                    @error('volume') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Sasaran / Penerima Manfaat</label>
-                                    <input type="text" class="form-control" name="sasaran" value="{{ old('sasaran') ?? $rpjm->sasaran }}" placeholder="Contoh: Warga Dusun 1">
+                                    <label class="form-label">Sasaran / Penerima Manfaat <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('sasaran') is-invalid @enderror" name="sasaran" value="{{ old('sasaran') ?? $rpjm->sasaran }}" placeholder="Contoh: Warga Dusun 1" required>
+                                    @error('sasaran') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Waktu Pelaksanaan</label>
-                                    <input type="text" class="form-control" name="waktu" value="{{ old('waktu') ?? $rpjm->waktu }}" placeholder="Contoh: 3 Bulan">
-                                </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Tahun Pelaksanaan</label>
-                                    <select class="form-select" name="tahun_pelaksanaan">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Tahun Pelaksanaan <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('tahun_pelaksanaan') is-invalid @enderror" name="tahun_pelaksanaan" required>
                                         <option value="">-- Pilih Tahun --</option>
                                         @for($i = 1; $i <= 8; $i++)
                                             <option value="{{ $i }}" {{ (old('tahun_pelaksanaan') ?? $rpjm->tahun_pelaksanaan) == $i ? 'selected' : '' }}>Tahun ke-{{ $i }}</option>
                                         @endfor
                                     </select>
+                                    @error('tahun_pelaksanaan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Perkiraan Biaya (Rp)</label>
-                                    <input type="number" class="form-control" name="jumlah" value="{{ old('jumlah') ?? $rpjm->jumlah }}" placeholder="0">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Perkiraan Biaya (Rp) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control @error('jumlah') is-invalid @enderror" name="jumlah" value="{{ old('jumlah', $rpjm->jumlah) }}" placeholder="0" required>
+                                    @error('jumlah') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="col-md-3 mb-3">
-                                    <label class="form-label">Sumber Dana</label>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Sumber Dana <span class="text-danger">*</span></label>
                                     @php
                                         $selectedBiaya = old('sumber_biaya', is_array($rpjm->sumber_biaya) ? $rpjm->sumber_biaya : [$rpjm->sumber_biaya]);
                                     @endphp
                                     <div class="dropdown">
-                                        <button class="btn btn-light border dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center bg-white" type="button" id="dropdownSumberDana" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="padding: 0.5rem 0.75rem;">
+                                        <button class="btn btn-light border dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center bg-white @error('sumber_biaya') border-danger @enderror" type="button" id="dropdownSumberDana" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" style="padding: 0.5rem 0.75rem;">
                                             <span class="text-muted" id="dropdownSumberDanaText" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-- Pilih Sumber Dana --</span>
                                         </button>
                                         <ul class="dropdown-menu w-100 px-3 py-2 shadow-sm" aria-labelledby="dropdownSumberDana" style="max-height: 250px; overflow-y: auto;">
@@ -204,19 +209,21 @@
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Pola Pelaksanaan</label>
-                                    <select class="form-select" name="pola_pelaksanaan">
+                                    <label class="form-label">Pola Pelaksanaan <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('pola_pelaksanaan') is-invalid @enderror" name="pola_pelaksanaan" required>
                                         <option value="">-- Pilih Pola --</option>
                                         @foreach($pola_pelaksanaans as $pp)
                                             <option value="{{ $pp->id_pelaksanaan }}" {{ (old('pola_pelaksanaan') ?? $rpjm->pola_pelaksanaan) == $pp->id_pelaksanaan ? 'selected' : '' }}>{{ $pp->nama }}</option>
                                         @endforeach
                                     </select>
+                                    @error('pola_pelaksanaan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Prioritas <span class="text-danger">*</span></label>
-                                    <input type="number" class="form-control" name="prioritas" value="{{ old('prioritas', $rpjm->prioritas) }}" min="1" required placeholder="Masukkan angka prioritas (1, 2, 3...)">
+                                    <input type="number" class="form-control @error('prioritas') is-invalid @enderror" name="prioritas" value="{{ old('prioritas', $rpjm->prioritas) }}" min="1" required placeholder="Masukkan angka prioritas (1, 2, 3...)">
                                     <div class="form-text text-muted">Angka prioritas harus unik dalam satu bidang.</div>
                                     <small class="text-danger" id="prioritas-error" style="display:none;"></small>
+                                    @error('prioritas') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                 </div>
                             </div>
 

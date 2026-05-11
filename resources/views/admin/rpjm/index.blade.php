@@ -105,7 +105,7 @@
                                                             <th>Jenis Kegiatan</th>
                                                             <th>Lokasi</th>
                                                             <th>Volume</th>
-                                                            <th>Waktu</th>
+                                                            <th>Tahun ke-</th>
                                                             <th>Biaya</th>
                                                             <!-- <th>Status</th> -->
                                                             <th>Aksi</th>
@@ -128,7 +128,7 @@
                                                                 <td>{{ $rpjm->jenis_kegiatan }}</td>
                                                                 <td>{{ $rpjm->lokasi }}</td>
                                                                 <td>{{ $rpjm->volume }}</td>
-                                                                <td>{{ $rpjm->waktu }}</td>
+                                                                <td>{{ $rpjm->tahun_pelaksanaan ? 'Tahun ke-' . $rpjm->tahun_pelaksanaan : '-' }}</td>
                                                                 <td>Rp {{ number_format($rpjm->jumlah, 0, ',', '.') }}</td>
                                                                  <!-- <td>
                                                                     @php

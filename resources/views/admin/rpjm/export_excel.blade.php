@@ -35,7 +35,7 @@
             <th rowspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">LOKASI <br>( RT / RW <br>DUSUN )</th>
             <th rowspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">PERKIRAAN <br>VOLUME</th>
             <th rowspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">SASARAN / <br>MANFAAT</th>
-            <th colspan="8" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">WAKTU PELAKSANAAN</th>
+            <th colspan="8" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">TAHUN PELAKSANAAN</th>
             <th colspan="2" style="border: 1px solid #000; text-align: center; font-weight: bold; vertical-align: middle;">PRAKIRAAN BIAYA &amp; SUMBERDANA</th>
         </tr>
         <tr>

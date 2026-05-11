@@ -71,10 +71,12 @@
                                         <th>Tahun Pelaksanaan</th>
                                         <td>{{ $rpjm->tahun_pelaksanaan ? 'Tahun ke-' . $rpjm->tahun_pelaksanaan : '-' }}</td>
                                     </tr>
+                                    @if($rpjm->waktu)
                                     <tr>
                                         <th>Waktu Pelaksanaan</th>
-                                        <td>{{ $rpjm->waktu ?? '-' }}</td>
+                                        <td>{{ $rpjm->waktu }}</td>
                                     </tr>
+                                    @endif
                                     <tr>
                                         <th>Perkiraan Biaya</th>
                                         <td>Rp {{ number_format($rpjm->jumlah, 0, ',', '.') }}</td>

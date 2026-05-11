@@ -168,16 +168,41 @@
                 z-index: 100;
             }
 
+            /* Sidebar header (logo area) — must match nxl-header height */
+            .nxl-navigation .m-header {
+                height: 80px;
+                min-height: 80px;
+                display: flex;
+                align-items: center;
+                padding: 0 20px;
+                border-bottom: 1px solid rgba(0,0,0,0.07);
+                flex-shrink: 0;
+            }
+
+            /* Top header bar — match sidebar logo height */
+            .nxl-header {
+                height: 80px;
+                min-height: 80px;
+                margin-left: 0;
+                display: flex;
+                align-items: center;
+                /* Lower z-index so sidebar can overlay header on hover */
+                z-index: 200 !important;
+            }
+
+            /* Toggle button inside header — center vertically */
+            .nxl-navigation-toggle {
+                height: 80px;
+                display: flex;
+                align-items: center;
+            }
+
             .nxl-container {
                 margin-left: 280px;
                 width: calc(100% - 280px);
                 display: flex;
                 flex-direction: column;
                 min-height: 100vh;
-            }
-
-            .nxl-header {
-                margin-left: 0;
             }
 
             .page-content {
@@ -399,150 +424,167 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
         }
     
-        /* Sidebar Mini (Collapsed) - Added for responsiveness */
-
-        /* Sidebar Mini (Collapsed) - Added for responsiveness */
+        /* ══════════════════════════════════════════════════
+         * SIDEBAR MINI (COLLAPSED) — Stable Hover System
+         * ══════════════════════════════════════════════════ */
         @media (min-width: 992px) {
+
+            /* ── Base: sidebar full width ── */
+            .nxl-navigation {
+                transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            /* ── Mini state: collapse to icon-only rail ── */
             body.sidebar-mini .nxl-navigation {
                 width: 80px;
-                z-index: 1000;
-                transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-                overflow-x: hidden; /* Prevent horizontal scroll or messy overflow during transition */
+                position: fixed;
+                z-index: 300;      /* above header (200) but below modals */
+                overflow: hidden;
+                overflow-y: auto;
             }
 
-            /* Expand on Hover */
+            /* ── On hover: expand OVER content and header ── */
             body.sidebar-mini .nxl-navigation:hover {
                 width: 280px;
-                box-shadow: 0 0 20px rgba(0,0,0,0.1);
+                z-index: 1200;     /* above header z-index override (200) */
+                box-shadow: 6px 0 24px rgba(0,0,0,0.12);
+                overflow-y: auto;
             }
 
+            /* ── Content area stays fixed at 80px indent ── */
             body.sidebar-mini .nxl-container {
                 margin-left: 80px;
                 width: calc(100% - 80px);
+                transition: none; /* no shift — sidebar overlays on hover */
             }
 
+            /* ── Header stays fixed at 80px indent ── */
             body.sidebar-mini .nxl-header {
                 left: 80px;
                 width: calc(100% - 80px);
-                transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            }
-            
-            /* Text Handling */
-            body.sidebar-mini .nxl-mtext {
-                display: none;
-                opacity: 0;
-                white-space: nowrap;
-                transition: opacity 0.2s ease;
+                transition: none;
             }
 
-            /* Show text only after a slight delay to allow width expansion */
-            body.sidebar-mini .nxl-navigation:hover .nxl-mtext {
-                display: inline-block;
-                opacity: 1;
-                transition-delay: 0.15s; 
-            }
-            
-            /* Caption Handling */
-            body.sidebar-mini .nxl-caption label {
-                display: none;
-                opacity: 0;
-                white-space: nowrap;
-                transition: opacity 0.2s ease;
-            }
-
-            body.sidebar-mini .nxl-navigation:hover .nxl-caption label {
-                display: block;
-                opacity: 1;
-                transition-delay: 0.15s;
-            }
-
-            /* Icon Alignment */
-            body.sidebar-mini .nxl-micon {
-                margin-right: 0;
-                justify-content: center;
-                min-width: 20px; /* Ensure icon doesn't shrink */
-                transition: all 0.3s ease;
-            }
-
-            body.sidebar-mini .nxl-navigation:hover .nxl-micon {
-                margin-right: 10px;
-                justify-content: center; /* Keep icon centered in its space, or align if needed */
-            }
-            
-            /* Link Justification & Padding */
-            body.sidebar-mini .nxl-item .nxl-link {
-                justify-content: center;
-                padding-left: 0;
-                padding-right: 0;
-                transition: all 0.3s ease;
-            }
-            
-            body.sidebar-mini .nxl-navigation:hover .nxl-item .nxl-link {
-                justify-content: flex-start;
-                padding-left: 25px; /* Add padding to align items nicely */
-                padding-right: 20px;
-            }
-            
-            /* Logo Handling - Crucial for fixing jump/cut-off */
+            /* ─────────────────────────────────
+             * m-header (logo row) — fixed height
+             * so the expand-button stays aligned
+             * ───────────────────────────────── */
             body.sidebar-mini .m-header {
                 display: flex;
                 align-items: center;
-                justify-content: center; /* Center logo by default in mini */
-                padding: 0;
-                overflow: hidden; /* Clip overflowing content during transition */
-                transition: all 0.3s ease;
+                justify-content: center;
+                height: 80px;       /* must match .nxl-header height (theme = 80px) */
+                min-height: 80px;
+                padding: 0 12px;
+                overflow: hidden;
+                flex-shrink: 0;
+                border-bottom: 1px solid rgba(0,0,0,0.07);
+                transition: padding 0.3s ease, justify-content 0.3s ease;
             }
 
             body.sidebar-mini .m-header .logo-lg {
-                display: none;
+                display: none !important;
                 opacity: 0;
-                transition: opacity 0.2s ease;
             }
-            
-            /* Show large logo on hover with delay */
-            body.sidebar-mini .nxl-navigation:hover .m-header .logo-lg {
-                display: inline-block;
-                opacity: 1;
-                transition-delay: 0.1s; 
-            }
-            
+
             body.sidebar-mini .m-header .logo-sm {
                 display: block !important;
                 margin: 0 auto;
                 opacity: 1;
-                transition: opacity 0.1s ease;
             }
 
-            /* Hide small logo on hover */
+            /* On hover: swap to full logo, align left */
+            body.sidebar-mini .nxl-navigation:hover .m-header {
+                justify-content: flex-start;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
             body.sidebar-mini .nxl-navigation:hover .m-header .logo-sm {
                 display: none !important;
                 opacity: 0;
             }
-            
-            /* Align header content to left on hover */
-            body.sidebar-mini .nxl-navigation:hover .m-header {
-                justify-content: flex-start;
-                padding-left: 25px; /* Match link padding */
+
+            body.sidebar-mini .nxl-navigation:hover .m-header .logo-lg {
+                display: inline-block !important;
+                opacity: 1;
             }
 
-            /* Hide downloads card */
+            /* ─────────────────────────────────
+             * Menu items — icon-only → icon+text
+             * ───────────────────────────────── */
+
+            /* Links: centered icons, no padding */
+            body.sidebar-mini .nxl-item .nxl-link {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                transition: padding 0.3s ease, justify-content 0.3s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-item .nxl-link {
+                justify-content: flex-start;
+                padding-left: 20px;
+                padding-right: 16px;
+            }
+
+            /* Icons: centered, no right margin */
+            body.sidebar-mini .nxl-micon {
+                flex-shrink: 0;
+                margin-right: 0;
+                transition: margin 0.3s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-micon {
+                margin-right: 10px;
+            }
+
+            /* Labels: hidden when mini */
+            body.sidebar-mini .nxl-mtext {
+                opacity: 0;
+                max-width: 0;
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+                transition: opacity 0.2s ease 0s, max-width 0.3s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-mtext {
+                opacity: 1;
+                max-width: 200px;
+                transition: opacity 0.2s ease 0.1s, max-width 0.3s ease;
+            }
+
+            /* Section captions: hidden when mini */
+            body.sidebar-mini .nxl-caption label {
+                opacity: 0;
+                max-width: 0;
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+                transition: opacity 0.2s ease 0s, max-width 0.3s ease;
+            }
+
+            body.sidebar-mini .nxl-navigation:hover .nxl-caption label {
+                opacity: 1;
+                max-width: 200px;
+                transition: opacity 0.2s ease 0.1s, max-width 0.3s ease;
+            }
+
+            /* Hide download card in mini mode */
             body.sidebar-mini .nxl-navigation .card {
                 display: none;
-                opacity: 0;
-                transition: opacity 0.2s ease;
             }
-            
+
             body.sidebar-mini .nxl-navigation:hover .card {
                 display: block;
-                opacity: 1;
-                transition-delay: 0.2s;
             }
-            
-            /* Toggle Buttons */
+
+            /* Toggle button visibility */
             body.sidebar-mini #menu-mini-button {
                 display: none !important;
             }
-            
+
             body.sidebar-mini #menu-expend-button {
                 display: flex !important;
             }

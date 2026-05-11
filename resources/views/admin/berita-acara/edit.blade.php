@@ -145,15 +145,15 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group mb-4">
-                        <label for="materi" class="form-label">Materi / Topik Pembahasan</label>
+                        <label for="materi" class="form-label">Materi / Topik Pembahasan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim...">{{ old('materi', $beritaAcara->materi) }}</textarea>
+                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim..." required>{{ old('materi', $beritaAcara->materi) }}</textarea>
                     </div>
 
                     <div class="form-group mb-0">
-                        <label for="putusan" class="form-label">Putusan / Kesepakatan</label>
+                        <label for="putusan" class="form-label">Putusan / Kesepakatan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan...">{{ old('putusan', $beritaAcara->putusan) }}</textarea>
+                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan..." required>{{ old('putusan', $beritaAcara->putusan) }}</textarea>
                     </div>
                 </div>
             </div>

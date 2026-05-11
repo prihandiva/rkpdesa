@@ -38,43 +38,52 @@
     {{-- ════════════════════════════════════════════════════════ --}}
     <div class="row g-3 mb-3">
         <div class="col-lg-4 col-md-6">
-            <div class="db-stat-card db-stat-indigo">
-                <div class="db-stat-body">
-                    <p class="db-stat-label">Total RPJM</p>
-                    <h2 class="db-stat-num">{{ number_format($totalRpjm) }}</h2>
-                    <p class="db-stat-desc">Rencana Pembangunan Jangka Menengah</p>
+            <a href="{{ route('rpjm.index') }}" class="db-stat-link">
+                <div class="db-stat-card db-stat-indigo">
+                    <div class="db-stat-body">
+                        <p class="db-stat-label">Total RPJM</p>
+                        <h2 class="db-stat-num">{{ number_format($totalRpjm) }}</h2>
+                        <p class="db-stat-desc">Rencana Pembangunan Jangka Menengah</p>
+                        <span class="db-stat-lihat">Lihat &rarr;</span>
+                    </div>
+                    <div class="db-stat-icon-wrap">
+                        <i class="feather-file-text db-stat-icon"></i>
+                    </div>
+                    <div class="db-stat-glow"></div>
                 </div>
-                <div class="db-stat-icon-wrap">
-                    <i class="feather-file-text db-stat-icon"></i>
-                </div>
-                <div class="db-stat-glow"></div>
-            </div>
+            </a>
         </div>
         <div class="col-lg-4 col-md-6">
-            <div class="db-stat-card db-stat-emerald">
-                <div class="db-stat-body">
-                    <p class="db-stat-label">Total Usulan</p>
-                    <h2 class="db-stat-num">{{ number_format($totalUsulan) }}</h2>
-                    <p class="db-stat-desc">Usulan dari seluruh dusun</p>
+            <a href="{{ route('usulan.index') }}" class="db-stat-link">
+                <div class="db-stat-card db-stat-emerald">
+                    <div class="db-stat-body">
+                        <p class="db-stat-label">Total Usulan</p>
+                        <h2 class="db-stat-num">{{ number_format($totalUsulan) }}</h2>
+                        <p class="db-stat-desc">Usulan dari seluruh dusun</p>
+                        <span class="db-stat-lihat">Lihat &rarr;</span>
+                    </div>
+                    <div class="db-stat-icon-wrap">
+                        <i class="feather-edit-2 db-stat-icon"></i>
+                    </div>
+                    <div class="db-stat-glow"></div>
                 </div>
-                <div class="db-stat-icon-wrap">
-                    <i class="feather-edit-2 db-stat-icon"></i>
-                </div>
-                <div class="db-stat-glow"></div>
-            </div>
+            </a>
         </div>
         <div class="col-lg-4 col-md-6">
-            <div class="db-stat-card db-stat-cyan">
-                <div class="db-stat-body">
-                    <p class="db-stat-label">Total RKP Desa</p>
-                    <h2 class="db-stat-num">{{ number_format($totalRkp) }}</h2>
-                    <p class="db-stat-desc">Rencana Kerja Pemerintah Desa</p>
+            <a href="{{ route('rkpdesa.index') }}" class="db-stat-link">
+                <div class="db-stat-card db-stat-cyan">
+                    <div class="db-stat-body">
+                        <p class="db-stat-label">Total RKP Desa</p>
+                        <h2 class="db-stat-num">{{ number_format($totalRkp) }}</h2>
+                        <p class="db-stat-desc">Rencana Kerja Pemerintah Desa</p>
+                        <span class="db-stat-lihat">Lihat &rarr;</span>
+                    </div>
+                    <div class="db-stat-icon-wrap">
+                        <i class="feather-send db-stat-icon"></i>
+                    </div>
+                    <div class="db-stat-glow"></div>
                 </div>
-                <div class="db-stat-icon-wrap">
-                    <i class="feather-send db-stat-icon"></i>
-                </div>
-                <div class="db-stat-glow"></div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -302,6 +311,32 @@
     height: 100%;
 }
 .db-stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
+
+/* ─── Stat Card Link ─── */
+.db-stat-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+}
+.db-stat-lihat {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.30);
+    border-radius: 20px;
+    padding: 3px 10px;
+    transition: background 0.2s, transform 0.2s;
+}
+.db-stat-link:hover .db-stat-lihat {
+    background: rgba(255,255,255,0.32);
+    transform: translateX(3px);
+}
 
 .db-stat-indigo { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); }
 .db-stat-emerald { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }

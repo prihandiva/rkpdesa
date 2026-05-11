@@ -2,9 +2,9 @@
 <!--! [Start] Header !-->
 <!--! ================================================================ !-->
 <header class="nxl-header">
-    <div class="header-wrapper">
+    <div class="header-wrapper" style="width:100%; display:flex; align-items:center;">
         <!--! [Start] Header Left !-->
-        <div class="header-left d-flex align-items-center gap-4">
+        <div class="header-left d-flex align-items-center gap-3">
             <!--! [Start] nxl-head-mobile-toggler !-->
             <a href="javascript:void(0);" class="nxl-head-mobile-toggler d-lg-none" id="mobile-collapse">
                 <div class="hamburger hamburger--arrowturn">
@@ -24,10 +24,20 @@
                 </a>
             </div>
             <!--! [End] nxl-navigation-toggle !-->
+
+            <!--! [Start] Realtime Clock !-->
+            <div class="header-realtime-clock d-none d-lg-flex align-items-center gap-2" id="headerRealtimeClock">
+                <i class="feather-clock" style="font-size:14px; opacity:0.6;"></i>
+                <span id="realtimeClockText" style="font-size:13px; font-weight:600; letter-spacing:0.2px; white-space:nowrap;"></span>
+            </div>
+            <!--! [End] Realtime Clock !-->
         </div>
-        <!--! [End] Header Left !-->
+        <!--! [End] Header Left -->
+        <!--! [Start] Header Divider !-->
+        <div class="header-divider d-none d-lg-block ms-auto me-2"></div>
+        <!--! [End] Header Divider !-->
         <!--! [Start] Header Right !-->
-        <div class="header-right ms-auto d-flex align-items-center gap-3">
+        <div class="header-right d-flex align-items-center gap-3">
             <!--! [Start] Header Search !-->
             <!-- <div class="nxl-h-item d-none d-md-flex">
                 <div class="input-group search-form">
@@ -245,8 +255,70 @@
 <!--! [End] Header !-->
 <!--! ================================================================ !-->
 
+<style>
+/* ─── Realtime Clock ─── */
+.header-realtime-clock {
+    padding: 5px 14px;
+    border-radius: 8px;
+    background: rgba(79, 70, 229, 0.07);
+    border: 1px solid rgba(79, 70, 229, 0.13);
+    color: #4f46e5;
+    transition: background 0.2s;
+    cursor: default;
+    user-select: none;
+}
+.header-realtime-clock i {
+    color: #6366f1;
+}
+[data-theme="dark"] .header-realtime-clock {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+}
+[data-theme="dark"] .header-realtime-clock i { color: #a5b4fc; }
+
+/* ─── Divider between left and right header ─── */
+.header-divider {
+    width: 1px;
+    height: 32px;
+    background: rgba(0,0,0,0.1);
+    margin: 0 4px;
+}
+[data-theme="dark"] .header-divider {
+    background: rgba(255,255,255,0.1);
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+
+    // === Realtime Indonesian Clock ===
+    (function() {
+        const clockEl = document.getElementById('realtimeClockText');
+        if (!clockEl) return;
+
+        const DAYS_ID   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+        const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni',
+                           'Juli','Agustus','September','Oktober','November','Desember'];
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function updateClock() {
+            const now = new Date();
+            const day   = DAYS_ID[now.getDay()];
+            const date  = now.getDate();
+            const month = MONTHS_ID[now.getMonth()];
+            const year  = now.getFullYear();
+            const hh    = pad(now.getHours());
+            const mm    = pad(now.getMinutes());
+            const ss    = pad(now.getSeconds());
+            clockEl.textContent = day + ', ' + date + ' ' + month + ' ' + year + '  ' + hh + ':' + mm + ':' + ss;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+    })();
+
     // === Logout Confirmation ===
     const btnLogout = document.getElementById('btn-logout');
     if (btnLogout) {

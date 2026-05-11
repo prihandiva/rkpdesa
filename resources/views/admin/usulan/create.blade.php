@@ -100,8 +100,9 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Deskripsi Lengkap</label>
-                                <textarea class="form-control" name="deskripsi" placeholder="Jelaskan detail usulan..." rows="3">{{ old('deskripsi') }}</textarea>
+                                <label class="form-label">Deskripsi Lengkap <span class="text-danger">*</span></label>
+                                <textarea class="form-control @error('deskripsi') is-invalid @enderror" name="deskripsi" placeholder="Jelaskan detail usulan..." rows="3" required>{{ old('deskripsi') }}</textarea>
+                                @error('deskripsi') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="mb-3">

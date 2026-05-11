@@ -72,9 +72,9 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="deskripsi" class="form-label">Deskripsi Lengkap</label>
+                                <label for="deskripsi" class="form-label">Deskripsi Lengkap <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('deskripsi') is-invalid @enderror"
-                                    id="deskripsi" name="deskripsi" rows="3">{{ old('deskripsi', $usulan->deskripsi) }}</textarea>
+                                    id="deskripsi" name="deskripsi" rows="3" required>{{ old('deskripsi', $usulan->deskripsi) }}</textarea>
                                 @error('deskripsi')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

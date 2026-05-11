@@ -110,9 +110,20 @@
                                             <td>{{ $user->username ?? '-' }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                <span class="badge {{ $user->role == 'admin' ? 'bg-danger' : 
-                                                    ($user->role == 'pegawai' ? 'bg-primary' : 'bg-success') }}">
-                                                    {{ ucfirst($user->role) }}
+                                                @php
+                                                    $roleStyles = [
+                                                        'admin' => ['bg' => 'bg-light-danger', 'text' => 'text-danger', 'icon' => 'feather-shield'],
+                                                        'operator_dusun' => ['bg' => 'bg-light-primary', 'text' => 'text-primary', 'icon' => 'feather-map-pin'],
+                                                        'operator_desa' => ['bg' => 'bg-light-info', 'text' => 'text-info', 'icon' => 'feather-home'],
+                                                        'tim_verifikasi' => ['bg' => 'bg-light-warning', 'text' => 'text-warning', 'icon' => 'feather-check-circle'],
+                                                        'tim_penyusun' => ['bg' => 'bg-light-secondary', 'text' => 'text-secondary', 'icon' => 'feather-users'],
+                                                        'bpd' => ['bg' => 'bg-light-success', 'text' => 'text-success', 'icon' => 'feather-award'],
+                                                    ];
+                                                    $style = $roleStyles[$user->role] ?? ['bg' => 'bg-light-dark', 'text' => 'text-dark', 'icon' => 'feather-user'];
+                                                @endphp
+                                                <span class="badge {{ $style['bg'] }} {{ $style['text'] }} rounded-pill px-3 py-2 fw-bold" style="font-size: 11px; letter-spacing: 0.3px; border: 1px solid rgba(0,0,0,0.03);">
+                                                    <i class="{{ $style['icon'] }} me-1" style="font-size: 12px;"></i>
+                                                    {{ strtoupper(str_replace('_', ' ', $user->role)) }}
                                                 </span>
                                             </td>
 
