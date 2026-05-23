@@ -211,6 +211,14 @@
         }
         
         /* 
+         * PAGINATION ICON FIX
+         * ---------------------------------------------------------
+         */
+        nav .w-5 { width: 1.25rem; }
+        nav .h-5 { height: 1.25rem; }
+        .pagination svg { width: 20px; height: 20px; }
+
+        /* 
          * TABLE LAYOUT FIXES
          * ---------------------------------------------------------
          */

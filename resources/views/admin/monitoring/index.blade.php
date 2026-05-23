@@ -44,8 +44,17 @@
         <!-- Activity Log Table -->
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
                     <h5 class="card-title mb-0">Log Aktivitas Terbaru</h5>
+                    <form action="{{ route('monitoring.index') }}" method="GET" class="d-flex">
+                        <div class="input-group input-group-sm" style="width: 250px;">
+                            <input type="text" name="search" class="form-control" placeholder="Cari user, role, IP..." value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit"><i class="feather-search"></i></button>
+                        </div>
+                        @if(request('search'))
+                            <a href="{{ route('monitoring.index') }}" class="btn btn-sm btn-light border ms-2" title="Reset Pencarian"><i class="feather-refresh-cw"></i></a>
+                        @endif
+                    </form>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -94,6 +103,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-3 px-3">
+                        {{ $logs->links() }}
                     </div>
                 </div>
             </div>

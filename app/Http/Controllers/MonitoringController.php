@@ -9,10 +9,24 @@ use Illuminate\Support\Facades\DB;
 
 class MonitoringController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Fetch logs with user data
-        $logs = MonitoringLog::with('user')->latest()->take(100)->get();
+        $query = MonitoringLog::with('user')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->whereHas('user', function ($qUser) use ($search) {
+                    $qUser->where('nama', 'like', "%{$search}%")
+                          ->orWhere('role', 'like', "%{$search}%");
+                })
+                ->orWhere('activity_type', 'like', "%{$search}%")
+                ->orWhere('ip_address', 'like', "%{$search}%");
+            });
+        }
+
+        $logs = $query->paginate(10)->appends($request->all());
 
         // Line Chart Data: Logins per day for the last 7 days
         $loginData = MonitoringLog::where('activity_type', 'login')
