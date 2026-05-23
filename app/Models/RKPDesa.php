@@ -131,4 +131,38 @@ class RKPDesa extends Model
 
         return true;
     }
+
+    /**
+     * Get the completion percentage of the RKP Desa data.
+     *
+     * @return int
+     */
+    public function getCompletionPercentageAttribute(): int
+    {
+        $requiredAttributes = [
+            'bidang',
+            'jenis_kegiatan',
+            'jenis',
+            'data_existing',
+            'target_capaian',
+            'lokasi',
+            'volume',
+            'penerima',
+            'waktu',
+            'jumlah',
+            'sumber_biaya',
+            'pola_pelaksanaan',
+            'tahun',
+            'prioritas',
+        ];
+
+        $filled = 0;
+        foreach ($requiredAttributes as $attribute) {
+            if (!empty($this->$attribute)) {
+                $filled++;
+            }
+        }
+
+        return (int) round(($filled / count($requiredAttributes)) * 100);
+    }
 }

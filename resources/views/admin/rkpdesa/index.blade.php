@@ -67,7 +67,7 @@
             'steps' => [
                 ['text' => 'Operator Desa input prioritas: klik {BTN:feather-eye::info} pada setiap kegiatan, lalu klik icon {BTN:feather-edit::secondary} di bagian Prioritas'],
                 ['text' => 'Tim Verifikator buka {BTN:feather-eye::info} setiap kegiatan, isi bagian Verifikasi Usulan dengan status {BTN:feather-clock:Pending:warning} {BTN:feather-check:Terverifikasi:success} {BTN:feather-x:Gagal Terverifikasi:danger} beserta Catatan Verifikasi'],
-                ['text' => 'Tim Penyusun RKP melengkapi data kegiatan berstatus {BTN:feather-check:Terverifikasi:success} dengan buka {BTN:feather-eye::info} lalu klik {BTN:feather-edit:Edit Data RKP:success} - semua field wajib diisi lengkap'],
+                ['text' => 'Tim Penyusun RKP melengkapi data kegiatan berstatus {BTN:feather-check:Terverifikasi:success} dengan buka {BTN:feather-eye::info} lalu klik {BTN:feather-edit:Edit Data RKP:success} - perhatikan kolom Kelengkapan untuk melihat persentase pengisian data (icon {BTN:feather-check-circle::success} muncul jika 100% lengkap)'],
                 ['text' => 'Centang kegiatan {BTN:feather-check-square::secondary} lalu klik {BTN:feather-send:Ajukan Persetujuan BPD:warning} - status berubah menjadi Menunggu Persetujuan BPD dan dapat dicetak sebagai Rancangan RKP Desa'],
                 ['text' => 'BPD melakukan approval akhir: buka {BTN:feather-eye::info} setiap kegiatan, pilih {BTN:feather-check:Disetujui:success} atau {BTN:feather-x:Ditolak:danger} sebagai status final'],
             ]
@@ -88,7 +88,20 @@
                         <!-- Filter Section -->
                         <div class="p-3 border-bottom bg-light">
                             <form action="{{ route('rkpdesa.index') }}" method="GET">
+                                <!-- Pertahankan parameter pencarian/tahun jika ada -->
+                                @if(request('tahun'))
+                                    <input type="hidden" name="tahun" value="{{ request('tahun') }}">
+                                @endif
+                                
                                 <div class="d-flex flex-wrap align-items-center gap-2">
+                                    <div style="min-width: 120px;">
+                                        <select name="per_page" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <option value="10" {{ request('per_page', '10') == '10' ? 'selected' : '' }}>10</option>
+                                            <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>25</option>
+                                            <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>50</option>
+                                            <option value="all" {{ request('per_page') == 'all' ? 'selected' : '' }}>Semua</option>
+                                        </select>
+                                    </div>
                                     <div style="min-width: 200px;">
                                         <select name="status" class="form-select form-select-sm">
                                             <option value="">Semua Status</option>
@@ -135,7 +148,8 @@
                                         </th>
                                         @endif
                                         <th style="width: 50px;">No</th>
-                                        <th>Deskripsi</th>
+                                        <th>Kegiatan</th>
+                                        <th style="width: 150px;">Kelengkapan</th>
                                         <th class="text-center">
                                             <a href="{{ route('rkpdesa.index', array_merge(request()->except('sort'), ['sort' => request('sort') == 'prioritas_desc' ? 'prioritas_asc' : 'prioritas_desc'])) }}" class="text-dark text-decoration-none">
                                                 Prioritas
@@ -168,7 +182,24 @@
                                             @endif
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                <div class="fw-bold">{{ $item->jenis_kegiatan }}</div>
+                                                <div class="fw-bold text-dark" style="max-width: 250px; white-space: normal;">
+                                                    {{ $item->jenis_kegiatan }}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $completion = $item->completion_percentage;
+                                                    $isComplete = $item->isComplete();
+                                                @endphp
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="progress flex-grow-1" style="height: 6px; background-color: #e9ecef; border-radius: 10px;">
+                                                        <div class="progress-bar {{ $isComplete ? 'bg-success' : 'bg-primary' }}" role="progressbar" style="width: {{ $completion }}%; border-radius: 10px;" aria-valuenow="{{ $completion }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <small class="text-muted fw-bold" style="font-size: 11px; width: 30px; text-align: right;">{{ $completion }}%</small>
+                                                    @if($isComplete)
+                                                        <i class="feather-check-circle text-success" style="font-size: 14px;" title="Data Lengkap & Siap Diajukan ke BPD"></i>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td class="text-center">
                                                 @if($item->prioritas)

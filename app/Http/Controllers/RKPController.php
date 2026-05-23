@@ -67,7 +67,13 @@ class RKPController extends Controller
             $query->orderBy('created_at', 'desc');
         }
 
-        $rkp_desa = $query->paginate(10)->appends($request->all());
+        // Pagination
+        $perPage = $request->get('per_page', 10);
+        if ($perPage === 'all') {
+            $total = $query->count();
+            $perPage = $total > 0 ? $total : 1;
+        }
+        $rkp_desa = $query->paginate((int) $perPage)->appends($request->all());
         
         return view('admin.rkpdesa.index', compact('rkp_desa', 'tahuns', 'selectedTahunId', 'selectedTahun'));
     }
