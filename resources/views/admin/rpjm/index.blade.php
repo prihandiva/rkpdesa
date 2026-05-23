@@ -24,10 +24,10 @@
                     <div class="page-header-right-items">
                          <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
                             @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
-                                <a href="{{ route('rpjm.export_excel', ['periode' => request('periode')]) }}" class="btn btn-md btn-success shadow-sm me-2">
-                                    <i class="feather-download me-2"></i>
+                                <button type="button" class="btn btn-md btn-outline-success shadow-sm me-2 btn-cetak-rpjm" data-bs-toggle="modal" data-bs-target="#exportExcelRpjmModal">
+                                    <i class="feather-printer me-2"></i>
                                     <span>Cetak RPJM (Excel)</span>
-                                </a>
+                                </button>
                                 <a href="{{ route('rpjm.create') }}" class="btn btn-md btn-primary shadow-sm">
                                     <i class="feather-plus me-2"></i>
                                     <span>Tambah RPJM</span>
@@ -38,6 +38,17 @@
                 </div>
             </div>
             <!-- [ page-header ] end -->
+        <!--! [Start] Info Guide Card !-->
+        @include('admin.components.info-card', [
+            'icon'  => 'feather-book-open',
+            'title' => 'Panduan pengisian data RPJM Desa',
+            'steps' => [
+                ['text' => 'Operator Desa dapat menambahkan data baru dengan klik button {BTN:feather-plus:Tambah RPJM:primary}'],
+                ['text' => 'Lihat Detail {BTN:feather-eye::info}, Edit {BTN:feather-edit::warning}, dan Hapus {BTN:feather-trash-2::danger} tersedia pada setiap baris data'],
+                ['text' => 'Unduh seluruh data dalam format Excel dengan klik {BTN:feather-printer:Cetak RPJM (Excel):success} lalu pilih Periode yang diinginkan'],
+            ]
+        ])
+        <!--! [End] Info Guide Card !-->
 
         <!--! [Start] Main Content Card !-->
         <div class="row">
@@ -102,7 +113,7 @@
                                                             {{-- @if(isset($currentUser) && ($currentUser->role == 'operator_desa' || $currentUser->role == 'admin'))
                                                                 <th width="50" class="text-center">#</th>
                                                             @endif --}}
-                                                            <th>Jenis Kegiatan</th>
+                                                            <th style="min-width: 220px; max-width: 320px;">Jenis Kegiatan</th>
                                                             <th>Lokasi</th>
                                                             <th>Volume</th>
                                                             <th>Tahun ke-</th>
@@ -125,7 +136,7 @@
                                                                     </td>
                                                                 @endif --}}
                                                                 
-                                                                <td>{{ $rpjm->jenis_kegiatan }}</td>
+                                                                <td style="min-width: 220px; max-width: 320px; white-space: normal; word-break: break-word;">{{ $rpjm->jenis_kegiatan }}</td>
                                                                 <td>{{ $rpjm->lokasi }}</td>
                                                                 <td>{{ $rpjm->volume }}</td>
                                                                 <td>{{ $rpjm->tahun_pelaksanaan ? 'Tahun ke-' . $rpjm->tahun_pelaksanaan : '-' }}</td>
@@ -195,8 +206,51 @@
         .table-hover tbody tr:hover {
             background-color: rgba(0, 0, 0, 0.02);
         }
+        .btn-cetak-rpjm {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-cetak-rpjm:hover {
+            background-color: #198754;
+            color: #fff;
+        }
     </style>
 @endsection
+
+@push('modals')
+<!-- Modal Export Excel RPJM -->
+<div class="modal fade" id="exportExcelRpjmModal" tabindex="-1" aria-labelledby="exportExcelRpjmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="{{ route('rpjm.export_excel') }}" method="GET" target="_blank">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportExcelRpjmModalLabel">
+                        <i class="feather-printer me-2 text-success"></i>Cetak RPJM (Excel)
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="export_rpjm_periode" class="form-label fw-bold">Pilih Periode</label>
+                        <select name="periode" id="export_rpjm_periode" class="form-select">
+                            <option value="">Semua Periode</option>
+                            @foreach($periodes ?? [] as $p)
+                                <option value="{{ $p }}" {{ request('periode') == $p ? 'selected' : '' }}>{{ $p }}</option>
+                            @endforeach
+                        </select>
+                        <div class="form-text text-muted">Pilih periode untuk mencetak data RPJM tertentu, atau biarkan "Semua Periode" untuk mencetak seluruh data.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="feather-download me-2"></i>Unduh Excel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endpush
 
 @push('scripts')
 <script>

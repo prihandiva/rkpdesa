@@ -17,6 +17,29 @@
     </div>
 </div>
 
+        <!--! [Start] Info Guide Card !-->
+        @include('admin.components.info-card', [
+            'icon'  => 'feather-file-text',
+            'title' => 'Panduan pembuatan Berita Acara',
+            'steps' => [
+                ['text' => 'Terdapat 3 jenis Berita Acara yang disajikan dengan badge status berikut:',
+                 'sub'  => [
+                     '{BDG:badge-status-proses:Musdus} - Musyawarah Dusun (dapat dibuat oleh Operator Dusun / Admin)',
+                     '{BDG:badge-status-disetujui:Musrenbang} - Musrenbang Desa (dapat dibuat oleh Operator Desa / Admin)',
+                     '{BDG:badge-status-menunggu-bpd:BPD} - Musyawarah BPD (dapat dibuat oleh BPD / Admin)',
+                 ]],
+                ['text' => 'Klik tombol {BTN:feather-plus:Tambah Baru:primary} untuk membuat berita acara baru sesuai jenis dan tingkat wilayah.'],
+                ['text' => 'Gunakan tombol aksi berikut pada tabel data:',
+                 'sub'  => [
+                     '{BTN:feather-printer::primary} Cetak: Mencetak draf dokumen berita acara resmi.',
+                     '{BTN:feather-upload::info} Unggah PDF: Mengunggah file PDF berita acara bertanda tangan basah.',
+                     '{BTN:feather-eye::success} / {BTN:feather-eye::secondary} Lihat BA: Melihat file PDF ({BTN:feather-eye::success} warna hijau jika file ada, {BTN:feather-eye::secondary} warna abu jika belum diunggah).',
+                     '{BTN:feather-edit-2::warning} Edit: Mengubah detail informasi atau lampiran daftar hadir.',
+                     '{BTN:feather-trash-2::danger} Hapus: Menghapus data berita acara dari sistem.',
+                 ]]
+            ]
+        ])
+        <!--! [End] Info Guide Card !-->
 <div class="row">
     <div class="col-12">
         <div class="card border-0 shadow-sm">

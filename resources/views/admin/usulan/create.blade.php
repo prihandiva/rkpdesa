@@ -261,16 +261,21 @@
                 });
             }
 
-            if(dusunSelect.tagName === 'INPUT') {
-                filterRW(dusunSelect.value);
-            } else {
+            // Selalu inisialisasi RW berdasarkan nilai awal dusun (untuk operator_dusun yg pakai hidden input)
+            const initialDusunId = dusunSelect.value;
+            if (initialDusunId) {
+                filterRW(initialDusunId);
+            }
+
+            // Jika dusun adalah select (admin), listen event change
+            if (dusunSelect.tagName === 'SELECT') {
                 dusunSelect.addEventListener('change', function() {
                     filterRW(this.value);
                 });
             }
 
             rwSelect.addEventListener('change', function() {
-                 filterRT(this.value);
+                filterRT(this.value);
             });
         });
     </script>

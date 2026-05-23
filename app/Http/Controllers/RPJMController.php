@@ -10,7 +10,9 @@ use App\Models\Notifikasi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
+use Illuminate\Database\QueryException;
 
 class RPJMController extends Controller
 {
@@ -111,25 +113,43 @@ class RPJMController extends Controller
         $validated['periode'] = $request->periode_mulai . ' sd ' . $request->periode_selesai;
         unset($validated['periode_mulai'], $validated['periode_selesai']);
 
-        $validated['status'] = 'Proses'; 
-        
-        $rpjm = RPJM::create($validated);
+        $validated['status'] = 'Proses';
 
-        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+        try {
+            $rpjm = RPJM::create($validated);
 
-        Notifikasi::create([
-            'judul' => 'Input RPJM Baru',
-            'jenis' => 'rpjm',
-            'deskripsi' => 'Item RPJM baru: ' . substr($validated['jenis_kegiatan'], 0, 50),
-            'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
-            'judul_kegiatan' => $validated['jenis_kegiatan'],
-            'status' => 'info',
-            'id_penerima' => $allUsersIds,
-            'dibaca' => 0
-        ]);
+            $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
 
-        return redirect()->back()
-            ->with('success', 'Item RPJM berhasil ditambahkan. Silakan input berikutnya.');
+            Notifikasi::create([
+                'judul'          => 'Input RPJM Baru',
+                'jenis'          => 'rpjm',
+                'deskripsi'      => 'Item RPJM baru: ' . substr($validated['jenis_kegiatan'], 0, 50),
+                'id_kegiatan'    => 'rpjm_' . $rpjm->id_rpjm,
+                'judul_kegiatan' => $validated['jenis_kegiatan'],
+                'status'         => 'info',
+                'id_penerima'    => $allUsersIds,
+                'dibaca'         => 0,
+            ]);
+
+            return redirect()->back()
+                ->with('success', 'Item RPJM berhasil ditambahkan. Silakan input berikutnya.');
+
+        } catch (QueryException $e) {
+            Log::error('RPJMController@store QueryException: ' . $e->getMessage());
+
+            $msg = 'Gagal menyimpan data RPJM ke database.';
+            if (str_contains($e->getMessage(), 'Out of range value')) {
+                $msg = 'Nilai jumlah yang dimasukkan terlalu besar. Maksimum adalah 9.223.372.036.854.775.807.';
+            } elseif (str_contains($e->getMessage(), 'Duplicate entry')) {
+                $msg = 'Data duplikat: prioritas yang sama sudah digunakan pada bidang ini.';
+            }
+
+            return redirect()->back()->withInput()->with('error', $msg);
+
+        } catch (\Exception $e) {
+            Log::error('RPJMController@store Exception: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan tidak terduga. Silakan coba lagi.');
+        }
     }
 
     /**
@@ -201,39 +221,57 @@ class RPJMController extends Controller
 
         $original = $rpjm->getOriginal();
 
-        $rpjm->update($validated);
-        $changes = $rpjm->getChanges();
+        try {
+            $rpjm->update($validated);
+            $changes = $rpjm->getChanges();
 
-        $currentUser = User::find(session('user_id'));
-        $userName = $currentUser ? $currentUser->nama : 'Sistem';
+            $currentUser = User::find(session('user_id'));
+            $userName = $currentUser ? $currentUser->nama : 'Sistem';
 
-        $deskripsiEdit = 'Data RPJM diperbarui: ' . substr($rpjm->jenis_kegiatan, 0, 50) . '.';
-        $changeDetails = [];
-        foreach ($changes as $key => $value) {
-            if ($key == 'updated_at' || $key == 'created_at') continue;
-            if (array_key_exists($key, $original)) {
-                $oldValue = $original[$key];
-                $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+            $deskripsiEdit = 'Data RPJM diperbarui: ' . substr($rpjm->jenis_kegiatan, 0, 50) . '.';
+            $changeDetails = [];
+            foreach ($changes as $key => $value) {
+                if ($key == 'updated_at' || $key == 'created_at') continue;
+                if (array_key_exists($key, $original)) {
+                    $oldValue = $original[$key];
+                    $changeDetails[] = "bagian {$key} dirubah dari '{$oldValue}' menjadi '{$value}'";
+                }
             }
+            if (count($changeDetails) > 0) {
+                $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
+            }
+
+            $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
+
+            Notifikasi::create([
+                'judul'          => 'RPJM Diedit',
+                'jenis'          => 'rpjm',
+                'deskripsi'      => $deskripsiEdit,
+                'id_kegiatan'    => 'rpjm_' . $rpjm->id_rpjm,
+                'judul_kegiatan' => $rpjm->jenis_kegiatan,
+                'status'         => 'info',
+                'id_penerima'    => $allUsersIds,
+                'dibaca'         => 0,
+            ]);
+
+            return redirect()->route('rpjm.index')->with('success', 'RPJM berhasil diperbarui');
+
+        } catch (QueryException $e) {
+            Log::error('RPJMController@update QueryException: ' . $e->getMessage());
+
+            $msg = 'Gagal memperbarui data RPJM.';
+            if (str_contains($e->getMessage(), 'Out of range value')) {
+                $msg = 'Nilai jumlah yang dimasukkan terlalu besar.';
+            } elseif (str_contains($e->getMessage(), 'Duplicate entry')) {
+                $msg = 'Prioritas yang sama sudah digunakan pada bidang ini.';
+            }
+
+            return redirect()->back()->withInput()->with('error', $msg);
+
+        } catch (\Exception $e) {
+            Log::error('RPJMController@update Exception: ' . $e->getMessage());
+            return redirect()->back()->withInput()->with('error', 'Terjadi kesalahan tidak terduga saat memperbarui data.');
         }
-        if (count($changeDetails) > 0) {
-            $deskripsiEdit .= ' ' . implode(', ', $changeDetails) . ' oleh ' . $userName . '.';
-        }
-
-        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
-
-        Notifikasi::create([
-            'judul' => 'RPJM Diedit',
-            'jenis' => 'rpjm',
-            'deskripsi' => $deskripsiEdit,
-            'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
-            'judul_kegiatan' => $rpjm->jenis_kegiatan,
-            'status' => 'info',
-            'id_penerima' => $allUsersIds,
-            'dibaca' => 0
-        ]);
-
-        return redirect()->route('rpjm.index')->with('success', 'RPJM berhasil diperbarui');
     }
 
     /**
@@ -242,23 +280,29 @@ class RPJMController extends Controller
     public function destroy($id)
     {
         $rpjm = RPJM::findOrFail($id);
-        
-        $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
 
-        Notifikasi::create([
-            'judul' => 'RPJM Dihapus',
-            'jenis' => 'rpjm',
-            'deskripsi' => 'Item RPJM dihapus: ' . $rpjm->jenis_kegiatan,
-            'id_kegiatan' => 'rpjm_' . $rpjm->id_rpjm,
-            'judul_kegiatan' => $rpjm->jenis_kegiatan,
-            'status' => 'danger',
-            'id_penerima' => $allUsersIds,
-            'dibaca' => 0
-        ]);
+        try {
+            $allUsersIds = \App\Models\User::pluck('id_user')->implode(',');
 
-        $rpjm->delete();
+            Notifikasi::create([
+                'judul'          => 'RPJM Dihapus',
+                'jenis'          => 'rpjm',
+                'deskripsi'      => 'Item RPJM dihapus: ' . $rpjm->jenis_kegiatan,
+                'id_kegiatan'    => 'rpjm_' . $rpjm->id_rpjm,
+                'judul_kegiatan' => $rpjm->jenis_kegiatan,
+                'status'         => 'danger',
+                'id_penerima'    => $allUsersIds,
+                'dibaca'         => 0,
+            ]);
 
-        return redirect()->route('rpjm.index')->with('success', 'RPJM berhasil dihapus');
+            $rpjm->delete();
+
+            return redirect()->route('rpjm.index')->with('success', 'RPJM berhasil dihapus');
+
+        } catch (\Exception $e) {
+            Log::error('RPJMController@destroy Exception: ' . $e->getMessage());
+            return redirect()->route('rpjm.index')->with('error', 'Gagal menghapus data RPJM. Silakan coba lagi.');
+        }
     }
 
     /**
@@ -289,7 +333,12 @@ class RPJMController extends Controller
      */
     public function exportExcel(Request $request)
     {
-        $periode = $request->get('periode');
-        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\RPJMExport($periode), 'RPJM_Desa.xlsx');
+        try {
+            $periode = $request->get('periode');
+            return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\RPJMExport($periode), 'RPJM_Desa.xlsx');
+        } catch (\Exception $e) {
+            Log::error('RPJMController@exportExcel Exception: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal mengekspor data Excel. Silakan coba lagi.');
+        }
     }
 }

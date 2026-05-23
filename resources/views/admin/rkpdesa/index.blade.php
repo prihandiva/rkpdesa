@@ -60,6 +60,19 @@
             </div>
             <!-- [ page-header ] end -->
 
+        <!--! [Start] Info Guide Card !-->
+        @include('admin.components.info-card', [
+            'icon'  => 'feather-layers',
+            'title' => 'Panduan alur verifikasi dan penyusunan RKP Desa',
+            'steps' => [
+                ['text' => 'Operator Desa input prioritas: klik {BTN:feather-eye::info} pada setiap kegiatan, lalu klik icon {BTN:feather-edit::secondary} di bagian Prioritas'],
+                ['text' => 'Tim Verifikator buka {BTN:feather-eye::info} setiap kegiatan, isi bagian Verifikasi Usulan dengan status {BTN:feather-clock:Pending:warning} {BTN:feather-check:Terverifikasi:success} {BTN:feather-x:Gagal Terverifikasi:danger} beserta Catatan Verifikasi'],
+                ['text' => 'Tim Penyusun RKP melengkapi data kegiatan berstatus {BTN:feather-check:Terverifikasi:success} dengan buka {BTN:feather-eye::info} lalu klik {BTN:feather-edit:Edit Data RKP:success} - semua field wajib diisi lengkap'],
+                ['text' => 'Centang kegiatan {BTN:feather-check-square::secondary} lalu klik {BTN:feather-send:Ajukan Persetujuan BPD:warning} - status berubah menjadi Menunggu Persetujuan BPD dan dapat dicetak sebagai Rancangan RKP Desa'],
+                ['text' => 'BPD melakukan approval akhir: buka {BTN:feather-eye::info} setiap kegiatan, pilih {BTN:feather-check:Disetujui:success} atau {BTN:feather-x:Ditolak:danger} sebagai status final'],
+            ]
+        ])
+        <!--! [End] Info Guide Card !-->
         <div class="row">
             <div class="col-12">
                 <div class="card border-0 shadow-sm">
@@ -352,8 +365,8 @@
                         <div class="mb-3">
                             <label for="export_status" class="form-label">Status (Jenis Cetakan)</label>
                             <select name="status" id="export_status" class="form-select">
-                                <option value="Disetujui">Fix (Disetujui)</option>
-                                <option value="Menunggu persetujuan BPD">Rancangan (Menunggu Persetujuan BPD)</option>
+                                <option value="Disetujui">Rencana Kerja Pemerintahan Desa (Disetujui)</option>
+                                <option value="Menunggu persetujuan BPD">Rancangan Rencana Kerja Pemerintahan Desa (Menunggu Persetujuan BPD)</option>
                             </select>
                         </div>
                     </div>

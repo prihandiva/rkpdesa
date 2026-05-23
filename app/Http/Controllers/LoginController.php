@@ -73,9 +73,12 @@ class LoginController extends Controller
         // Jika login dari halaman admin atau role admin, set session admin juga
         $allowedRoles = ['admin', 'opdusun', 'opdesa', 'timverif', 'penyusunrkp', 'bpd', 'bendahara'];
         
-        if (in_array(strtolower($user->role), $allowedRoles)) { 
+        if (in_array(strtolower($user->role), $allowedRoles)) {
             session()->put('admin_authenticated', true);
-            return redirect()->route('admin.dashboard');
+
+            // Arahkan ke halaman yang semula dituju (jika ada), atau ke dashboard
+            $intended = session()->pull('intended_url', route('admin.dashboard'));
+            return redirect($intended);
         }
 
         return redirect('/dashboard');

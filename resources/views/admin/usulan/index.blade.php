@@ -55,6 +55,20 @@
                 </div>
             </div>
             <!-- [ page-header ] end -->
+        <!--! [Start] Info Guide Card !-->
+        @include('admin.components.info-card', [
+            'icon'  => 'feather-clipboard',
+            'title' => 'Panduan pengisian dan pengelolaan Usulan',
+            'steps' => [
+                ['text' => 'Operator masing-masing Dusun dapat menambahkan usulan baru dengan klik {BTN:feather-plus:Tambah Usulan:primary}'],
+                ['text' => 'Gunakan filter {BTN:feather-calendar:Tahun:secondary} di pojok kanan atas untuk melihat daftar usulan berdasarkan tahun anggaran'],
+                ['text' => 'Lihat Detail {BTN:feather-eye::info}, Edit {BTN:feather-edit::warning}, dan Hapus {BTN:feather-trash-2::danger} tersedia pada setiap baris data (khusus Operator Dusun)'],
+                ['text' => 'Kolom {BTN:feather-tag:Status:secondary} menampilkan status terkini dari setiap usulan kegiatan yang diajukan'],
+                ['text' => 'Unduh data dalam format Excel dengan klik {BTN:feather-printer:Cetak Excel:success} pada pojok kanan card header'],
+                ['text' => 'Operator Desa memilih kegiatan dengan mencentang {BTN:feather-check-square:?:secondary} di sebelah kiri tiap baris, lalu klik {BTN:feather-check-square:Masuk ke RKP Desa:primary} untuk memasukkan kegiatan ke RKP Desa'],
+            ]
+        ])
+        <!--! [End] Info Guide Card !-->
 
         <!--! [Start] Main Content Card !-->
         <div class="row">
@@ -113,7 +127,7 @@
                                                                     <th width="50" class="text-center">#</th>
                                                                 @endif
                                                                 <th>No</th>
-                                                                <th>Jenis Kegiatan</th>
+                                                                <th style="min-width: 220px; max-width: 320px;">Jenis Kegiatan</th>
                                                                 <th>RW/RT</th>
                                                                 <th>Tahun</th>
                                                                 <th>Prioritas</th>
@@ -137,7 +151,7 @@
                                                                     @endif
                                                                     
                                                                     <td>{{ $loop->iteration }}</td>
-                                                                    <td>{{ $usulan->jenis_kegiatan }}</td>
+                                                                    <td style="min-width: 220px; max-width: 320px; white-space: normal; word-break: break-word;">{{ $usulan->jenis_kegiatan }}</td>
                                                                     <td>RW: {{ $usulan->id_rw }} / RT: {{ $usulan->id_rt }}</td>
                                                                     <td>{{ $usulan->tahun }}</td>
                                                                     <td>{{ $usulan->prioritas }}</td>

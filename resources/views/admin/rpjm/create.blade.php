@@ -180,7 +180,6 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
                         <h6 class="mb-0">Daftar RPJM Terinput ({{ count($draftRpjms) }})</h6>
-                        <span class="badge bg-primary">Draft / Pending</span>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -190,7 +189,7 @@
                                         <th>Kegiatan</th>
                                         <th>Lokasi</th>
                                         <th>Biaya</th>
-                                        <th>Status</th>
+                                        <!-- <th>Status</th> -->
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -200,12 +199,12 @@
                                         <td>{{ Str::limit($draft->jenis_kegiatan, 40) }}</td>
                                         <td>{{ $draft->lokasi ?? '-' }}</td>
                                         <td>{{ $draft->jumlah ? 'Rp '.number_format($draft->jumlah,0,',','.') : '-' }}</td>
-                                        <td><span class="badge bg-secondary">{{ $draft->status }}</span></td>
+                                        <!-- <td><span class="badge bg-secondary">{{ $draft->status }}</span></td> -->
                                         <td>
                                             <form action="{{ route('rpjm.destroy', $draft->id_rpjm) }}" method="POST" class="d-inline" >
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="btn btn-xs btn-outline-danger"><i class="feather-trash"></i></button>
+                                                <button type="submit" class="btn btn-sm bg-light-danger text-danger border-0" title="Hapus"><i class="feather-trash-2"></i></button>
                                             </form>
                                         </td>
                                     </tr>

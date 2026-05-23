@@ -92,17 +92,20 @@
                             @endphp
                             <div class="form-group mb-3">
                                 <label for="id_dusun" class="form-label">Dusun</label>
-                                <select name="id_dusun" id="id_dusun" class="form-select" {{ $isOpDusun ? 'disabled' : '' }} {{ ($beritaAcara->jenis == 'Musrenbang' || $beritaAcara->jenis == 'BPD') ? '' : 'required' }}>
+                                @php
+                                    $isDusunDisabled = $isOpDusun || ($beritaAcara->jenis == 'Musrenbang' || $beritaAcara->jenis == 'BPD');
+                                @endphp
+                                <select name="id_dusun" id="id_dusun" class="form-select" {{ $isDusunDisabled ? 'disabled' : 'required' }}>
                                     <option value="">-- Pilih Dusun --</option>
                                     @foreach($dusun as $d)
                                         <option value="{{ $d->id_dusun }}" {{ (old('id_dusun', $beritaAcara->id_dusun) == $d->id_dusun) ? 'selected' : '' }}>{{ $d->nama }}</option>
                                     @endforeach
                                 </select>
-                                @if($isOpDusun)
-                                    <input type="hidden" name="id_dusun" value="{{ $userDusunId }}">
+                                @if($isDusunDisabled)
+                                    <input type="hidden" name="id_dusun" value="{{ old('id_dusun', $beritaAcara->id_dusun) ?? $userDusunId ?? '' }}">
                                 @endif
                                 @if($beritaAcara->jenis == 'Musrenbang' || $beritaAcara->jenis == 'BPD')
-                                    <small class="text-muted">Biarkan kosong jika tingkat Desa</small>
+                                    <small class="text-muted">Dinonaktifkan untuk tingkat Desa</small>
                                 @endif
                             </div>
                         </div>
@@ -147,13 +150,13 @@
                     <div class="form-group mb-4">
                         <label for="materi" class="form-label">Materi / Topik Pembahasan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim..." required>{{ old('materi', $beritaAcara->materi) }}</textarea>
+                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim...">{{ old('materi', $beritaAcara->materi) }}</textarea>
                     </div>
 
                     <div class="form-group mb-0">
                         <label for="putusan" class="form-label">Putusan / Kesepakatan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan..." required>{{ old('putusan', $beritaAcara->putusan) }}</textarea>
+                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan...">{{ old('putusan', $beritaAcara->putusan) }}</textarea>
                     </div>
                 </div>
             </div>

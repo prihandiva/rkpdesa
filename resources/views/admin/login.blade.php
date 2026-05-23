@@ -253,6 +253,16 @@
                         </div>
                     @endif
 
+                    @if (session('info'))
+                        <div class="alert alert-info alert-custom alert-dismissible fade show" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="feather-info me-2 fs-5"></i>
+                                <div class="fw-medium">{{ session('info') }}</div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
                     @if (session('success'))
                         <div class="alert alert-success alert-custom alert-dismissible fade show" role="alert">
                             <div class="d-flex align-items-center">

@@ -89,7 +89,8 @@
                     <hr>
 
                     <!-- ROLE: Tim Verifikasi / Admin -->
-                    @if(session('user_role') == 'tim_verifikasi' || session('user_role') == 'admin')
+                    @php $isVerifikator = in_array(session('user_role'), ['admin', 'tim_verifikasi', 'timverif']); @endphp
+                    @if($isVerifikator)
                     <div class="card bg-light border mb-3">
                         <div class="card-body">
                             <h6 class="card-title text-info"><i class="feather-check-circle me-2"></i>Verifikasi Usulan</h6>
@@ -120,7 +121,7 @@
                     @endif
 
                     <!-- ROLE: BPD / Admin -->
-                    @if(session('user_role') == 'bpd' || session('user_role') == 'admin')
+                    @if(in_array(session('user_role'), ['admin', 'bpd']))
                         @if(in_array($rkpDesa->status, ['Menunggu persetujuan BPD', 'Disetujui', 'Ditolak']))
                         <div class="card bg-light border mb-3">
                             <div class="card-body">
@@ -152,7 +153,8 @@
                     @endif
 
                     <!-- ROLE: Penyusun RKP / Admin -->
-                    @if(session('user_role') == 'tim_penyusun' || session('user_role') == 'admin')
+                    @php $isPenyusun = in_array(session('user_role'), ['admin', 'tim_penyusun', 'penyusunrkp']); @endphp
+                    @if($isPenyusun)
                         @if($rkpDesa->status == 'Terverifikasi' || $rkpDesa->status == 'Disetujui')
                         <div class="card bg-light border mb-3">
                             <div class="card-body">

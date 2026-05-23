@@ -66,7 +66,33 @@
 <div class="container-fluid">
     <form action="{{ route('berita-acara.store') }}" method="POST">
     @csrf
-    <input type="hidden" name="jenis" value="{{ $jenis ?? 'Musdus' }}">
+    @php $isAdminUser = session('user_role') === 'admin'; @endphp
+
+    @if($isAdminUser && !$jenis)
+        {{-- Admin tanpa jenis spesifik: tampilkan dropdown pilih jenis --}}
+        <div class="row mb-3">
+            <div class="col-md-6 offset-md-3">
+                <div class="card border-2 border-primary shadow-sm">
+                    <div class="card-body p-3">
+                        <label for="jenis_select" class="form-label fw-bold text-primary">
+                            <i class="feather-file-text me-1"></i> Pilih Jenis Berita Acara
+                        </label>
+                        <select id="jenis_select" class="form-select form-select-lg"
+                            onchange="if(this.value) window.location.href='{{ route('berita-acara.create') }}?jenis='+this.value">
+                            <option value="">-- Pilih Jenis --</option>
+                            <option value="Musdus">Musyawarah Dusun (Musdus)</option>
+                            <option value="Musrenbang">Musrenbang Desa</option>
+                            <option value="BPD">Musyawarah BPD</option>
+                        </select>
+                        <small class="text-muted">Sebagai Admin, Anda dapat membuat semua jenis Berita Acara.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="jenis" id="jenis_hidden" value="">
+    @else
+        <input type="hidden" name="jenis" value="{{ $jenis ?? 'Musdus' }}">
+    @endif
 
     <div class="row">
         <!-- Kolom Kiri -->
@@ -91,17 +117,20 @@
                             @endphp
                             <div class="form-group mb-3">
                                 <label for="id_dusun" class="form-label">Dusun</label>
-                                <select name="id_dusun" id="id_dusun" class="form-select" {{ $isOpDusun ? 'disabled' : '' }} {{ ($jenis == 'Musrenbang' || $jenis == 'BPD') ? '' : 'required' }}>
+                                @php
+                                    $isDusunDisabled = $isOpDusun || ($jenis == 'Musrenbang' || $jenis == 'BPD');
+                                @endphp
+                                <select name="id_dusun" id="id_dusun" class="form-select" {{ $isDusunDisabled ? 'disabled' : 'required' }}>
                                     <option value="">-- Pilih Dusun --</option>
                                     @foreach($dusun as $d)
                                         <option value="{{ $d->id_dusun }}" {{ (old('id_dusun') == $d->id_dusun || (isset($userDusunId) && $userDusunId == $d->id_dusun)) ? 'selected' : '' }}>{{ $d->nama }}</option>
                                     @endforeach
                                 </select>
-                                @if($isOpDusun)
-                                    <input type="hidden" name="id_dusun" value="{{ $userDusunId }}">
+                                @if($isDusunDisabled)
+                                    <input type="hidden" name="id_dusun" value="{{ $userDusunId ?? '' }}">
                                 @endif
                                 @if($jenis == 'Musrenbang' || $jenis == 'BPD')
-                                    <small class="text-muted">Biarkan kosong jika tingkat Desa</small>
+                                    <small class="text-muted">Dinonaktifkan untuk tingkat Desa</small>
                                 @endif
                             </div>
                         </div>
@@ -146,13 +175,13 @@
                     <div class="form-group mb-4">
                         <label for="materi" class="form-label">Materi / Topik Pembahasan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim..." required>{{ old('materi') }}</textarea>
+                        <textarea name="materi" id="materi" class="form-control tinymce-editor" placeholder="1. Pembahasan RKP Desa...&#10;2. Pembentukan Tim...">{{ old('materi') }}</textarea>
                     </div>
 
                     <div class="form-group mb-0">
                         <label for="putusan" class="form-label">Putusan / Kesepakatan <span class="text-danger">*</span></label>
                         <small class="text-danger d-block mb-2">* Gunakan format list angka (1. ..., 2. ...) agar rapi saat dicetak.</small>
-                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan..." required>{{ old('putusan') }}</textarea>
+                        <textarea name="putusan" id="putusan" class="form-control tinymce-editor" placeholder="1. Menyepakati...&#10;2. Menetapkan...">{{ old('putusan') }}</textarea>
                     </div>
                 </div>
             </div>

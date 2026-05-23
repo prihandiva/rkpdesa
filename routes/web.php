@@ -21,14 +21,6 @@ use App\Http\Controllers\BidangController;
 
 // Landing page for guests
 Route::get('/', function () {
-    // DEVELOPMENT MODE: Auto-set session
-    if (!session()->get('user_authenticated')) {
-        session()->put('user_authenticated', true);
-        session()->put('user_id', 'dev-user');
-        session()->put('user_name', 'Developer');
-        session()->put('user_role', 'admin');
-    }
-
     return view('landing');
 });
 
@@ -37,8 +29,10 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Dashboard (protected route)
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+// /dashboard → redirect ke admin dashboard (yang sudah protected oleh middleware auth.admin)
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->name('dashboard');
 
 // Admin Auth Routes
 Route::get('/admin/login', [LoginController::class, 'showAdminLoginForm'])->name('admin.login');
@@ -62,12 +56,11 @@ Route::get('/admin', function () {
     return redirect()->route('admin.dashboard');
 });
 
-Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
-
 // Admin CRUD Routes (Resource Routes)
-// DEVELOPMENT MODE: Bypass authentication
-// Route::middleware(['auth.admin'])->prefix('admin')->group(function () {
-Route::prefix('admin')->group(function () {
+Route::middleware(['auth.admin'])->prefix('admin')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
+
     Route::resource('berita-acara', BeritaAcaraController::class);
     Route::post('berita-acara/{id}/upload-pdf', [BeritaAcaraController::class, 'uploadPdf'])->name('berita-acara.upload_pdf');
     Route::get('berita-acara/{id}/print', [BeritaAcaraController::class, 'print'])->name('berita-acara.print');

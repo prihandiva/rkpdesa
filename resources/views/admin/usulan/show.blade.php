@@ -58,7 +58,18 @@
                                         <th style="width: 200px;">Nama Usulan / Kegiatan</th>
                                         <td class="fw-bold fs-5">{{ $usulan->jenis_kegiatan }}</td>
                                     </tr>
-                                    {{-- Bidang row removed as per request --}}
+                                    <tr>
+                                        <th>Jenis</th>
+                                        <td>
+                                            @if($usulan->jenis)
+                                                <span class="badge {{ $usulan->jenis == 'Fisik' ? 'bg-info' : 'bg-secondary' }}">
+                                                    {{ $usulan->jenis }}
+                                                </span>
+                                            @else
+                                                <span class="text-muted">-</span>
+                                            @endif
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <th>Deskripsi</th>
                                         <td>{{ $usulan->deskripsi ?? '-' }}</td>
@@ -68,14 +79,62 @@
                                         <td>
                                             <ul class="list-unstyled mb-0">
                                                 <li><strong>Dusun:</strong> {{ $usulan->dusun->nama ?? '-' }}</li>
-                                                <li><strong>RW:</strong> {{ $usulan->rw->nama_rw ?? '-' }}</li>
-                                                <li><strong>RT:</strong> {{ $usulan->rt->nama_rt ?? '-' }}</li>
+                                                <li><strong>RW:</strong> {{ $usulan->rw->nama_rw ?? 'RW ' . ($usulan->id_rw ?? '-') }}</li>
+                                                <li><strong>RT:</strong> {{ $usulan->rt->nama_rt ?? 'RT ' . ($usulan->id_rt ?? '-') }}</li>
                                             </ul>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Prioritas</th>
+                                        <td>
+                                            @php
+                                                $prio = $usulan->prioritas;
+                                                $prioColor = match(true) {
+                                                    $prio == 1  => 'success',
+                                                    $prio == 2  => 'primary',
+                                                    $prio == 3  => 'info',
+                                                    $prio <= 5  => 'warning',
+                                                    default     => 'danger',
+                                                };
+                                            @endphp
+                                            <span class="badge bg-{{ $prioColor }} fs-6 px-3 py-1">
+                                                #{{ $prio ?? '-' }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td>
+                                            @php
+                                                $statusColor = match($usulan->status) {
+                                                    'Disetujui'                 => 'success',
+                                                    'Ditolak'                   => 'danger',
+                                                    'Pending'                   => 'warning',
+                                                    'Terverifikasi'             => 'info',
+                                                    'Gagal Terverifikasi'       => 'danger',
+                                                    'Menunggu persetujuan BPD'  => 'secondary',
+                                                    default                     => 'primary',
+                                                };
+                                            @endphp
+                                            <span class="badge bg-{{ $statusColor }}">{{ $usulan->status ?? '-' }}</span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Tahun Anggaran</th>
                                         <td>{{ $usulan->tahun }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Berita Acara</th>
+                                        <td>
+                                            @if($usulan->file_berita_acara)
+                                                <a href="{{ asset($usulan->file_berita_acara) }}" target="_blank"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    <i class="feather-file-text me-1"></i> Lihat / Unduh
+                                                </a>
+                                            @else
+                                                <span class="text-muted small">Belum ada file</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
