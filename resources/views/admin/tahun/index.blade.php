@@ -132,10 +132,7 @@
                             <label class="form-label">Tahun <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" name="tahun" required>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Keterangan</label>
-                            <textarea class="form-control" rows="3" name="keterangan"></textarea>
-                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

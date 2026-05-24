@@ -45,10 +45,12 @@
                                 </form>
                             @endif
 
-                            <a href="{{ route('rkpdesa.create') }}" class="btn btn-md btn-primary shadow-sm">
-                                <i class="feather-plus me-2"></i>
-                                <span>Tambah RKP</span>
-                            </a>
+                            @if(in_array(session('user_role'), ['tim_penyusun', 'penyusunrkp','operator_desa', 'admin']))
+                                <a href="{{ route('rkpdesa.create') }}" class="btn btn-md btn-primary shadow-sm">
+                                    <i class="feather-plus me-2"></i>
+                                    <span>Tambah RKP</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="d-md-none d-flex align-items-center">

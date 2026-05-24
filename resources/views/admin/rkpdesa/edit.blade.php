@@ -197,12 +197,16 @@
 
                                 <!-- Data Input Fields -->
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">Data Existing</label>
-                                    <input type="text" name="data_existing" class="form-control" value="{{ old('data_existing', $rkpDesa->data_existing) }}" placeholder="Isi data existing...">
+                                    <label class="form-label">Data Existing (Kondisi Saat Ini)</label>
+                                    <textarea name="data_existing" class="form-control" rows="3" placeholder="Isi data existing...">{{ old('data_existing', $rkpDesa->data_existing) }}</textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Target Capaian</label>
-                                    <input type="text" name="target_capaian" class="form-control" value="{{ old('target_capaian', $rkpDesa->target_capaian) }}" placeholder="Isi target...">
+                                    <textarea name="target_capaian" class="form-control" rows="3" placeholder="Isi target...">{{ old('target_capaian', $rkpDesa->target_capaian) }}</textarea>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label class="form-label">Catatan Verifikasi</label>
+                                    <textarea name="catatan_verifikasi" class="form-control" rows="3" placeholder="Tambahkan catatan verifikasi...">{{ old('catatan_verifikasi', $rkpDesa->catatan_verifikasi) }}</textarea>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Lokasi</label>

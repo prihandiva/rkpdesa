@@ -40,9 +40,27 @@
         </div>
         <!-- [ page-header ] end -->
 
-        <!--! [Start] Main Form Card !-->
-        <div class="row">
-            <div class="col-lg-8">
+        <!--! [Start] Main Content !-->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="alert alert-primary border-0 shadow-sm d-flex gap-3 align-items-center mb-0" role="alert">
+                    <div class="bg-white text-primary p-2 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 45px; height: 45px;">
+                        <i class="feather-info fs-4"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Panduan Pengisian RKP Desa</h6>
+                        <div class="d-flex flex-wrap gap-4 small text-dark">
+                            <span><strong>Tahun:</strong> Pilih tahun untuk RKP.</span>
+                            <span><strong>Judul RKP:</strong> Isi dengan judul kegiatan.</span>
+                            <span><strong>RPJM:</strong> Pilih RPJM acuan (opsional).</span>
+                            <span><strong>Deskripsi:</strong> Jelaskan secara ringkas.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-lg-12">
                 <div class="card border-0 shadow-sm">
                     <!--! [Start] Card Header !-->
                     <div class="card-header bg-white border-bottom">
@@ -126,7 +144,21 @@
                                     <label class="form-label">Waktu</label>
                                     <input type="text" class="form-control" name="waktu" placeholder="Contoh: 3 Bulan">
                                 </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Sasaran/Penerima</label>
+                                    <input type="text" class="form-control" name="penerima" placeholder="Contoh: Warga Dusun 1">
+                                </div>
                             </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Data Existing (Kondisi Saat Ini)</label>
+                                    <textarea class="form-control" name="data_existing" rows="3" placeholder="Deskripsikan kondisi saat ini..."></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Target Capaian</label>
+                                    <textarea class="form-control" name="target_capaian" rows="3" placeholder="Deskripsikan target yang ingin dicapai..."></textarea>
+                                </div>
                             
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -183,6 +215,11 @@
                             </div>
 
                             <div class="mb-3">
+                                <label class="form-label">Catatan Verifikasi <span class="text-muted">(Opsional)</span></label>
+                                <textarea class="form-control" name="catatan_verifikasi" rows="3" placeholder="Tambahkan catatan verifikasi jika ada..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
                                 <label class="form-label">Berita Acara Musrenbang (PDF) <span class="text-muted">(Opsional)</span></label>
                                 <input type="file" class="form-control" name="file_berita_acara_musrenbang" accept=".pdf,.doc,.docx">
                             </div>
@@ -202,32 +239,8 @@
                     <!--! [End] Card Body !-->
                 </div>
             </div>
-
-            <div class="col-lg-4">
-                <!--! [Start] Info Card !-->
-                <div class="card border-0 shadow-sm mb-3">
-                    <div class="card-header bg-light border-bottom">
-                        <h6 class="mb-0">Panduan Pengisian</h6>
-                    </div>
-                    <div class="card-body p-3">
-                        <p class="text-muted small mb-2">
-                            <strong>Tahun:</strong> Pilih tahun untuk RKP yang akan dibuat.
-                        </p>
-                        <p class="text-muted small mb-2">
-                            <strong>Judul RKP:</strong> Isi dengan judul rencana kerja pembangunan desa.
-                        </p>
-                        <p class="text-muted small mb-2">
-                            <strong>RPJM Terkait:</strong> Pilih RPJM yang menjadi acuan untuk RKP ini (opsional).
-                        </p>
-                        <p class="text-muted small mb-0">
-                            <strong>Deskripsi:</strong> Jelaskan secara ringkas tentang RKP yang direncanakan.
-                        </p>
-                    </div>
-                </div>
-                <!--! [End] Info Card !-->
-            </div>
         </div>
-        <!--! [End] Main Form Card !-->
+        <!--! [End] Main Content !-->
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
