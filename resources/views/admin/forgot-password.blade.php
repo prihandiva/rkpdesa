@@ -205,7 +205,7 @@
                 <div class="login-wrapper text-center">
                     
                     <a href="/">
-                        <img src="{{ asset('admin-template/assets/images/Logo Sipdes 3.png') }}" alt="SIPDES Logo" class="mb-4" style="height: 50px;">
+                        <img src="{{ asset('admin-template/assets/images/Sipdes hd.png') }}" alt="SIPDES Logo" class="mb-4" style="max-height: 50px; max-width: 100%; height: auto; width: auto; object-fit: contain;">
                     </a>
 
                     <div class="help-icon-wrapper">

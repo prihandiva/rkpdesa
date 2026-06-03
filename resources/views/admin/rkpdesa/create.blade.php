@@ -201,9 +201,7 @@
                                 <div class="col-md-4 mb-3">
                                     <label class="form-label">Status <span class="text-danger">*</span></label>
                                     <select class="form-select" name="status" required>
-                                        <option value="Proses">Proses</option>
                                         <option value="Pending">Pending</option>
-                                        <option value="Terverifikasi">Terverifikasi</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 mb-3">

@@ -229,7 +229,7 @@
                     
                     <div class="text-center mb-5">
                         <a href="/">
-                            <img src="{{ asset('admin-template/assets/images/Logo Sipdes 3.png') }}" alt="SIPDES Logo" class="mb-4" style="height: 65px;">
+                            <img src="{{ asset('admin-template/assets/images/Sipdes hd.png') }}" alt="SIPDES Logo" class="mb-4" style="max-height: 65px; max-width: 100%; height: auto; width: auto; object-fit: contain;">
                         </a>
                         <h3 class="fw-bold text-dark">Selamat Datang Kembali</h3>
                         <p class="text-muted">Silakan masukkan kredensial Anda untuk melanjutkan</p>
