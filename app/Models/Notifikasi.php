@@ -26,6 +26,7 @@ class Notifikasi extends Model
         'status',
         'id_penerima',
         'dibaca',
+        'data',
     ];
 
     /**
@@ -37,6 +38,7 @@ class Notifikasi extends Model
     {
         return [
             'dibaca' => 'integer',
+            'data' => 'json',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',

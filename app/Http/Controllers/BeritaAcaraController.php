@@ -8,8 +8,11 @@ use App\Models\AbsensiBeritaAcara;
 use App\Models\Tahun;
 use App\Models\Dusun;
 use App\Models\Pegawai;
+use App\Models\User;
+use App\Models\Notifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BeritaAcaraController extends Controller
 {
@@ -459,4 +462,6 @@ class BeritaAcaraController extends Controller
 
         return redirect()->back()->with('error', 'Tidak ada file yang diunggah.');
     }
+
 }
+

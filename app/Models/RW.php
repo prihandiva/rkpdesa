@@ -39,4 +39,9 @@ class RW extends Model
     {
         return $this->belongsTo(Dusun::class, 'id_dusun', 'id_dusun');
     }
+
+    public function rt()
+    {
+        return $this->hasMany(RT::class, 'id_rw', 'id_rw');
+    }
 }

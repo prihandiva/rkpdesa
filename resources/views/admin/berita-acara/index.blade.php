@@ -1,4 +1,4 @@
-@extends('admin.layout')
+﻿@extends('admin.layout')
 
 @section('content')
 <div class="page-header">
@@ -141,7 +141,7 @@
                                     <td>
                                         <span class="fw-semibold">{{ $ba->hari }}</span><br>
                                         <small class="text-muted">{{ \Carbon\Carbon::parse($ba->tanggal)->translatedFormat('d F Y') }}</small><br>
-                                        <small class="text-muted"><i class="feather-clock me-1" style="font-size:10px;"></i>{{ $ba->jam_mulai }} – {{ $ba->jam_selesai }}</small>
+                                        <small class="text-muted"><i class="feather-clock me-1" style="font-size:10px;"></i>{{ $ba->jam_mulai }} â€“ {{ $ba->jam_selesai }}</small>
                                     </td>
                                     <td class="text-muted small">{{ Str::limit($ba->tempat, 50) }}</td>
                                     <td class="text-center">

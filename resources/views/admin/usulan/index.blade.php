@@ -128,7 +128,7 @@
                                                                 @endif
                                                                 <th>No</th>
                                                                 <th style="min-width: 220px; max-width: 320px;">Jenis Kegiatan</th>
-                                                                <th>RW/RT</th>
+                                                                <th>Lokasi</th>
                                                                 <th>Tahun</th>
                                                                 <th>Prioritas</th>
                                                                 <th>Status</th>
