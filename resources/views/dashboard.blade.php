@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="db-hero-right">
-            <form method="GET" action="{{ route('dashboard') }}" class="db-filter-form">
+            <form method="GET" action="{{ route('admin.dashboard') }}" class="db-filter-form">
                 <i class="feather-calendar"></i>
                 <label for="tahun" class="db-filter-label">Tahun:</label>
                 <select name="tahun" id="tahun" class="db-filter-select" onchange="this.form.submit()">

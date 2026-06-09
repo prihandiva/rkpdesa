@@ -162,12 +162,14 @@ class RKPController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
         
+        $detailVerif = \App\Models\DetailVerifikasi::where('id_kegiatan', $id)->first();
+
         // Fetch reference data for the edit form in show page
         $bidangs = \App\Models\Bidang::all();
         $sumber_biayas = \App\Models\SumberBiaya::all();
         $pola_pelaksanaans = \App\Models\PolaPelaksanaan::all();
 
-        return view('admin.rkpdesa.show', compact('rkpDesa', 'logs', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans'));
+        return view('admin.rkpdesa.show', compact('rkpDesa', 'logs', 'bidangs', 'sumber_biayas', 'pola_pelaksanaans', 'detailVerif'));
     }
 
     /**
@@ -420,17 +422,42 @@ class RKPController extends Controller
         $validated = $request->validate([
             'status' => 'required|string',
             'catatan_verifikasi' => 'nullable|string',
+            'detail' => 'nullable|string',
         ]);
 
         $oldStatus = $rkpDesa->status;
         $newStatus = $validated['status'];
 
-        // Update Status & Notes
+        // Validation for required fields based on status
+        if ($newStatus == 'Gagal Terverifikasi' && empty($validated['detail'])) {
+            return redirect()->back()->with('error', 'Detail verifikasi wajib diisi jika status Gagal Terverifikasi.');
+        }
+
+        if ($newStatus == 'Ditolak' && empty($validated['catatan_verifikasi'])) {
+            return redirect()->back()->with('error', 'Catatan verifikasi wajib diisi jika status Ditolak.');
+        }
+
+        // Prepare Notification Description
+        $deskripsiNotif = 'Status berubah menjadi ' . $newStatus;
+
+        // Update RKPDesa Status
         $rkpDesa->status = $newStatus;
+
         if ($request->has('catatan_verifikasi')) {
             $rkpDesa->catatan_verifikasi = $validated['catatan_verifikasi'];
+            $deskripsiNotif .= '. Catatan: ' . ($validated['catatan_verifikasi'] ?: '(Dihapus/Kosong)');
         }
+
         $rkpDesa->save();
+
+        // Update DetailVerifikasi if provided
+        if ($request->has('detail')) {
+            $detailVerif = \App\Models\DetailVerifikasi::updateOrCreate(
+                ['id_kegiatan' => $id],
+                ['detail' => $validated['detail']]
+            );
+            $deskripsiNotif .= '. Detail: ' . ($validated['detail'] ?: '(Dihapus/Kosong)');
+        }
 
         // Sync Status using Service if changed
         if ($oldStatus !== $newStatus) {
@@ -450,7 +477,7 @@ class RKPController extends Controller
         \App\Models\Notifikasi::create([
             'judul' => 'Status RKP: ' . $newStatus,
             'jenis' => 'rkpdesa',
-            'deskripsi' => 'Status berubah menjadi ' . $newStatus . ($request->catatan_verifikasi ? '. Catatan: ' . $request->catatan_verifikasi : ''),
+            'deskripsi' => $deskripsiNotif,
             'id_kegiatan' => 'rkpdesa_' . $rkpDesa->id_kegiatan, // Assuming format
             'judul_kegiatan' => $rkpDesa->jenis_kegiatan,
             'status' => 'info',

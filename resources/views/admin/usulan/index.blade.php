@@ -65,7 +65,7 @@
                 ['text' => 'Lihat Detail {BTN:feather-eye::info}, Edit {BTN:feather-edit::warning}, dan Hapus {BTN:feather-trash-2::danger} tersedia pada setiap baris data (khusus Operator Dusun)'],
                 ['text' => 'Kolom {BTN:feather-tag:Status:secondary} menampilkan status terkini dari setiap usulan kegiatan yang diajukan'],
                 ['text' => 'Unduh data dalam format Excel dengan klik {BTN:feather-printer:Cetak Excel:success} pada pojok kanan card header'],
-                ['text' => 'Operator Desa memilih kegiatan dengan mencentang {BTN:feather-check-square:?:secondary} di sebelah kiri tiap baris, lalu klik {BTN:feather-check-square:Masuk ke RKP Desa:primary} untuk memasukkan kegiatan ke RKP Desa'],
+                ['text' => 'Operator Desa memilih kegiatan dengan mencentang {BTN:feather-check-square::secondary} di sebelah kiri tiap baris, lalu klik {BTN:feather-check-square:Masuk ke RKP Desa:primary} untuk memasukkan kegiatan ke RKP Desa'],
             ]
         ])
         <!--! [End] Info Guide Card !-->

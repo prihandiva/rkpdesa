@@ -102,15 +102,16 @@
                                 
                                 <div class="mb-3">
                                     <label class="form-label">Status Verifikasi</label>
-                                    <select name="status" class="form-select">
+                                    <select name="status" class="form-select" id="status-verif-select">
                                         <option value="Pending" {{ $rkpDesa->status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="Terverifikasi" {{ $rkpDesa->status == 'Terverifikasi' ? 'selected' : '' }}>Terverifikasi</option>
                                         <option value="Gagal Terverifikasi" {{ $rkpDesa->status == 'Gagal Terverifikasi' ? 'selected' : '' }}>Gagal Terverifikasi</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Catatan Verifikasi</label>
-                                    <textarea name="catatan_verifikasi" class="form-control" rows="3">{{ $rkpDesa->catatan_verifikasi }}</textarea>
+                                    <label class="form-label">Detail Verifikasi <span id="req-verif" class="text-danger d-none">*</span></label>
+                                    <textarea name="detail" class="form-control" rows="3" id="detail-verif">{{ $detailVerif->detail ?? '' }}</textarea>
+                                    <small class="text-danger d-none" id="alert-verif">Detail verifikasi wajib diisi jika status Gagal Terverifikasi</small>
                                 </div>
                                 <div class="text-end">
                                     <button type="submit" class="btn btn-primary">Simpan Verifikasi</button>
@@ -131,11 +132,16 @@
                                     @method('PUT')
                                     <div class="mb-3">
                                         <label class="form-label">Status Approval</label>
-                                        <select name="status" class="form-select">
+                                        <select name="status" class="form-select" id="status-bpd-select">
                                             <option value="Menunggu persetujuan BPD" {{ $rkpDesa->status == 'Menunggu persetujuan BPD' ? 'selected' : '' }}>Menunggu persetujuan BPD</option>
                                             <option value="Disetujui" {{ $rkpDesa->status == 'Disetujui' ? 'selected' : '' }}>Disetujui</option>
                                             <option value="Ditolak" {{ $rkpDesa->status == 'Ditolak' ? 'selected' : '' }}>Ditolak</option>
                                         </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Catatan Verifikasi <span id="req-bpd" class="text-danger d-none">*</span></label>
+                                        <textarea name="catatan_verifikasi" class="form-control" rows="3" id="catatan-bpd">{{ $rkpDesa->catatan_verifikasi }}</textarea>
+                                        <small class="text-danger d-none" id="alert-bpd">Catatan verifikasi wajib diisi jika status Ditolak</small>
                                     </div>
                                     <div class="text-end">
                                         <button type="submit" class="btn btn-primary">Simpan Keputusan</button>
@@ -414,6 +420,11 @@
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
                 let title = 'Konfirmasi?';
                 let text = 'Apakah Anda yakin ingin memperbarui data ini?';
                 let icon = 'question';
@@ -448,6 +459,46 @@
                 });
             });
         });
+
+        const statusVerifSelect = document.getElementById('status-verif-select');
+        const detailVerifArea = document.getElementById('detail-verif');
+        const reqVerif = document.getElementById('req-verif');
+        const alertVerif = document.getElementById('alert-verif');
+
+        if (statusVerifSelect) {
+            statusVerifSelect.addEventListener('change', function() {
+                if (this.value === 'Gagal Terverifikasi') {
+                    reqVerif.classList.remove('d-none');
+                    alertVerif.classList.remove('d-none');
+                    detailVerifArea.setAttribute('required', 'required');
+                } else {
+                    reqVerif.classList.add('d-none');
+                    alertVerif.classList.add('d-none');
+                    detailVerifArea.removeAttribute('required');
+                }
+            });
+            statusVerifSelect.dispatchEvent(new Event('change'));
+        }
+
+        const statusBpdSelect = document.getElementById('status-bpd-select');
+        const catatanBpdArea = document.getElementById('catatan-bpd');
+        const reqBpd = document.getElementById('req-bpd');
+        const alertBpd = document.getElementById('alert-bpd');
+
+        if (statusBpdSelect) {
+            statusBpdSelect.addEventListener('change', function() {
+                if (this.value === 'Ditolak') {
+                    reqBpd.classList.remove('d-none');
+                    alertBpd.classList.remove('d-none');
+                    catatanBpdArea.setAttribute('required', 'required');
+                } else {
+                    reqBpd.classList.add('d-none');
+                    alertBpd.classList.add('d-none');
+                    catatanBpdArea.removeAttribute('required');
+                }
+            });
+            statusBpdSelect.dispatchEvent(new Event('change'));
+        }
     });
 </script>
 @endpush
