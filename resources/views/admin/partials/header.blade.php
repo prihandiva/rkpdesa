@@ -230,10 +230,10 @@
                             <i class="feather-user me-2"></i>
                             <span>Profile</span>
                         </a>
-                        <a href="{{ route('pengaturan.index') }}" class="dropdown-item">
+                        <!-- <a href="{{ route('pengaturan.index') }}" class="dropdown-item">
                             <i class="feather-settings me-2"></i>
                             <span>Settings</span>
-                        </a>
+                        </a> -->
                         <div class="dropdown-divider"></div>
                         <button type="button" id="btn-logout" class="dropdown-item"
                                 style="cursor: pointer; border: none; background: none; width: 100%; text-align: left;">

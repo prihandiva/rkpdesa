@@ -157,18 +157,18 @@
                 @endif
 
                 <!--! [Start] Menu Caption !-->
-                <li class="nxl-item nxl-caption">
+                <!-- <li class="nxl-item nxl-caption">
                     <label>Pengaturan</label>
                 </li>
-                <!--! [End] Menu Caption !-->
+                <--! [End] Menu Caption !-->
 
                 <!--! [Start] Profile Menu !-->
-                <li class="nxl-item {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
+                <!-- <li class="nxl-item {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}">
                     <a href="{{ route('pengaturan.index') }}" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-settings"></i></span>
                         <span class="nxl-mtext">Pengaturan</span>
                     </a>
-                </li>
+                </li> -->
                 <!--! [End] Profile Menu !-->
             </ul>
 
