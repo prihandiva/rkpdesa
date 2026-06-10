@@ -32,6 +32,7 @@ class User extends Authenticatable
         'id_rt',
         'profile_image',
         'fcm_token',
+        'status',
     ];
 
     /**

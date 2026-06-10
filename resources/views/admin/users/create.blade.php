@@ -118,6 +118,35 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="telp" class="form-label">No. Telepon</label>
+                                <input type="text" class="form-control @error('telp') is-invalid @enderror"
+                                    id="telp" name="telp" value="{{ old('telp') }}">
+                                @error('telp')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="profile_image" class="form-label">Foto Profil (Opsional)</label>
+                                <input type="file" class="form-control @error('profile_image') is-invalid @enderror"
+                                    id="profile_image" name="profile_image" accept="image/*">
+                                @error('profile_image')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
+                                    <option value="Aktif" {{ old('status') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Nonaktif" {{ old('status') == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                                 <a href="{{ route('user.index') }}" class="btn btn-secondary">Batal</a>

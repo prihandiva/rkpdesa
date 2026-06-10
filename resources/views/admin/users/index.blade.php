@@ -81,6 +81,7 @@
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Status</th>
                                         <th style="width: 100px;">Aksi</th>
                                     </tr>
                                 </thead>
@@ -97,7 +98,7 @@
                                                 <div class="d-flex align-items-center py-1">
                                                     @if($user->profile_image)
                                                         <div class="rounded-circle me-3 border shadow-sm" style="width: 42px; height: 42px; min-width: 42px; overflow: hidden;">
-                                                            <img src="{{ asset('storage/'.$user->profile_image) }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                                            <img src="{{ str_starts_with($user->profile_image, 'uploads') ? asset($user->profile_image) : asset('storage/'.$user->profile_image) }}" alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                                                         </div>
                                                     @else
                                                         <div class="rounded-circle me-3 bg-light d-flex align-items-center justify-content-center text-primary border" style="width: 42px; height: 42px; min-width: 42px;">
@@ -125,6 +126,16 @@
                                                     <i class="{{ $style['icon'] }} me-1" style="font-size: 12px;"></i>
                                                     {{ strtoupper(str_replace('_', ' ', $user->role)) }}
                                                 </span>
+                                            </td>
+                                            
+                                            <td>
+                                                <form action="{{ route('user.toggle_status', $user->id_user) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button type="submit" class="btn btn-sm {{ $user->status === 'Aktif' ? 'btn-success' : 'btn-secondary' }} rounded-pill px-3" style="font-size: 11px; font-weight: bold;">
+                                                        {{ $user->status === 'Aktif' ? 'Aktif' : 'Nonaktif' }}
+                                                    </button>
+                                                </form>
                                             </td>
 
                                             <td>

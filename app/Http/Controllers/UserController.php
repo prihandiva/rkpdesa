@@ -36,7 +36,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users',
@@ -48,16 +47,34 @@ class UserController extends Controller
             'id_rw' => 'nullable|exists:rw,id_rw',
             'id_rt' => 'nullable|exists:rt,id_rt',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|string|in:Aktif,Nonaktif',
         ]);
 
         // Hash password
         $validated['password'] = bcrypt($validated['password']);
+        
+        $validated['status'] = $request->status ?? 'Aktif';
+
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile-images', 'public');
+            $validated['profile_image'] = $path;
+        }
 
         // Simpan user baru
         User::create($validated);
 
         return redirect()->route('user.index')
             ->with('success', 'User berhasil ditambahkan');
+    }
+
+    public function toggleStatus($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status === 'Aktif' ? 'Nonaktif' : 'Aktif';
+        $user->save();
+
+        return redirect()->route('user.index')
+            ->with('success', 'Status user berhasil diubah');
     }
 
     /**
@@ -101,6 +118,7 @@ class UserController extends Controller
             'id_rw' => 'nullable|exists:rw,id_rw',
             'id_rt' => 'nullable|exists:rt,id_rt',
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'status' => 'nullable|string|in:Aktif,Nonaktif',
         ]);
 
         // Hash password jika ada perubahan
@@ -108,6 +126,16 @@ class UserController extends Controller
             $validated['password'] = bcrypt($validated['password']);
         } else {
             unset($validated['password']);
+        }
+        
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile-images', 'public');
+            $validated['profile_image'] = $path;
+            
+            // Delete old file if exists
+            if ($user->profile_image && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->profile_image)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_image);
+            }
         }
 
         // Update user

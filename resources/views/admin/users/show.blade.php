@@ -50,7 +50,11 @@
                                 </tr>
                                 <tr>
                                     <th>Status</th>
-                                    <td><span class="badge bg-success">Aktif</span></td>
+                                    <td>
+                                        <span class="badge {{ $user->status === 'Aktif' ? 'bg-success' : 'bg-secondary' }}">
+                                            {{ $user->status ?? 'Aktif' }}
+                                        </span>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th>No. Telepon</th>
@@ -79,7 +83,7 @@
                     </div>
                     <div class="card-body text-center">
                         @if($user->profile_image)
-                            <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                            <img src="{{ str_starts_with($user->profile_image, 'uploads') ? asset($user->profile_image) : asset('storage/' . $user->profile_image) }}" alt="Profile" class="img-fluid rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
                         @else
                             <div class="bg-light rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px;">
                                 <i class="feather-user display-4 text-secondary"></i>

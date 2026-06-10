@@ -119,6 +119,38 @@
                                 @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="telp" class="form-label">No. Telepon</label>
+                                <input type="text" class="form-control @error('telp') is-invalid @enderror"
+                                    id="telp" name="telp" value="{{ old('telp', $user->telp) }}">
+                                @error('telp')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="profile_image" class="form-label">Foto Profil (Opsional)</label>
+                                <input type="file" class="form-control @error('profile_image') is-invalid @enderror"
+                                    id="profile_image" name="profile_image" accept="image/*">
+                                @if($user->profile_image)
+                                    <small class="text-muted d-block mt-2">Gambar saat ini: <a href="{{ str_starts_with($user->profile_image, 'uploads') ? asset($user->profile_image) : asset('storage/' . $user->profile_image) }}" target="_blank">Lihat</a></small>
+                                @endif
+                                @error('profile_image')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
+                                    <option value="Aktif" {{ old('status', $user->status) == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Nonaktif" {{ old('status', $user->status) == 'Nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                 <a href="{{ route('user.index') }}" class="btn btn-secondary">Batal</a>

@@ -93,6 +93,7 @@ Route::middleware(['auth.admin'])->prefix('admin')->group(function () {
         }
         return $next($request);
     }], function () {
+        Route::patch('user/{id}/toggle-status', [UserController::class, 'toggleStatus'])->name('user.toggle_status');
         Route::resource('user', UserController::class);
         // Role Management Routes via UserController
         Route::post('user/role', [UserController::class, 'storeRole'])->name('user.role.store');
