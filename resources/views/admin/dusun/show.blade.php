@@ -57,7 +57,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-sm-3 text-muted">Jumlah RW</div>
-                            <div class="col-sm-9">{{ $dusun->class_rw ?? 0 }} RW</div>
+                            <div class="col-sm-9">{{ $dusun->rw->count() }} RW</div>
                         </div>
 
                         <hr>
@@ -80,7 +80,37 @@
                                             <td>{{ $usulan->tahun }}</td>
                                             <td>{{ $usulan->prioritas }}</td>
                                             <td>
-                                                <span class="badge {{ $usulan->status == 'Setuju' ? 'bg-success' : ($usulan->status == 'Tolak' ? 'bg-danger' : 'bg-warning') }}">
+                                                @php
+                                                    $status = $usulan->status;
+                                                    $badgeClass = 'bg-secondary text-white';
+                                                    
+                                                    switch($status) {
+                                                        case 'Proses': 
+                                                            $badgeClass = 'badge-status-proses';
+                                                            break;
+                                                        case 'Pending': 
+                                                            $badgeClass = 'badge-status-pending';
+                                                            break;
+                                                        case 'Terverifikasi': 
+                                                            $badgeClass = 'badge-status-terverifikasi';
+                                                            break;
+                                                        case 'Gagal Terverifikasi': 
+                                                            $badgeClass = 'badge-status-gagal';
+                                                            break;
+                                                        case 'Disetujui': 
+                                                            $badgeClass = 'badge-status-disetujui';
+                                                            break;
+                                                        case 'Menunggu persetujuan BPD': 
+                                                            $badgeClass = 'badge-status-menunggu-bpd';
+                                                            break;
+                                                        case 'Ditolak': 
+                                                            $badgeClass = 'badge-status-ditolak-bpd';
+                                                            break;
+                                                        default:
+                                                            $badgeClass = 'bg-secondary text-white';
+                                                    }
+                                                @endphp
+                                                <span class="badge {{ $badgeClass }}">
                                                     {{ $usulan->status }}
                                                 </span>
                                             </td>

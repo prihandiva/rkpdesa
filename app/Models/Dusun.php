@@ -29,6 +29,11 @@ class Dusun extends Model
         return $this->hasMany(Usulan::class, 'id_dusun', 'id_dusun');
     }
 
+    public function rw()
+    {
+        return $this->hasMany(RW::class, 'id_dusun', 'id_dusun');
+    }
+
     /**
      * The attributes that should be cast.
      *
