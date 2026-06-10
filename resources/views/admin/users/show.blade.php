@@ -4,19 +4,33 @@
 
 @section('content')
     <div class="container-fluid">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="d-flex align-items-center justify-content-between">
-                    <h2 class="mb-0">Detail Pengguna</h2>
-                    <div>
-                        <a href="{{ route('user.edit', $user->id_user) }}" class="btn btn-warning me-2">
-                            <i class="feather-edit me-2"></i>Edit
+        <!-- [ page-header ] start -->
+        <div class="page-header">
+            <div class="page-header-left d-flex align-items-center">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Detail Pengguna</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('user.index') }}">Pengguna</a></li>
+                    <li class="breadcrumb-item">Detail</li>
+                </ul>
+            </div>
+            <div class="page-header-right ms-auto">
+                <div class="page-header-right-items">
+                    <div class="d-flex align-items-center gap-2 page-header-right-items-wrapper">
+                        <a href="{{ route('user.edit', $user->id_user) }}" class="btn btn-md btn-warning">
+                            <i class="feather-edit me-2"></i>
+                            <span>Edit</span>
                         </a>
-                        <a href="{{ route('user.index') }}" class="btn btn-secondary">Kembali</a>
+                        <a href="{{ route('user.index') }}" class="btn btn-md btn-secondary">
+                            <span>Kembali</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- [ page-header ] end -->
 
         <div class="row">
             <div class="col-lg-8">
