@@ -133,13 +133,23 @@
 
                         <div class="col-md-6">
                             <label for="password" class="form-label fw-bold">Password Baru</label>
-                            <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password">
+                                    <i class="feather-eye"></i>
+                                </button>
+                            </div>
                             <div class="form-text">Kosongkan jika tidak ingin mengubah password.</div>
                         </div>
 
                         <div class="col-md-6">
                             <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password</label>
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password">
+                                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="password_confirmation">
+                                    <i class="feather-eye"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -168,5 +178,23 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('feather-eye');
+                icon.classList.add('feather-eye-off');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('feather-eye-off');
+                icon.classList.add('feather-eye');
+            }
+        });
+    });
 </script>
 @endpush
